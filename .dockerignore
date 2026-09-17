@@ -1,0 +1,9 @@
+.git
+.venv
+data
+__pycache__
+*.pyc
+.ruff_cache
+docs
+TASK.md
+PLAN.md

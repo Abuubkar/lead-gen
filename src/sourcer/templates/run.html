@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}{{ run.trade }} in {{ run.city }} — sourcer{% endblock %}
+{% block content %}
+<section class="panel runhead">
+  <div>
+    <h1>{{ run.trade | replace("-", " ") | title }} in {{ run.city }}, {{ run.state }}</h1>
+    <p class="lede">
+      <span class="pill {{ run.run_status }}">{{ run.run_status }}</span>
+      {{ run.discovered_count }} found, {{ run.enriched_count }} sites read,
+      {{ run.scored_count }} scored
+    </p>
+  </div>
+  <div class="actions">
+    <a class="button" href="/runs/{{ run.id }}/export.csv?{{ request.url.query }}">Export CSV</a>
+    {% if run.run_status == "running" %}
+    <form method="post" action="/runs/{{ run.id }}/cancel">
+      <button class="quiet" type="submit">Cancel</button>
+    </form>
+    {% endif %}
+  </div>
+</section>
+
+{% if run.source_outcomes %}
+<section class="panel outcomes">
+  <h2>What each source did</h2>
+  <ul>
+    {% for name, outcome in run.source_outcomes.items() %}
+    <li class="outcome {{ outcome.status }}">
+      <strong>{{ source_labels.get(name, name) }}</strong>
+      <span class="pill {{ outcome.status }}">{{ outcome.status }}</span>
+      {{ outcome.found }} found
+      {% if outcome.reason %}<em>{{ outcome.reason }}</em>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  <p class="fine">An empty column means a source refused us, not that the market is empty.</p>
+</section>
+{% endif %}
+
+<section class="panel">
+  <form class="filters" method="get" action="/runs/{{ run.id }}">
+    <div class="field short">
+      <label for="min_score">Min score</label>
+      <input id="min_score" name="min_score" type="number" min="0" max="100"
+             value="{{ active_filters.get('min_score', '') }}">
+    </div>
+    <div class="field short">
+      <label for="min_confidence">Min confidence</label>
+      <input id="min_confidence" name="min_confidence" type="number" step="0.1" min="0" max="1"
+             value="{{ active_filters.get('min_confidence', '') }}">
+    </div>
+    <div class="field short">
+      <label for="min_years">Min years</label>
+      <input id="min_years" name="min_years" type="number" min="0"
+             value="{{ active_filters.get('min_years', '') }}">
+    </div>
+    <div class="field">
+      <label for="state">Review state</label>
+      <select id="state" name="state">
+        <option value="">any</option>
+        {% for value in review_states %}
+        <option value="{{ value }}" {% if active_filters.get('state') == value %}selected{% endif %}>
+          {{ value }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+    <label class="check">
+      <input type="checkbox" name="no_website" value="1"
+             {% if active_filters.get('no_website') %}checked{% endif %}>
+      <span>No website</span>
+    </label>
+    <label class="check">
+      <input type="checkbox" name="owner_known" value="1"
+             {% if active_filters.get('owner_known') %}checked{% endif %}>
+      <span>Owner known</span>
+    </label>
+    <button type="submit">Filter</button>
+    {% if active_filters %}<a class="quiet button" href="/runs/{{ run.id }}">Clear</a>{% endif %}
+  </form>
+</section>
+
+<section class="results">
+  <div id="rows"
+       {% if run.run_status in ("pending", "running") %}
+       hx-get="/runs/{{ run.id }}/rows?{{ request.url.query }}"
+       hx-trigger="load delay:2s, every 3s"
+       hx-swap="innerHTML"
+       {% endif %}>
+    {% include "_rows.html" %}
+  </div>
+</section>
+
+<aside id="detail" class="detail"></aside>
+{% endblock %}

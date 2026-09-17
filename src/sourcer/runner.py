@@ -15,7 +15,7 @@ for a field is the one that survives.
 
 import threading
 
-from sourcer import scoring, sources, store
+from sourcer import llm, scoring, sources, store
 from sourcer.db import connect
 from sourcer.enrich import enrich
 from sourcer.fetch import Blocked, Disallowed, Fetcher
@@ -136,6 +136,10 @@ def _discover_one(connection, run_id, fetcher, source, trade, city, state, page_
 
 
 CONTACT_FIELDS = ("owner_name", "owner_role", "emails", "phones")
+# Findings with no column of their own, held for scoring only.
+UNSTORED_FIELDS = ("ownership_language", "succession_language", "franchise_language",
+                   "has_booking", "site_builder", "https", "copyright_year",
+                   "pages_read", "evidence_url", "site_text")
 
 
 def _record_contacts(connection, business_id, found, evidence_url):
@@ -172,11 +176,25 @@ def _enrich_all(connection, run_id):
             store.set_progress_note(connection, run_id, f"reading websites {index}/{total}")
 
             found, outcome = enrich(fetcher, business.get("website_url"))
+
+            # The model fills gaps the rules left, and never overrides them.
+            # Absent a key it does nothing at all.
+            if found.get("site_text") and llm.available():
+                store.set_progress_note(connection, run_id, f"reading websites {index}/{total}, AI")
+                inferred = llm.read_site(business["name"], found.pop("site_text"))
+                for key, value in inferred.items():
+                    found.setdefault(key, value)
+            found.pop("site_text", None)
+
             if found:
                 store.fill_business(
                     connection,
                     business["id"],
-                    {key: value for key, value in found.items() if key not in CONTACT_FIELDS},
+                    {
+                        key: value
+                        for key, value in found.items()
+                        if key not in CONTACT_FIELDS and key not in UNSTORED_FIELDS
+                    },
                     "website",
                 )
                 _record_contacts(

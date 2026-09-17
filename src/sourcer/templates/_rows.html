@@ -1,0 +1,65 @@
+{% if run.run_status in ("pending", "running") %}
+<p class="working">
+  <span class="spinner"></span>
+  {{ run.progress_note or "starting" }}
+</p>
+{% endif %}
+
+{% if businesses %}
+<table class="leads">
+  <thead>
+    <tr>
+      <th>Score</th><th>Conf</th><th>Business</th><th>Owner</th><th>Years</th>
+      <th>Web</th><th>Phone</th><th>Review</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for business in businesses %}
+    <tr hx-get="/businesses/{{ business.id }}" hx-target="#detail" hx-swap="innerHTML"
+        class="lead {% if business.review_state and business.review_state != 'new' %}handled{% endif %}">
+      <td class="score">
+        <span class="band {% if business.score >= 75 %}high{% elif business.score >= 50 %}mid{% else %}low{% endif %}">
+          {{ business.score | round(0) | int if business.score is not none else "—" }}
+        </span>
+      </td>
+      <td class="conf" title="share of the rubric we could evaluate">
+        {{ (business.confidence * 100) | round(0) | int if business.confidence else 0 }}%
+        {% if business.confidence is not none and business.confidence < provisional_below %}
+        <em class="provisional">provisional</em>
+        {% endif %}
+      </td>
+      <td class="name">
+        {{ business.name }}
+        <em class="where">{{ business.city or "" }}{% if business.street %} · {{ business.street }}{% endif %}</em>
+      </td>
+      <td>{{ business.owner_name or "—" }}</td>
+      <td class="num">{{ business.years_in_business or "—" }}</td>
+      <td>
+        {% if business.website_url %}
+          <a href="{{ business.website_url }}" target="_blank" rel="noopener noreferrer nofollow"
+             onclick="event.stopPropagation()">{{ business.website_domain or "site" }}</a>
+        {% else %}<span class="flag">none</span>{% endif %}
+      </td>
+      <td class="num">{{ business.phone_display or "—" }}</td>
+      <td>
+        {% if business.review_state and business.review_state != "new" %}
+        <span class="pill {{ business.review_state }}">{{ business.review_state }}</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<p class="fine">
+  {{ businesses | length }} shown. Click a row to see why it scored.
+  {% if hidden_count %}
+    {{ hidden_count }} thinly-evidenced
+    {{ "lead" if hidden_count == 1 else "leads" }} hidden.
+    <a href="/runs/{{ run.id }}?min_confidence=0">Show everything</a>
+  {% endif %}
+</p>
+{% elif run.run_status == "done" %}
+<p class="empty">
+  Nothing matched. {% if active_filters %}Try clearing the filters.{% endif %}
+</p>
+{% endif %}

@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}sourcer{% endblock %}</title>
+  <link rel="stylesheet" href="/static/app.css">
+  <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.4/dist/htmx.min.js"></script>
+</head>
+<body>
+  <header class="bar">
+    <a class="brand" href="/">sourcer</a>
+    <p class="tagline">Small businesses, ranked by who is most likely to sell.</p>
+  </header>
+  <main>{% block content %}{% endblock %}</main>
+</body>
+</html>

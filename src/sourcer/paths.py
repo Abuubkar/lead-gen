@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 
 DEFAULT_DATA_DIRNAME = "data"
+DEFAULT_SEED_DIRNAME = "seed"
 
 
 def project_root():
@@ -31,6 +32,12 @@ def data_dir():
     path = Path(override) if override else project_root() / DEFAULT_DATA_DIRNAME
     path.mkdir(parents=True, exist_ok=True)
     return path
+
+
+def seed_dir():
+    """The dataset committed to the repository. Not created: it ships or it does not."""
+    override = os.environ.get("SOURCER_SEED_DIR")
+    return Path(override) if override else project_root() / DEFAULT_SEED_DIRNAME
 
 
 def db_path():
