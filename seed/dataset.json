@@ -1159,16 +1159,6 @@
        "role": null,
        "source": "website",
        "source_url": "http://www.wilsonplumbingaustin.com"
-      },
-      {
-       "confidence": 0.5,
-       "created_at": "2026-09-17T17:38:24+00:00",
-       "email": "user@domain.com.",
-       "name": null,
-       "phone": null,
-       "role": null,
-       "source": "website",
-       "source_url": "http://www.wilsonplumbingaustin.com"
       }
      ],
      "signals": [
@@ -2715,16 +2705,6 @@
        "role": null,
        "source": "website",
        "source_url": "https://www.nbplumbinganddrain.com"
-      },
-      {
-       "confidence": 0.5,
-       "created_at": "2026-09-17T17:37:14+00:00",
-       "email": "your@email.com",
-       "name": null,
-       "phone": null,
-       "role": null,
-       "source": "website",
-       "source_url": "https://www.nbplumbinganddrain.com"
       }
      ],
      "signals": [
@@ -3823,18 +3803,7 @@
       "website_url": "http://www.1stplumbingservices.com",
       "years_in_business": 16
      },
-     "contacts": [
-      {
-       "confidence": 0.5,
-       "created_at": "2026-09-17T17:39:23+00:00",
-       "email": "user@domain.com.",
-       "name": null,
-       "phone": null,
-       "role": null,
-       "source": "website",
-       "source_url": "http://www.1stplumbingservices.com"
-      }
-     ],
+     "contacts": [],
      "signals": [
       {
        "group_name": "acquirability",
@@ -34459,28 +34428,7 @@
       "website_url": "https://www.accurateenergymanagement.com",
       "years_in_business": 46
      },
-     "contacts": [
-      {
-       "confidence": 0.5,
-       "created_at": "2026-09-17T17:49:18+00:00",
-       "email": "605a7baede844d278b89dc95ae0a9123@sentry-next.wixpress.com",
-       "name": null,
-       "phone": null,
-       "role": null,
-       "source": "website",
-       "source_url": "https://www.accurateenergymanagement.com"
-      },
-      {
-       "confidence": 0.5,
-       "created_at": "2026-09-17T17:49:18+00:00",
-       "email": "8c4075d5481d476e945486754f783364@sentry.io",
-       "name": null,
-       "phone": null,
-       "role": null,
-       "source": "website",
-       "source_url": "https://www.accurateenergymanagement.com"
-      }
-     ],
+     "contacts": [],
      "signals": [
       {
        "group_name": "acquirability",
@@ -37770,28 +37718,7 @@
       "website_url": "http://johnbondac.com",
       "years_in_business": 23
      },
-     "contacts": [
-      {
-       "confidence": 0.5,
-       "created_at": "2026-09-17T17:47:52+00:00",
-       "email": "605a7baede844d278b89dc95ae0a9123@sentry-next.wixpress.com",
-       "name": null,
-       "phone": null,
-       "role": null,
-       "source": "website",
-       "source_url": "http://johnbondac.com"
-      },
-      {
-       "confidence": 0.5,
-       "created_at": "2026-09-17T17:47:52+00:00",
-       "email": "8eb368c655b84e029ed79ad7a5c1718e@sentry.wixpress.com",
-       "name": null,
-       "phone": null,
-       "role": null,
-       "source": "website",
-       "source_url": "http://johnbondac.com"
-      }
-     ],
+     "contacts": [],
      "signals": [
       {
        "group_name": "acquirability",
@@ -41506,16 +41433,6 @@
        "confidence": 0.5,
        "created_at": "2026-09-17T17:50:33+00:00",
        "email": "indoorsupply@yahoo.com",
-       "name": null,
-       "phone": null,
-       "role": null,
-       "source": "website",
-       "source_url": "https://indoorcomfortsupply.com/"
-      },
-      {
-       "confidence": 0.5,
-       "created_at": "2026-09-17T17:50:33+00:00",
-       "email": "user@example.com.",
        "name": null,
        "phone": null,
        "role": null,

@@ -142,6 +142,32 @@ PRACTICE_PRINCIPAL = re.compile(
 )
 
 EMAIL = re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]+")
+
+# Addresses that belong to the tooling a site embeds, not to anyone who works
+# there. Error trackers and tag managers leave these in the markup, and a
+# Searcher handed one would email a monitoring endpoint.
+VENDOR_EMAIL_DOMAINS = (
+    "sentry.io",
+    "sentry-next.wixpress.com",
+    "wixpress.com",
+    "sentry.wixpress.com",
+    "ingest.sentry.io",
+    "bugsnag.com",
+    "rollbar.com",
+    "datadoghq.com",
+    "newrelic.com",
+    "googletagmanager.com",
+    "google-analytics.com",
+    "cloudflare.com",
+    "gstatic.com",
+    "example.com",
+    "domain.com",
+    "email.com",
+    "yourdomain.com",
+    "sentry.local",
+)
+# A local part that is a long hex string is a machine key, not a person.
+MACHINE_LOCAL_PART = re.compile(r"^[0-9a-f]{16,}$", re.I)
 PHONE = re.compile(r"\(?\b\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}\b")
 COPYRIGHT_YEAR = re.compile(r"(?:©|&copy;|copyright)\s*(?:\d{4}\s*[-–]\s*)?(\d{4})", re.I)
 
@@ -242,6 +268,35 @@ def _clean_person(name):
     return " ".join(words)
 
 
+def _is_contactable(address):
+    """Whether an address could plausibly reach a person at this business."""
+    if address.lower().endswith((".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg")):
+        return False
+    local, _, domain = address.rpartition("@")
+    domain = domain.lower().strip(".")
+    if not local or not domain:
+        return False
+    if any(domain == vendor or domain.endswith("." + vendor) for vendor in VENDOR_EMAIL_DOMAINS):
+        return False
+    if MACHINE_LOCAL_PART.match(local):
+        return False
+    # Sentry keys arrive as <hex>@<anything>; belt and braces for hosts we have
+    # not seen yet.
+    return "sentry" not in domain
+
+
+def _ranked_emails(addresses, site_url):
+    """An address on the business's own domain beats one on anybody else's."""
+    host = urlsplit(site_url).hostname or ""
+    own = host[4:] if host.startswith("www.") else host
+
+    def rank(address):
+        domain = address.rpartition("@")[2].lower()
+        return (0 if own and own in domain else 1, address)
+
+    return sorted(set(addresses), key=rank)
+
+
 def _read_owner(text):
     match = OWNER_ROLE.search(text)
     if match:
@@ -289,9 +344,9 @@ def extract(text, html, url):
         found["owner_name"] = owner_name
         found["owner_role"] = owner_role
 
-    emails = [address for address in EMAIL.findall(html) if not address.endswith((".png", ".jpg"))]
+    emails = [address for address in EMAIL.findall(html) if _is_contactable(address)]
     if emails:
-        found["emails"] = sorted(set(emails))[:3]
+        found["emails"] = _ranked_emails(emails, url)[:3]
     phones = PHONE.findall(text)
     if phones:
         found["phones"] = sorted(set(phones))[:3]
