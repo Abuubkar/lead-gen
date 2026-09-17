@@ -140,7 +140,10 @@ def _discover_one(connection, run_id, fetcher, source, trade, city, state, page_
     store.record_source_outcome(connection, run_id, source.NAME, {"status": "ok", "found": found})
 
 
-CONTACT_FIELDS = ("owner_name", "owner_role", "emails", "phones")
+# Findings that become Contacts. owner_name is deliberately NOT here: it is
+# both a Contact and a column on the Business, because the results table shows
+# it and the rubric scores it.
+CONTACT_FIELDS = ("owner_role", "emails", "phones")
 # Findings with no column of their own, held for scoring only.
 UNSTORED_FIELDS = (
     "ownership_language",
