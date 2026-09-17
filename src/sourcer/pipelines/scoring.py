@@ -13,12 +13,7 @@ Weights are plain data in this module so they can be argued with and tuned
 without touching the logic.
 """
 
-from datetime import UTC, datetime
-
-# Derived, not hard-coded. A literal year silently rots: every age Signal would
-# drift by one on 1 January and nobody would notice.
-CURRENT_YEAR = datetime.now(UTC).year
-EARLIEST_PLAUSIBLE_YEAR = 1850
+from sourcer.config import CURRENT_YEAR
 
 # Web presences that are somebody else's platform rather than the business's
 # own site. Having only one of these is itself a sign of underinvestment.

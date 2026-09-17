@@ -1,128 +1,44 @@
-"""The web application: server-rendered HTML, with HTMX for the live parts.
+"""HTTP handlers: server-rendered HTML, with HTMX for the live parts.
 
 One process, one language, no build step. HTMX comes from a CDN, so there is no
 bundler, no node_modules and nothing to compile before a reviewer can run this.
 
-Every route is thin. It reads the store, hands dictionaries to a template, and
-returns HTML. The JSON endpoint returns the same data for anyone who would
-rather script against it than click.
+Every route is thin. It reads the repository, hands dictionaries to a template,
+and returns HTML. The JSON endpoints return the same data for anyone who would
+rather script against it than click. Filtering lives in filters.py and CSV in
+export.py, so all three surfaces agree by construction.
 """
 
-import csv
-import io
-import logging
 from pathlib import Path
 
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from starlette.applications import Starlette
 from starlette.routing import Mount, Route
 
-from sourcer import runner, scoring, sources, store, trades
-from sourcer.db import connect, init_db
-from sourcer.seed import load_seed
+from sourcer.api.export import filename_for, to_csv
+from sourcer.api.filters import (
+    DEFAULT_MIN_CONFIDENCE,
+    FILTERS,
+    PROVISIONAL_BELOW,
+    REVIEW_STATES,
+    apply_filters,
+    band_of,
+    shown_score,
+)
+from sourcer.db import repository as store
+from sourcer.db.database import connect
+from sourcer.pipelines import scoring
+from sourcer.scrapers import catalog as trades
+from sourcer.scrapers import registry as sources
+from sourcer.workers import runner
 
 HERE = Path(__file__).parent
 templates = Jinja2Templates(directory=str(HERE / "templates"))
 
-# Score bands. Defined once here rather than as a comparison repeated in every
-# template, because a Business mid-run has no Score yet and comparing None
-# against a number raises.
-BAND_THRESHOLDS = ((75, "high"), (50, "mid"))
-
-
-def band_of(score):
-    if score is None:
-        return "none"
-    for threshold, name in BAND_THRESHOLDS:
-        if score >= threshold:
-            return name
-    return "low"
-
-
-def shown_score(score):
-    return "—" if score is None else str(round(score))
-
 
 templates.env.filters["band"] = band_of
 templates.env.filters["shown_score"] = shown_score
-
-# Filters a Searcher can apply to the results table. Kept here because the
-# interface is what decides which ones are worth having.
-FILTERS = {
-    "min_score": ("Minimum score", lambda b, v: (b["score"] or 0) >= float(v)),
-    # A Business not yet scored has no Confidence to judge, so it passes. Without
-    # this, the default floor hides every row while a run is still working and
-    # the streaming table stays empty until scoring finishes.
-    "min_confidence": (
-        "Minimum confidence",
-        lambda b, v: b["confidence"] is None or b["confidence"] >= float(v),
-    ),
-    "min_years": ("Minimum years trading", lambda b, v: (b["years_in_business"] or 0) >= int(v)),
-    "no_website": ("No website only", lambda b, v: not b["website_url"]),
-    "owner_known": ("Owner known only", lambda b, v: bool(b["owner_name"])),
-    "state": ("Review state", lambda b, v: (b["review_state"] or "new") == v),
-}
-
-REVIEW_STATES = ("new", "contacted", "passed")
-
-# A Business scored on under a third of the rubric is a lead to investigate, not
-# one to act on, and it should not head the table. Missing data still costs no
-# points, so instead of penalising the Score we hide the thinnest rows by
-# default and say so, with one click to see them.
-DEFAULT_MIN_CONFIDENCE = "0.35"
-PROVISIONAL_BELOW = 0.35
-
-EXPORT_COLUMNS = (
-    "score",
-    "confidence",
-    "name",
-    "owner_name",
-    "phone_display",
-    "website_url",
-    "street",
-    "city",
-    "state",
-    "postal_code",
-    "years_in_business",
-    "founded_year",
-    "public_rating",
-    "public_review_count",
-    "categories",
-    "sources",
-    "review_state",
-    "review_notes",
-    "key_rule",
-)
-
-
-def _apply_filters(businesses, params):
-    """Narrow the list to what the Searcher asked for, ignoring blank fields.
-
-    With no filters at all, a confidence floor is applied so the first thing a
-    Searcher reads is trustworthy. It appears in the filter box like any other,
-    and clearing it shows everything.
-    """
-    params = dict(params or {})
-    if not any((params.get(key) or "").strip() for key in FILTERS):
-        params["min_confidence"] = DEFAULT_MIN_CONFIDENCE
-
-    active = {}
-    for key, (_, predicate) in FILTERS.items():
-        value = (params.get(key) or "").strip()
-        if not value:
-            continue
-        active[key] = value
-        businesses = [b for b in businesses if _safely(predicate, b, value)]
-    return businesses, active
-
-
-def _safely(predicate, business, value):
-    try:
-        return predicate(business, value)
-    except (TypeError, ValueError):
-        return True
 
 
 def _run_context(connection, run_id, params):
@@ -130,7 +46,7 @@ def _run_context(connection, run_id, params):
     if run is None:
         return None
     everything = store.list_businesses(connection, run_id)
-    businesses, active = _apply_filters(everything, params or {})
+    businesses, active = apply_filters(everything, params or {})
     return {
         "run": run,
         "businesses": businesses,
@@ -277,21 +193,13 @@ async def cancel_run(request):
 # --------------------------------------------------------------------------- #
 
 
-def _export_row(business):
-    row = {}
-    for column in EXPORT_COLUMNS:
-        value = business.get(column)
-        row[column] = ", ".join(map(str, value)) if isinstance(value, list) else value
-    return row
-
-
 async def export_csv(request):
     """The filtered view, not the whole table. What is on screen is what exports."""
     run_id = int(request.path_params["run_id"])
     connection = connect()
     try:
         run = store.get_run(connection, run_id)
-        businesses, _ = _apply_filters(
+        businesses, _ = apply_filters(
             store.list_businesses(connection, run_id), dict(request.query_params)
         )
     finally:
@@ -300,18 +208,11 @@ async def export_csv(request):
     if run is None:
         return HTMLResponse("", status_code=404)
 
-    buffer = io.StringIO()
-    writer = csv.DictWriter(buffer, fieldnames=EXPORT_COLUMNS, extrasaction="ignore")
-    writer.writeheader()
-    for business in businesses:
-        writer.writerow(_export_row(business))
-    buffer.seek(0)
-
-    filename = f"sourcer-{run['trade']}-{run['city']}-{run_id}.csv".replace(" ", "-").lower()
+    body = to_csv(businesses)
     return StreamingResponse(
-        iter([buffer.getvalue()]),
+        iter([body]),
         media_type="text/csv",
-        headers={"content-disposition": f'attachment; filename="{filename}"'},
+        headers={"content-disposition": f'attachment; filename="{filename_for(run)}"'},
     )
 
 
@@ -322,7 +223,7 @@ async def api_run(request):
         run = store.get_run(connection, run_id)
         if run is None:
             return JSONResponse({"error": "no such run"}, status_code=404)
-        businesses, active = _apply_filters(
+        businesses, active = apply_filters(
             store.list_businesses(connection, run_id), dict(request.query_params)
         )
     finally:
@@ -392,17 +293,3 @@ routes = [
     Route("/healthz", healthz),
     Mount("/static", StaticFiles(directory=str(HERE / "static")), name="static"),
 ]
-
-
-def build():
-    init_db().close()
-    try:
-        load_seed()
-    except Exception:
-        # A malformed seed must never stop the application booting, but it must
-        # not vanish either: an empty table would otherwise look like a design.
-        logging.getLogger("sourcer").exception("could not load the shipped dataset")
-    return Starlette(routes=routes)
-
-
-app = build()

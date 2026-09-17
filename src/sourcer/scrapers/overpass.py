@@ -11,7 +11,7 @@ Source refuses us.
 
 import json
 
-from sourcer.trades import source_key
+from sourcer.scrapers.catalog import source_key
 
 NAME = "overpass"
 LABEL = "OpenStreetMap"

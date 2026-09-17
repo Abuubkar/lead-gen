@@ -2,8 +2,8 @@
 
 import argparse
 
-from sourcer.db import describe
-from sourcer.seed import export_seed, load_seed, seed_runs
+from sourcer.db.database import describe
+from sourcer.db.seed import export_seed, load_seed, seed_runs
 
 
 def cmd_init_db(_args):

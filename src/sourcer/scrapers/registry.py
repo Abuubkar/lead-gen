@@ -7,7 +7,7 @@ is a new module and a line in the registry.
 Each declares whether it is enabled by default. BBB is not: see ADR 0001.
 """
 
-from sourcer.sources import bbb, overpass, yellowpages
+from sourcer.scrapers import bbb, overpass, yellowpages
 
 # Order matters. The first Source to report a field wins, because merging fills
 # blanks and never overwrites, so the richest reachable Source goes first.

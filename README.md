@@ -25,7 +25,7 @@ with the evidence shown beside it.
 
 ```bash
 uv sync
-uv run uvicorn sourcer.web:app --port 8000
+uv run uvicorn sourcer.main:app --port 8000
 ```
 
 Open http://localhost:8000. A dataset ships with the repository and loads on
@@ -38,7 +38,7 @@ memory:
 
 ```bash
 uv run patchright install chromium
-SOURCER_BROWSER=1 uv run uvicorn sourcer.web:app --port 8000
+SOURCER_BROWSER=1 uv run uvicorn sourcer.main:app --port 8000
 ```
 
 ### Command line
@@ -135,17 +135,26 @@ library. A background thread per search run. One Docker container on Render.
 
 | Path | What it is |
 |---|---|
-| `src/sourcer/schema.sql` | Five tables, the whole data model in one readable file |
-| `src/sourcer/identity.py` | Normalisation and the dedup key resolution |
-| `src/sourcer/merge.py` | What changes when a second source reports the same business |
-| `src/sourcer/store.py` | Every read and write. No other module writes SQL |
-| `src/sourcer/fetch.py` | Every outbound request, robots, rate limiting, tiers |
-| `src/sourcer/sources/` | One module per source, behind one small interface |
-| `src/sourcer/enrich.py` | Reading a business's own site by rule |
-| `src/sourcer/scoring.py` | The rubric. Weights as plain data |
-| `src/sourcer/runner.py` | Orchestrating a run in the background |
-| `src/sourcer/web.py` | Routes, filters, CSV export, JSON API |
-| `src/sourcer/llm.py` | Optional model step. Cannot produce a score |
+| `main.py` | ASGI entry point. Builds the app, applies the schema, loads the seed |
+| `config.py` | Paths, environment flags, shared constants |
+| `api/routes.py` | HTTP handlers for the pages and the JSON endpoints |
+| `api/filters.py` | The query filters, shared by page, CSV and API |
+| `api/export.py` | CSV generation |
+| `api/templates/`, `api/static/` | Jinja templates and the single stylesheet |
+| `db/schema.sql` | Five tables, the whole data model in one readable file |
+| `db/database.py` | Connection settings, transactions, schema application |
+| `db/repository.py` | Every read and write. No other module writes SQL |
+| `db/seed.py` | Capturing and loading the shipped dataset |
+| `scrapers/client.py` | Every outbound request: robots, rate limiting, both tiers |
+| `scrapers/registry.py` | Which scrapers exist and which run by default |
+| `scrapers/catalog.py` | Trade to per-site keys |
+| `scrapers/yellowpages.py`, `overpass.py`, `bbb.py` | One module per site |
+| `extractors/website.py` | Reading a business's own site by rule |
+| `pipelines/dedup.py` | Normalisation and identity resolution |
+| `pipelines/merge.py` | What changes when a second source reports the same business |
+| `pipelines/scoring.py` | The rubric. Weights as plain data |
+| `services/llm.py` | Optional model step. Cannot produce a score |
+| `workers/runner.py` | Orchestrating a run in the background |
 | `CONTEXT.md` | The domain glossary the code follows |
 | `docs/adr/` | Decisions that were hard to reverse |
 | `PLAN.md` | The plan this was built from |

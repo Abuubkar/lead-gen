@@ -11,9 +11,9 @@ Signals behind it but never computes or adjusts either. See ADR 0002.
 
 import json
 
-from sourcer.db import now
-from sourcer.identity import DEDUP_RULES, dedup_keys, key_rule_of, resolve_dedup_key
-from sourcer.merge import plan_merge
+from sourcer.db.database import now
+from sourcer.pipelines.dedup import DEDUP_RULES, dedup_keys, key_rule_of, resolve_dedup_key
+from sourcer.pipelines.merge import plan_merge
 
 # Columns holding a JSON document as text.
 JSON_COLUMNS = ("categories", "sources", "source_outcomes")

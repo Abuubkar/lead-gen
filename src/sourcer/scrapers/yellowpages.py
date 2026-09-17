@@ -16,8 +16,8 @@ duplicate the organic rows.
 import json
 import re
 
-from sourcer.identity import slug
-from sourcer.trades import source_key
+from sourcer.pipelines.dedup import slug
+from sourcer.scrapers.catalog import source_key
 
 NAME = "yellowpages"
 LABEL = "YellowPages"

@@ -15,10 +15,13 @@ for a field is the one that survives.
 
 import threading
 
-from sourcer import llm, scoring, sources, store
-from sourcer.db import connect, init_db
-from sourcer.enrich import enrich
-from sourcer.fetch import Blocked, Disallowed, Fetcher
+from sourcer.db import repository as store
+from sourcer.db.database import connect, init_db
+from sourcer.extractors.website import enrich
+from sourcer.pipelines import scoring
+from sourcer.scrapers import registry as sources
+from sourcer.scrapers.client import Blocked, Disallowed, Fetcher
+from sourcer.services import llm
 
 # Per-host politeness during one run. Slower than strictly necessary for a
 # single page, because the alternative is being refused for the whole run.

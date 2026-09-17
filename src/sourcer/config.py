@@ -5,6 +5,7 @@ fingerprint store, and is ignored by git.
 """
 
 import os
+from datetime import UTC, datetime
 from pathlib import Path
 
 DEFAULT_DATA_DIRNAME = "data"
@@ -54,3 +55,37 @@ def selector_store_path():
     along with every selector learned so far. Used from step 4.
     """
     return data_dir() / "selectors.db"
+
+
+# --------------------------------------------------------------------------- #
+# Shared constants
+# --------------------------------------------------------------------------- #
+
+# Derived, not hard-coded. A literal year silently rots: every age Signal would
+# drift by one on 1 January and nobody would notice.
+CURRENT_YEAR = datetime.now(UTC).year
+
+# Older than this and a "since" date is more likely a street number or a phone
+# fragment than a founding year.
+EARLIEST_PLAUSIBLE_YEAR = 1850
+
+
+# --------------------------------------------------------------------------- #
+# Feature flags
+# --------------------------------------------------------------------------- #
+
+
+def browser_enabled():
+    """Whether the browser tier may be used.
+
+    Off by default. Headless Chromium measured 920 MB to 1.5 GB of resident
+    memory, against 512 MB on the smallest deployment tiers, and the
+    HTTP-only Sources must keep working there.
+    """
+    return os.environ.get("SOURCER_BROWSER", "").strip().lower() in ("1", "true", "yes")
+
+
+def proxies():
+    """A rotation list from the environment, empty when none is configured."""
+    raw = os.environ.get("SOURCER_PROXIES", "")
+    return [entry.strip() for entry in raw.split(",") if entry.strip()]

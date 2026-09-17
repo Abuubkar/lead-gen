@@ -16,9 +16,9 @@ query string, and profile pages, which the policy allows explicitly.
 import json
 import re
 
-from sourcer.fetch import Disallowed
-from sourcer.identity import slug
-from sourcer.trades import source_key
+from sourcer.pipelines.dedup import slug
+from sourcer.scrapers.catalog import source_key
+from sourcer.scrapers.client import Disallowed
 
 NAME = "bbb"
 LABEL = "Better Business Bureau"
