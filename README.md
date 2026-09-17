@@ -6,6 +6,9 @@ the fact behind it.
 
 Built for the Caprae Capital AI-readiness pre-work challenge.
 
+![The ranked shortlist: 31 HVAC businesses in Phoenix, scored out of 100, with
+the four score groups broken out beside each one](docs/media/shortlist.png)
+
 ## The thesis
 
 SaaSquatch was built by a searcher who was tired of paying a thousand dollars a
@@ -31,6 +34,9 @@ uv run uvicorn sourcer.main:app --port 8000
 Open http://localhost:8000. A dataset ships with the repository and loads on
 first boot, so there is a ranked shortlist on screen immediately, with no
 scraping and no browser stack.
+
+![The search form, with the rubric's four groups and their weights in the
+rail](docs/media/home.png)
 
 To run a live search, pick a trade and a market on the home page. To enable the
 browser tier, which some sources need, and which wants around a gigabyte of
@@ -67,7 +73,7 @@ that is missing.
 
 Two rules matter more than the weights.
 
-**Every point traces to evidence.** Click any row and the panel lists each
+**Every point traces to evidence.** Click any row and a drawer lists each
 signal, the value observed, the points awarded, and where the fact came from.
 Provenance is derived from which fields the rule actually read, so a signal built
 on a directory listing cites the listing and one built on the business's own site
@@ -75,6 +81,9 @@ links to the page. A fact supplied by the optional model is labelled as such,
 because a guess is weaker evidence than a page we read. A searcher has to defend
 a shortlist to their investors, and a number nobody can audit is worth less than
 a smaller number they can trace.
+
+![The evidence drawer for one business: every signal with its points, the value
+observed, and the source the fact came from](docs/media/evidence.png)
 
 **Missing data never costs points.** A signal we could not evaluate is recorded
 unresolved and excluded from the denominator, so a business scored on half the
