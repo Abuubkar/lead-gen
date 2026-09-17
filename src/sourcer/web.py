@@ -25,11 +25,39 @@ from sourcer.seed import load_seed
 HERE = Path(__file__).parent
 templates = Jinja2Templates(directory=str(HERE / "templates"))
 
+# Score bands. Defined once here rather than as a comparison repeated in every
+# template, because a Business mid-run has no Score yet and comparing None
+# against a number raises.
+BAND_THRESHOLDS = ((75, "high"), (50, "mid"))
+
+
+def band_of(score):
+    if score is None:
+        return "none"
+    for threshold, name in BAND_THRESHOLDS:
+        if score >= threshold:
+            return name
+    return "low"
+
+
+def shown_score(score):
+    return "—" if score is None else str(round(score))
+
+
+templates.env.filters["band"] = band_of
+templates.env.filters["shown_score"] = shown_score
+
 # Filters a Searcher can apply to the results table. Kept here because the
 # interface is what decides which ones are worth having.
 FILTERS = {
     "min_score": ("Minimum score", lambda b, v: (b["score"] or 0) >= float(v)),
-    "min_confidence": ("Minimum confidence", lambda b, v: (b["confidence"] or 0) >= float(v)),
+    # A Business not yet scored has no Confidence to judge, so it passes. Without
+    # this, the default floor hides every row while a run is still working and
+    # the streaming table stays empty until scoring finishes.
+    "min_confidence": (
+        "Minimum confidence",
+        lambda b, v: b["confidence"] is None or b["confidence"] >= float(v),
+    ),
     "min_years": ("Minimum years trading", lambda b, v: (b["years_in_business"] or 0) >= int(v)),
     "no_website": ("No website only", lambda b, v: not b["website_url"]),
     "owner_known": ("Owner known only", lambda b, v: bool(b["owner_name"])),

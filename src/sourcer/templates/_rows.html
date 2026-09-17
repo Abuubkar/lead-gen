@@ -18,8 +18,8 @@
     <tr hx-get="/businesses/{{ business.id }}" hx-target="#detail" hx-swap="innerHTML"
         class="lead {% if business.review_state and business.review_state != 'new' %}handled{% endif %}">
       <td class="score">
-        <span class="band {% if business.score >= 75 %}high{% elif business.score >= 50 %}mid{% else %}low{% endif %}">
-          {{ business.score | round(0) | int if business.score is not none else "—" }}
+        <span class="band {{ business.score | band }}">
+          {{ business.score | shown_score }}
         </span>
       </td>
       <td class="conf" title="share of the rubric we could evaluate">
