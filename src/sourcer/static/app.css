@@ -112,6 +112,7 @@ tbody tr:last-child td { border-bottom: 0; }
 }
 .band.high { background: var(--high-soft); color: var(--high); }
 .band.mid { background: var(--mid-soft); color: var(--mid); }
+.band.none { color: var(--ink-faint); }
 
 .pill {
   display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 12px;
