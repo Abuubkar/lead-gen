@@ -427,6 +427,31 @@ def list_businesses(connection, run_id):
     return businesses
 
 
+def group_breakdown(connection, run_id):
+    """Points earned and available per rubric group, per Business, in one query.
+
+    The results table draws each Score as four segments sized by group weight
+    and filled by what that group earned, so the bar is the breakdown rather
+    than decoration beside a number. Fetching the sums per row would be a query
+    per Business; this is one grouped query per run.
+    """
+    rows = connection.execute(
+        "SELECT signal.business_id AS bid, signal.group_name AS grp,"
+        " SUM(signal.points) AS earned, SUM(signal.max_points) AS available"
+        " FROM signal JOIN business ON business.id = signal.business_id"
+        " WHERE business.run_id = ? GROUP BY 1, 2",
+        (run_id,),
+    ).fetchall()
+
+    breakdown = {}
+    for row in rows:
+        breakdown.setdefault(row["bid"], {})[row["grp"]] = {
+            "earned": row["earned"] or 0.0,
+            "available": row["available"] or 0.0,
+        }
+    return breakdown
+
+
 def get_business_detail(connection, business_id):
     """One Business with everything needed to audit its Score."""
     business = get_business_fields(connection, business_id)

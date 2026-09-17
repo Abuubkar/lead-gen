@@ -4,14 +4,31 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}sourcer{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/app.css">
   <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.4/dist/htmx.min.js"></script>
 </head>
 <body>
-  <header class="bar">
-    <a class="brand" href="/">sourcer</a>
-    <p class="tagline">Small businesses, ranked by who is most likely to sell.</p>
-  </header>
-  <main>{% block content %}{% endblock %}</main>
+  <aside class="rail">
+    <a class="brand" href="/"><em></em> sourcer</a>
+    {% block rail %}{% endblock %}
+  </aside>
+  <main id="main">{% block main %}{% endblock %}</main>
+  {% block after %}{% endblock %}
+
+  <script>
+    // Copy a phone or an email with one click, and say so for a moment.
+    document.addEventListener('click', function (event) {
+      var button = event.target.closest('[data-copy]');
+      if (!button) return;
+      event.preventDefault();
+      event.stopPropagation();
+      navigator.clipboard.writeText(button.getAttribute('data-copy')).then(function () {
+        button.classList.add('copied');
+        setTimeout(function () { button.classList.remove('copied'); }, 1400);
+      });
+    });
+  </script>
 </body>
 </html>

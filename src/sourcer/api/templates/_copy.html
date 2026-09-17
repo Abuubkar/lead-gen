@@ -1,0 +1,8 @@
+{# A value worth copying, with the control beside it. Used for phones and emails. #}
+<span class="copyable">
+  {{ shown }}
+  <button class="copy" type="button" data-copy="{{ value }}" title="Copy {{ what }}">
+    <svg viewBox="0 0 12 12" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7"/><path d="M1.5 8.5v-7h7"/></svg>
+    <span class="idle">copy</span><span class="done">copied</span>
+  </button>
+</span>

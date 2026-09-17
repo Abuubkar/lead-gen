@@ -50,6 +50,8 @@ def _run_context(connection, run_id, params):
     return {
         "run": run,
         "businesses": businesses,
+        "breakdown": store.group_breakdown(connection, run_id),
+        "groups": list(scoring.GROUP_LABELS),
         "total_count": len(everything),
         "hidden_count": len(everything) - len(businesses),
         "provisional_below": PROVISIONAL_BELOW,
