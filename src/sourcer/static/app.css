@@ -95,9 +95,9 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--line); vertical-align: t
 tbody tr:last-child td { border-bottom: 0; }
 
 .results { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 6px 12px 16px; }
-.lead { cursor: pointer; }
-.lead:hover { background: var(--accent-soft); }
-.lead.handled { opacity: 0.62; }
+.business { cursor: pointer; }
+.business:hover { background: var(--accent-soft); }
+.business.handled { opacity: 0.62; }
 .name { font-weight: 550; }
 .where { display: block; font-style: normal; color: var(--ink-faint); font-size: 12px; font-weight: 400; }
 .num { font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -188,3 +188,5 @@ a { color: var(--accent); }
   color: var(--mid); background: var(--mid-soft); border-radius: 4px;
   padding: 1px 5px; margin-left: 4px; white-space: nowrap;
 }
+
+.cite.from { color: var(--ink-faint); }

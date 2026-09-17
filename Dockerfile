@@ -18,7 +18,8 @@ ENV UV_COMPILE_BYTECODE=1 \
 WORKDIR /app
 
 # Dependencies first, so a source change does not reinstall the world.
-COPY pyproject.toml uv.lock ./
+# README.md is declared as the project readme, so the wheel build needs it.
+COPY pyproject.toml uv.lock README.md ./
 RUN uv sync --no-install-project --no-dev
 
 COPY src ./src

@@ -6,7 +6,7 @@
 {% endif %}
 
 {% if businesses %}
-<table class="leads">
+<table class="businesses">
   <thead>
     <tr>
       <th>Score</th><th>Conf</th><th>Business</th><th>Owner</th><th>Years</th>
@@ -16,7 +16,7 @@
   <tbody>
     {% for business in businesses %}
     <tr hx-get="/businesses/{{ business.id }}" hx-target="#detail" hx-swap="innerHTML"
-        class="lead {% if business.review_state and business.review_state != 'new' %}handled{% endif %}">
+        class="business {% if business.review_state and business.review_state != 'new' %}handled{% endif %}">
       <td class="score">
         <span class="band {{ business.score | band }}">
           {{ business.score | shown_score }}
@@ -54,7 +54,7 @@
   {{ businesses | length }} shown. Click a row to see why it scored.
   {% if hidden_count %}
     {{ hidden_count }} thinly-evidenced
-    {{ "lead" if hidden_count == 1 else "leads" }} hidden.
+    {{ "business" if hidden_count == 1 else "businesses" }} hidden.
     <a href="/runs/{{ run.id }}?min_confidence=0">Show everything</a>
   {% endif %}
 </p>

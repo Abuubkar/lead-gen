@@ -12,16 +12,16 @@ import re
 from urllib.parse import urljoin, urlsplit
 
 from sourcer.fetch import Blocked, Disallowed
+from sourcer.scoring import CURRENT_YEAR, EARLIEST_PLAUSIBLE_YEAR
 
 # Three pages is enough. The homepage carries the tagline and the footer, and
 # an about or contact page carries the founding year and the owner's name.
 MAX_PAGES = 3
 INTERESTING_PATH = re.compile(r"(about|our-story|our-team|meet|history|contact|staff)", re.I)
 
-CURRENT_YEAR = 2026
-# Older than this and a "since" date is more likely a street number or a phone
-# fragment than a founding year.
-EARLIEST_PLAUSIBLE_YEAR = 1850
+# Shared with the rubric, which is the other place a year has to be plausible.
+# Older than the floor and a "since" date is more likely a street number or a
+# phone fragment than a founding year.
 
 FOUNDED = re.compile(
     r"(?:since|established|est\.?|serving\s+\w+\s+since|founded(?:\s+in)?|"
@@ -50,8 +50,9 @@ CREDENTIALLED = re.compile(
     r"\bDr\.?\s+([A-Z][\w'’-]+(?:\s+[A-Z][\w'’-]+){0,2})"
     r"(?:\s*,?\s*(DDS|DMD|DVM|MD|CPA|PE))?",
 )
-PRACTICE_PRINCIPAL = re.compile(r"(owner|founder|practice\s+owner|our\s+doctor|meet\s+(?:dr|the))",
-                                re.I)
+PRACTICE_PRINCIPAL = re.compile(
+    r"(owner|founder|practice\s+owner|our\s+doctor|meet\s+(?:dr|the))", re.I
+)
 
 EMAIL = re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]+")
 PHONE = re.compile(r"\(?\b\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}\b")

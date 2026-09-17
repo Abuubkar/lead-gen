@@ -60,23 +60,42 @@ def _capture(connection, run):
     businesses = []
     for business in store.list_businesses(connection, run["id"]):
         detail = store.get_business_detail(connection, business["id"])
-        businesses.append({
-            "business": {
-                key: value for key, value in detail.items()
-                if key not in ("id", "run_id", "review", "contacts", "signals_by_group",
-                               "key_rule", "review_state", "review_notes")
-            },
-            "contacts": [
-                {key: value for key, value in contact.items()
-                 if key not in ("id", "business_id")}
-                for contact in detail["contacts"]
-            ],
-            "signals": [
-                {key: value for key, value in signal.items()
-                 if key not in ("id", "business_id")}
-                for group in detail["signals_by_group"].values() for signal in group
-            ],
-        })
+        businesses.append(
+            {
+                "business": {
+                    key: value
+                    for key, value in detail.items()
+                    if key
+                    not in (
+                        "id",
+                        "run_id",
+                        "review",
+                        "contacts",
+                        "signals_by_group",
+                        "key_rule",
+                        "review_state",
+                        "review_notes",
+                    )
+                },
+                "contacts": [
+                    {
+                        key: value
+                        for key, value in contact.items()
+                        if key not in ("id", "business_id")
+                    }
+                    for contact in detail["contacts"]
+                ],
+                "signals": [
+                    {
+                        key: value
+                        for key, value in signal.items()
+                        if key not in ("id", "business_id")
+                    }
+                    for group in detail["signals_by_group"].values()
+                    for signal in group
+                ],
+            }
+        )
     return {
         "run": {key: value for key, value in run.items() if key != "id"},
         "businesses": businesses,
@@ -96,8 +115,18 @@ def export_seed(runs):
 # --------------------------------------------------------------------------- #
 
 RUN_COLUMNS = (
-    "trade", "city", "state", "run_status", "progress_note", "started_at", "finished_at",
-    "discovered_count", "enriched_count", "scored_count", "source_outcomes", "error",
+    "trade",
+    "city",
+    "state",
+    "run_status",
+    "progress_note",
+    "started_at",
+    "finished_at",
+    "discovered_count",
+    "enriched_count",
+    "scored_count",
+    "source_outcomes",
+    "error",
     "created_at",
 )
 

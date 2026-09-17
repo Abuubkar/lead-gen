@@ -13,16 +13,33 @@ Weights are plain data in this module so they can be argued with and tuned
 without touching the logic.
 """
 
+from datetime import UTC, datetime
+
+# Derived, not hard-coded. A literal year silently rots: every age Signal would
+# drift by one on 1 January and nobody would notice.
+CURRENT_YEAR = datetime.now(UTC).year
+EARLIEST_PLAUSIBLE_YEAR = 1850
+
 # Web presences that are somebody else's platform rather than the business's
 # own site. Having only one of these is itself a sign of underinvestment.
 PLATFORM_DOMAINS = (
-    "facebook.com", "instagram.com", "yelp.com", "linkedin.com", "nextdoor.com",
-    "google.com", "business.site", "wixsite.com", "weebly.com", "squarespace.com",
-    "angi.com", "thumbtack.com", "homeadvisor.com", "yellowpages.com",
+    "facebook.com",
+    "instagram.com",
+    "yelp.com",
+    "linkedin.com",
+    "nextdoor.com",
+    "google.com",
+    "business.site",
+    "wixsite.com",
+    "weebly.com",
+    "squarespace.com",
+    "angi.com",
+    "thumbtack.com",
+    "homeadvisor.com",
+    "yellowpages.com",
 )
 
 STALE_COPYRIGHT_YEARS = 3
-CURRENT_YEAR = 2026
 
 GROUP_LABELS = {
     "succession": "Succession likelihood",
@@ -30,6 +47,15 @@ GROUP_LABELS = {
     "acquirability": "Acquirability",
     "demand": "Demand proof",
 }
+
+
+def _enrichment_attempted(context):
+    """Whether we actually tried to read this Business's own site.
+
+    Asked as a question rather than compared against status strings in three
+    places, so a new status does not mean hunting for them.
+    """
+    return context.get("enrichment_status") == "ok"
 
 
 def _years(context):
@@ -59,7 +85,7 @@ def _owner_named(context):
         role = context.get("owner_role")
         return 11.0, f"{name}{f', {role}' if role else ''}"
     # Absence is not evidence: we may simply not have read a page that says so.
-    if context.get("enrichment_status") in ("ok",) or context.get("sources_include_bbb"):
+    if _enrichment_attempted(context) or "bbb" in (context.get("sources") or []):
         return 0.0, "no owner named"
     return None, None
 
@@ -71,6 +97,16 @@ def _owner_language(context):
     if language:
         return 5.0, ", ".join(label.replace("_", " ") for label in language)
     return 0.0, "no owner-operator language"
+
+
+def _succession_language(context):
+    """Explicit retirement or for-sale wording: the least ambiguous signal here."""
+    language = context.get("succession_language")
+    if language is None:
+        return None, None
+    if language:
+        return 3.0, "site mentions retirement or a sale"
+    return 0.0, "no succession language"
 
 
 def _no_website(context):
@@ -91,7 +127,7 @@ def _stale_copyright(context):
 
 
 def _weak_platform(context):
-    if context.get("enrichment_status") == "skipped" and not context.get("website_url"):
+    if not context.get("website_url"):
         return None, None
     builder = context.get("site_builder")
     if not context.get("https", True):
@@ -123,7 +159,7 @@ def _not_a_chain(context):
     franchise = context.get("is_franchise") or context.get("franchise_language")
     if franchise:
         return 0.0, "franchise or chain markers"
-    if context.get("enrichment_status") == "ok" or context.get("is_franchise") is not None:
+    if _enrichment_attempted(context) or context.get("is_franchise") is not None:
         return 8.0, "no chain markers"
     return None, None
 
@@ -175,54 +211,91 @@ def _accredited(context):
 
 
 def _listing_complete(context):
-    present = [
-        field for field in ("phone_display", "street", "categories") if context.get(field)
-    ]
+    present = [field for field in ("phone_display", "street", "categories") if context.get(field)]
     if len(present) == 3:
         return 2.0, "phone, address and categories all listed"
     return 0.0, f"listing has {len(present)} of 3 key fields"
 
 
-# name, group, max points, rule. The four group totals are 30, 25, 25 and 20.
+# name, group, max points, rule, and the context keys the rule reads. The keys
+# are what let a Signal cite where its fact actually came from instead of
+# pointing at whichever page was enriched last.
 SIGNALS = (
-    ("years_in_business", "succession", 14.0, _age),
-    ("owner_named", "succession", 11.0, _owner_named),
-    ("owner_operator_language", "succession", 5.0, _owner_language),
-    ("no_website", "underinvestment", 12.0, _no_website),
-    ("stale_copyright", "underinvestment", 7.0, _stale_copyright),
-    ("weak_web_platform", "underinvestment", 4.0, _weak_platform),
-    ("no_online_booking", "underinvestment", 2.0, _no_booking),
-    ("single_location", "acquirability", 10.0, _single_location),
-    ("not_a_chain", "acquirability", 8.0, _not_a_chain),
-    ("small_team", "acquirability", 4.0, _small_team),
-    ("own_domain", "acquirability", 3.0, _own_domain),
-    ("review_volume", "demand", 8.0, _reviews),
-    ("rating", "demand", 6.0, _rating),
-    ("bbb_accredited", "demand", 4.0, _accredited),
-    ("listing_complete", "demand", 2.0, _listing_complete),
+    ("years_in_business", "succession", 14.0, _age, ("years_in_business", "founded_year")),
+    ("owner_named", "succession", 10.0, _owner_named, ("owner_name", "owner_role")),
+    ("owner_operator_language", "succession", 3.0, _owner_language, ("ownership_language",)),
+    ("succession_language", "succession", 3.0, _succession_language, ("succession_language",)),
+    ("no_website", "underinvestment", 12.0, _no_website, ("website_url",)),
+    ("stale_copyright", "underinvestment", 7.0, _stale_copyright, ("copyright_year",)),
+    ("weak_web_platform", "underinvestment", 4.0, _weak_platform, ("site_builder", "https")),
+    ("no_online_booking", "underinvestment", 2.0, _no_booking, ("has_booking",)),
+    ("single_location", "acquirability", 10.0, _single_location, ("location_count", "street")),
+    ("not_a_chain", "acquirability", 8.0, _not_a_chain, ("is_franchise", "franchise_language")),
+    ("small_team", "acquirability", 4.0, _small_team, ("employee_estimate",)),
+    ("own_domain", "acquirability", 3.0, _own_domain, ("website_domain", "website_url")),
+    ("review_volume", "demand", 8.0, _reviews, ("public_review_count",)),
+    ("rating", "demand", 6.0, _rating, ("public_rating",)),
+    ("bbb_accredited", "demand", 4.0, _accredited, ("bbb_accredited",)),
+    (
+        "listing_complete",
+        "demand",
+        2.0,
+        _listing_complete,
+        ("phone_display", "street", "categories"),
+    ),
 )
 
-TOTAL_POINTS = sum(max_points for _, _, max_points, _ in SIGNALS)
+TOTAL_POINTS = sum(max_points for _, _, max_points, _, _ in SIGNALS)
+
+
+# Where a fact came from, worst case first: a model guess is weaker evidence
+# than a page we read, which is weaker than nothing at all being claimed.
+ORIGIN_MODEL = "ai"
+ORIGIN_WEBSITE = "website"
+
+
+def _provenance(context, reads):
+    """Which Source a Signal's fact came from, and the page to cite for it.
+
+    Derived from which context keys the rule actually read. Stamping the
+    enriched homepage on every Signal, as an earlier pass did, cites a page
+    where a listing-derived fact was never observed, which is worse than citing
+    nothing.
+    """
+    model_keys = context.get("_model_keys") or ()
+    website_keys = context.get("_website_keys") or ()
+
+    used = [key for key in reads if context.get(key) not in (None, "", [], {})] or list(reads)
+    if any(key in model_keys for key in used):
+        return ORIGIN_MODEL, context.get("evidence_url")
+    if any(key in website_keys for key in used):
+        return ORIGIN_WEBSITE, context.get("evidence_url")
+
+    sources = context.get("sources") or []
+    return (sources[0] if sources else None), None
 
 
 def group_totals():
     """Points available per group, for showing the rubric."""
     totals = {}
-    for _, group, max_points, _ in SIGNALS:
+    for _, group, max_points, _, _ in SIGNALS:
         totals[group] = totals.get(group, 0.0) + max_points
     return totals
 
 
 def evaluate(context):
-    """Every Signal for one Business, resolved or not."""
-    signals = []
-    for name, group, max_points, rule in SIGNALS:
-        try:
-            points, raw_value = rule(context)
-        except Exception:
-            points, raw_value = None, None
+    """Every Signal for one Business, resolved or not.
 
+    A rule that raises is a bug in the rubric, and the rubric is the one thing
+    here that has to be auditable, so it is not caught. Quietly returning
+    "unresolved" would shrink Confidence's denominator and hide the fault.
+    """
+    signals = []
+    for name, group, max_points, rule, reads in SIGNALS:
+        points, raw_value = rule(context)
         resolved = points is not None
+        source, source_url = _provenance(context, reads) if resolved else (None, None)
+
         signals.append(
             {
                 "name": name,
@@ -231,7 +304,8 @@ def evaluate(context):
                 "points": float(points) if resolved else 0.0,
                 "max_points": max_points,
                 "resolved": resolved,
-                "source_url": context.get("evidence_url") if resolved else None,
+                "source": source,
+                "source_url": source_url,
             }
         )
     return signals

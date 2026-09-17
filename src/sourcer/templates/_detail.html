@@ -73,7 +73,9 @@
         </span>
         {% if signal.source_url %}
         <a class="cite" href="{{ signal.source_url }}" target="_blank"
-           rel="noopener noreferrer nofollow">source</a>
+           rel="noopener noreferrer nofollow">{{ signal.source or "source" }}</a>
+        {% elif signal.source %}
+        <span class="cite from">{{ signal.source }}</span>
         {% endif %}
       </li>
       {% endfor %}

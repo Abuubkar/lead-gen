@@ -16,6 +16,7 @@ duplicate the organic rows.
 import json
 import re
 
+from sourcer.identity import slug
 from sourcer.trades import source_key
 
 NAME = "yellowpages"
@@ -24,6 +25,11 @@ ENABLED_BY_DEFAULT = True
 TIER = "http"
 
 BASE = "https://www.yellowpages.com"
+
+# Listing container. Saved on first success and relocated by structure and text
+# if YellowPages renames it, which is the difference between a redesign costing
+# an afternoon and costing a run.
+CARD_SELECTOR = ".result"
 
 # Ratings arrive as words in a class attribute rather than a number.
 RATING_WORDS = {
@@ -35,17 +41,24 @@ RATING_WORDS = {
 }
 
 
-def _slug(text):
-    return re.sub(r"[^a-z0-9]+", "-", (text or "").strip().lower()).strip("-")
-
-
 def category_url(trade_key, city, state, page=1):
     """A category path, which carries no query string on the first page."""
     category = source_key(trade_key, NAME)
     if not category:
         return None
-    path = f"{BASE}/{_slug(city)}-{_slug(state)}/{category}"
+    path = f"{BASE}/{slug(city)}-{slug(state)}/{category}"
     return path if page <= 1 else f"{path}?page={page}"
+
+
+def cards_in(response):
+    """The listing cards on a page, found adaptively.
+
+    auto_save records what matched so a later run can relocate the same element
+    after a markup change; adaptive uses those records when the selector itself
+    stops matching.
+    """
+    found = response.css(CARD_SELECTOR, adaptive=True, auto_save=True)
+    return list(found) if found else []
 
 
 def _text(card, selector):
@@ -133,7 +146,7 @@ def discover(fetcher, trade_key, city, state, page_limit=3):
             return
 
         response = fetcher.get(url, referer=previous_url, tier=TIER)
-        cards = [card for card in response.css(".result") if not _is_paid(card)]
+        cards = [card for card in cards_in(response) if not _is_paid(card)]
         if not cards:
             return
 

@@ -13,6 +13,8 @@ Business row, so a second pass over the same market costs nothing.
 import json
 import os
 
+from sourcer.scoring import CURRENT_YEAR, EARLIEST_PLAUSIBLE_YEAR
+
 MODEL = "claude-haiku-4-5-20251001"
 MAX_CHARS = 6000
 MAX_TOKENS = 400
@@ -79,7 +81,7 @@ def _clean(parsed):
                 year = int(value)
             except (TypeError, ValueError):
                 continue
-            if 1850 <= year <= 2026:
+            if EARLIEST_PLAUSIBLE_YEAR <= year <= CURRENT_YEAR:
                 found[key] = year
             continue
         if key == "employee_estimate":
