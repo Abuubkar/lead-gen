@@ -99,11 +99,26 @@ one click to show everything.
 
 ## Sources
 
-| Source | Reachable | Carries |
+| Source | Reachable from a home address | Carries |
 |---|---|---|
 | YellowPages | Intermittently; refusals are not tier-specific | Name, phone, address, website, rating, years trading |
-| OpenStreetMap | Always. No key, no anti-bot | Name, phone, website, address |
+| OpenStreetMap | Yes. No key, no anti-bot | Name, phone, website, address |
 | Better Business Bureau | Disabled by default, see below | Owner name, date started, rating, accreditation |
+
+**From a datacenter address, none of them.** Measured against the deployed
+service on Render, every Source refuses, each in its own way: YellowPages
+answers with Cloudflare's "Attention required!", an address-level block rather
+than a challenge; BBB answers with Cloudflare's "Just a moment..." interstitial,
+which is a challenge but needs the browser tier that the instance has too little
+memory to run; and OpenStreetMap's Overpass endpoint refuses the TCP connection
+outright in about thirty milliseconds, while answering from a home address at
+the same moment. Outbound HTTPS from the instance is fine, which the first two
+prove by returning real pages.
+
+This is the ordinary condition of a scraper on shared hosting, and it is why the
+dataset ships in the repository. The deployed demo serves that dataset in full
+and cannot run a live search. Live discovery needs a residential or proxied
+address, which `SOURCER_PROXIES` accepts.
 
 **BBB is built and switched off.** Three separate reasons, recorded in
 [ADR 0001](docs/adr/0001-robots-constrained-bbb-access.md). Its robots policy
