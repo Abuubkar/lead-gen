@@ -16,7 +16,7 @@ for a field is the one that survives.
 import threading
 
 from sourcer import llm, scoring, sources, store
-from sourcer.db import connect
+from sourcer.db import connect, init_db
 from sourcer.enrich import enrich
 from sourcer.fetch import Blocked, Disallowed, Fetcher
 
@@ -45,8 +45,14 @@ def _clear_cancel(run_id):
 
 
 def start(trade, city, state, source_names=None, page_limit=3):
-    """Record the request, then work it in the background. Returns the run id."""
-    connection = connect()
+    """Record the request, then work it in the background. Returns the run id.
+
+    Applies the schema first. Starting a run is an entry point into the
+    database, reachable from the command line as well as the web app, and
+    application is idempotent, so doing it here removes a class of "forgot to
+    initialise" rather than relying on some earlier caller.
+    """
+    connection = init_db()
     try:
         run_id = store.create_run(connection, trade, city, state)
     finally:
