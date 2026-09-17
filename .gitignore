@@ -1,1 +1,20 @@
+# Confidential interview brief. Never commit.
 TASK.md
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# Tooling caches
+.ruff_cache/
+
+# Runtime data: the working database, WAL companions, and the learned
+# selector fingerprint store. The shipped seed lives in seed/ and is committed.
+data/
+*.db
+*.db-wal
+*.db-shm
+
+# Local configuration
+.env
