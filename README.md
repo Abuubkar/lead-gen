@@ -9,6 +9,10 @@ Built for the Caprae Capital AI-readiness pre-work challenge.
 ![The ranked shortlist: 31 HVAC businesses in Phoenix, scored out of 100, with
 the four score groups broken out beside each one](docs/media/shortlist.png)
 
+A silent screen recording of the same flow, end to end, is at
+[`docs/media/walkthrough.webm`](docs/media/walkthrough.webm) (1:42). The
+narration it is scripted against is in [VIDEO.md](./VIDEO.md).
+
 ## The thesis
 
 SaaSquatch was built by a searcher who was tired of paying a thousand dollars a

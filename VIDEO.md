@@ -1,66 +1,97 @@
-# Two-minute walkthrough outline
+# The submission video
 
-Aim: show the product working on real data, and make one argument. Do not tour
-the code.
+`docs/media/walkthrough.webm` is the screen recording: 1:42, 1600x900, silent.
+It is scripted and reproducible, not a live take, so it can be re-shot without
+losing the pacing.
 
-## 0:00 to 0:20, the gap
+The voice has to be yours. Read the script below over the clip; the marks are
+measured off this recording, not estimated, so a line started on its mark lands
+on the right frame. Word counts are sized for roughly 150 words a minute, which
+is the pace the marks assume.
 
-Open SaaSquatch's own page. Read the two lines out loud: "30+ entrepreneurs and
-searchers" next to "2,000+ sales teams". Point at the filters: industry, size,
-location, tech stack. Point at the navigation item "AI Company Scoring" and note
-that nothing sits behind it.
+## The script
 
-Say the line: a searcher does not want a list of plumbers, they want the three
-plumbers most likely to sell.
+**0:00 — the gap** (36 words)
 
-## 0:20 to 0:45, the search
+> SaaSquatch gives searchers filters and a CSV export. But a searcher doesn't
+> want a list of plumbers. They want the three most likely to sell. So the score
+> comes first: a hundred points across four groups, and every point has to name
+> the fact behind it.
 
-On the home page, pick a trade and a market, and start a search. While it runs,
-say what is happening: three sources, then we read each business's own website.
-Let the rows appear on screen. Do not talk over the streaming; let it be seen.
+**0:13 — a finished run** (33 words)
 
-Point at the per-source line. Say that a blocked source says so, because an
-empty column has to read as a refusal and not as an empty market.
+> This run found ninety-three HVAC businesses in Phoenix and read ninety of their
+> websites. Each bar is the score cut into its four groups, so you can see where
+> the points came from before opening anything.
 
-## 0:45 to 1:20, the score
+**0:26 — the argument. Slow down here; it is half the video.** (67 words)
 
-Click the top row. This is the whole argument, so slow down.
+> Accurate Energy: sixty-seven out of a hundred, on eighty-six percent of the
+> rubric. Forty-six years trading. The copyright still reads 2019, seven years
+> stale. Built on Wix. Every line shows its points and where the fact came from,
+> the listing or the company's own site. A searcher has to defend a shortlist to
+> their investors, and a number nobody can audit is worth less than a smaller one
+> they can trace.
 
-Walk the panel: thirty-nine years trading, a named owner, a copyright four years
-stale, its own domain, sixty reviews. Each line shows the points and links to
-where it was seen.
+**0:51 — the searcher's call** (26 words)
 
-Say: a searcher has to defend a shortlist to their investors. A number nobody can
-audit is worth less than a smaller number they can trace.
+> I mark it contacted and leave a note. The note is keyed to the business, not to
+> this search, so it survives re-running the search tomorrow.
 
-Then click a thinly-evidenced row. Show the confidence figure and the
-provisional marker. Say: missing data lowers confidence, never the score,
-because the least digitally present businesses are often the best targets, and a
-rubric that punished thin evidence would bury them.
+**1:04 — confidence, not score** (37 words)
 
-## 1:20 to 1:40, the workflow
+> Now the top-ranked business: seventy-one points, but on only fifty-five percent
+> of the rubric, because there is no website to read. Missing data lowers
+> confidence, never the score. The least digitally present businesses are often
+> the best targets.
 
-Filter to businesses trading twenty years or more with a known owner. Mark one
-contacted, add a note. Export the CSV and show that it matches what is on screen
-rather than the whole table.
+**1:18 — narrowing** (28 words)
 
-Say: notes are keyed to the business, not the search, so they survive re-running
-it.
+> Thirty years or more trading, and thirty-one becomes nine. Rows below the
+> evidence floor are hidden by default, and it says so, with one click to show
+> all ninety.
 
-## 1:40 to 2:00, the judgement call
+**1:30 — the export** (10 words)
 
-Show the BBB toggle, switched off. Say the three reasons in one breath: its
-robots policy disallows the search endpoint, its terms forbid compiling a
-competing dataset, and it blocked us at the network edge anyway. The adapter is
-written; the switch is off.
+> The CSV export follows the filters, not the whole table.
 
-Close on that: the most interesting engineering decision here was choosing not
-to take data we could technically have reached.
+**1:34 — the judgement call. Land this one; it is the closing line.** (24 words)
 
-## Notes
+> Better Business Bureau is switched off. Its terms forbid compiling a competing
+> dataset. The best decision here was not taking data we could reach.
 
-- Have a completed run open in a second tab, in case a live source refuses
-  during recording. A refusal is honest but it is not the story.
-- Show the deployed link and `/api/rubric` for a second each, no more.
-- Do not read the README aloud. The video is for the argument; the README is for
-  the detail.
+## What is deliberately not in the clip
+
+**No live search.** The recording runs against the dataset that ships with the
+repo, so it is identical every time and cannot be derailed by a source refusing
+mid-take. The cost is that the streaming table never appears. If you want that
+beat, start a real search in a second tab before recording and cut fifteen
+seconds of rows arriving into the 0:13 mark; say what is happening while it runs
+rather than talking over the rows.
+
+**No competitor screen.** The earlier outline opened on SaaSquatch's own page.
+The gap is easier to state in one sentence than to prove with a tour, and cutting
+to a competitor spends ten seconds before the product appears.
+
+**No code.** The README covers the detail. The video makes one argument.
+
+## Two things to know before you read it out
+
+The filter beat narrows on **years trading**, not on a known owner. Filtering to
+a known owner returns exactly one business in this run: owner names survive a
+deliberately strict cleaner, so they are sparse. One row is honest and makes a
+poor demo, and thirty years of trading tells the succession story anyway.
+
+The score bars in the drawer include greyed lines reading "not enough
+information". Those are unresolved signals, and they are meant to be visible: it
+is the same mechanism as the confidence figure. Do not apologise for them on
+camera.
+
+## Re-shooting it
+
+The flow is a Playwright script driven against a local server, with an injected
+cursor so a viewer can follow the clicks. Start the app on port 8099, clear the
+`review` table so the list starts clean, and run the recorder. Playwright's
+bundled ffmpeg only encodes VP8, so the output is `.webm`. That uploads fine to
+YouTube, Drive and Loom; if the submission form insists on `.mp4`, a system
+ffmpeg will convert it in one pass.
