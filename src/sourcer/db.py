@@ -1,8 +1,8 @@
 """SQLite access.
 
 Plain SQL through the standard library, no ORM. The schema is one readable file
-applied on every open, so there is no migration tool and no state where the code
-and the database disagree.
+applied on every open, so there is no migration step to forget and no state
+where the code and the database disagree.
 """
 
 import sqlite3
@@ -12,8 +12,6 @@ from pathlib import Path
 from sourcer.paths import db_path
 
 SCHEMA_FILE = Path(__file__).with_name("schema.sql")
-
-TABLES = ("search_run", "business", "contact", "signal", "review")
 
 
 def now():
@@ -25,7 +23,7 @@ def connect(path=None):
     """Open a connection with the settings this application depends on.
 
     Write-ahead logging lets the background worker thread write while a web
-    request reads. The busy timeout stops the two from colliding outright.
+    request reads, and the busy timeout stops the two colliding outright.
     Foreign keys are off by default in SQLite and must be enabled per
     connection, or the cascade rules in the schema are decoration.
     """
@@ -40,27 +38,42 @@ def connect(path=None):
     return connection
 
 
-def apply_schema(connection):
-    """Create anything missing. Safe to call on an existing database."""
+def init_db(path=None):
+    """Open the database and create anything the committed schema is missing.
+
+    Safe to call on an existing database: every statement in the schema file is
+    idempotent. Called on every open, so `sourcer init-db` is a convenience for
+    inspecting the result, not a setup step the application depends on.
+    """
+    connection = connect(path)
     connection.executescript(SCHEMA_FILE.read_text())
     return connection
 
 
-def init_db(path=None):
-    """Open the database and bring it up to the committed schema."""
-    return apply_schema(connect(path))
+# What counts as SQLite's own business rather than our schema, per object kind.
+# Tables: sqlite_sequence is AUTOINCREMENT bookkeeping. Indexes: only the
+# statistics tables are internal, because sqlite_autoindex_* entries ARE our
+# UNIQUE constraints, and those are the dedup and re-scoring guarantees.
+_INTERNAL_PREFIX = {"table": "sqlite_", "index": "sqlite_stat"}
 
 
-def table_names(connection):
+def object_names(connection, kind):
+    """Names of every table or index belonging to our schema."""
     rows = connection.execute(
-        "SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'"
-        " ORDER BY name"
+        "SELECT name FROM sqlite_master WHERE type = ? AND name NOT LIKE ? ORDER BY name",
+        (kind, _INTERNAL_PREFIX[kind] + "%"),
     ).fetchall()
     return [row["name"] for row in rows]
 
 
-def index_names(connection):
-    rows = connection.execute(
-        "SELECT name FROM sqlite_master WHERE type = 'index' AND name LIKE 'idx_%' ORDER BY name"
-    ).fetchall()
-    return [row["name"] for row in rows]
+def describe(path=None):
+    """What the database contains, for the CLI and for eyeballing a deployment."""
+    connection = init_db(path)
+    try:
+        return {
+            "path": str(path or db_path()),
+            "tables": object_names(connection, "table"),
+            "indexes": object_names(connection, "index"),
+        }
+    finally:
+        connection.close()

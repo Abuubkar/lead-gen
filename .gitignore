@@ -10,9 +10,9 @@ __pycache__/
 .ruff_cache/
 
 # Runtime data: the working database, WAL companions, and the learned
-# selector fingerprint store. The shipped seed lives in seed/ and is committed.
+# selector fingerprint store. Scoped to data/ on purpose, so the seed database
+# committed under seed/ at step 11 is not swept up by a blanket *.db rule.
 data/
-*.db
 *.db-wal
 *.db-shm
 

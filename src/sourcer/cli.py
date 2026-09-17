@@ -2,22 +2,15 @@
 
 import argparse
 
-from sourcer.db import index_names, init_db, table_names
-from sourcer.paths import db_path
+from sourcer.db import describe
 
 
 def cmd_init_db(_args):
-    path = db_path()
-    connection = init_db()
-    try:
-        tables = table_names(connection)
-        indexes = index_names(connection)
-    finally:
-        connection.close()
-
-    print(f"database: {path}")
-    print(f"tables ({len(tables)}): {', '.join(tables)}")
-    print(f"indexes ({len(indexes)}): {', '.join(indexes)}")
+    summary = describe()
+    print(f"database: {summary['path']}")
+    for kind in ("tables", "indexes"):
+        names = summary[kind]
+        print(f"{kind} ({len(names)}): {', '.join(names)}")
     return 0
 
 

@@ -44,6 +44,14 @@ _Avoid_: scraping, crawling
 One Searcher request for a trade in a city, and everything discovered under it. Results persist after it ends.
 _Avoid_: job, query, session
 
+**Run Status**:
+Where a Search Run is in its lifecycle: pending, running, done, failed or cancelled.
+_Avoid_: state, stage, phase
+
+**Progress Note**:
+The single human-readable line shown while a Search Run is still working.
+_Avoid_: stage, step, message
+
 ## Judgement
 
 **Signal**:
@@ -57,6 +65,10 @@ _Avoid_: rating, rank, grade
 **Confidence**:
 How much of the Score rests on Signals we actually resolved. Reported beside the Score, never folded into it.
 _Avoid_: accuracy, certainty
+
+**Reputation**:
+The public rating and review count a Source reports for a Business. Feeds the demand-proof Signals; it is not itself the Score.
+_Avoid_: rating, score, reviews
 
 **Review State**:
 What the Searcher has decided about a Business so far, and their notes on it.

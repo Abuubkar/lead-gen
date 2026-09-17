@@ -14,10 +14,11 @@ CREATE TABLE IF NOT EXISTS search_run (
     trade             TEXT    NOT NULL,
     city              TEXT    NOT NULL,
     state             TEXT    NOT NULL,
-    -- pending | running | done | failed | cancelled
-    status            TEXT    NOT NULL DEFAULT 'pending',
-    -- Human-readable label for the live progress strip, e.g. "enriching 12/30".
-    stage             TEXT,
+    -- Run Status: pending | running | done | failed | cancelled
+    run_status        TEXT    NOT NULL DEFAULT 'pending',
+    -- Progress Note: the line shown while the Search Run is live,
+    -- e.g. "enriching 12/30".
+    progress_note     TEXT,
     started_at        TEXT,
     finished_at       TEXT,
     discovered_count  INTEGER NOT NULL DEFAULT 0,
@@ -48,6 +49,8 @@ CREATE TABLE IF NOT EXISTS business (
     website_domain     TEXT,
     phone_display      TEXT,
     phone_digits       TEXT,
+    -- Third and weakest dedup input: normalised name plus street.
+    name_street_key    TEXT,
     street             TEXT,
     city               TEXT,
     state              TEXT,
@@ -60,8 +63,11 @@ CREATE TABLE IF NOT EXISTS business (
     founded_year       INTEGER,
     owner_name         TEXT,
     employee_estimate  TEXT,
-    rating             REAL,
-    review_count       INTEGER,
+    -- Reputation, as the Source reported it. Never part of the Score directly;
+    -- it feeds the demand-proof Signals. Named to avoid colliding with Score,
+    -- and with the review table, which holds the Searcher's own judgement.
+    public_rating      REAL,
+    public_review_count INTEGER,
     location_count     INTEGER,
     is_franchise       INTEGER,
 
@@ -84,6 +90,7 @@ CREATE TABLE IF NOT EXISTS business (
 CREATE INDEX IF NOT EXISTS idx_business_run     ON business (run_id);
 CREATE INDEX IF NOT EXISTS idx_business_domain  ON business (website_domain);
 CREATE INDEX IF NOT EXISTS idx_business_phone   ON business (phone_digits);
+CREATE INDEX IF NOT EXISTS idx_business_namest ON business (name_street_key);
 CREATE INDEX IF NOT EXISTS idx_business_score   ON business (run_id, score DESC);
 CREATE INDEX IF NOT EXISTS idx_business_dedup   ON business (dedup_key);
 
