@@ -6,6 +6,7 @@ where the code and the database disagree.
 """
 
 import sqlite3
+from contextlib import contextmanager
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -48,6 +49,23 @@ def init_db(path=None):
     connection = connect(path)
     connection.executescript(SCHEMA_FILE.read_text())
     return connection
+
+
+@contextmanager
+def transaction(connection):
+    """Wrap a unit of work so it lands whole or not at all.
+
+    Connections run in autocommit mode, which suits single statements and is
+    wrong for a Business and its Signals, which must appear together or not at
+    all. SQLite has no nested transactions, so this does not nest.
+    """
+    connection.execute("BEGIN")
+    try:
+        yield connection
+    except Exception:
+        connection.execute("ROLLBACK")
+        raise
+    connection.execute("COMMIT")
 
 
 # What counts as SQLite's own business rather than our schema, per object kind.
