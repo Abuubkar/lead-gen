@@ -228,6 +228,27 @@ def upsert_business(connection, run_id, record, source):
     return cursor.lastrowid, True
 
 
+def fill_business(connection, business_id, values, source):
+    """Add what Enrichment learned, without overwriting what Discovery found."""
+    existing = get_business_fields(connection, business_id)
+    if existing is None:
+        return False
+    return _apply_updates(
+        connection, business_id, plan_merge(existing, _encoded_values(values), {}, source)
+    )
+
+
+def list_businesses_to_enrich(connection, run_id):
+    """Businesses in a run that Enrichment has not yet attempted."""
+    return _rows(
+        connection.execute(
+            "SELECT * FROM business WHERE run_id = ? AND enrichment_status = 'pending'"
+            " ORDER BY id",
+            (run_id,),
+        ).fetchall()
+    )
+
+
 def set_business_score(connection, business_id, score, confidence):
     """Persist a computed Score. This module never computes one."""
     connection.execute(
@@ -397,7 +418,8 @@ def list_businesses(connection, run_id):
             "SELECT business.*, review.state AS review_state, review.notes AS review_notes"
             " FROM business LEFT JOIN review ON review.dedup_key = business.dedup_key"
             " WHERE business.run_id = ?"
-            " ORDER BY business.score IS NULL, business.score DESC, business.name",
+            " ORDER BY business.score IS NULL, business.score DESC,"
+            " business.confidence DESC, business.name",
             (run_id,),
         ).fetchall()
     )
