@@ -1,0 +1,101 @@
+<div class="card">
+  <header>
+    <h2>{{ business.name }}</h2>
+    <p class="lede">
+      <span class="band {% if business.score >= 75 %}high{% elif business.score >= 50 %}mid{% else %}low{% endif %}">
+        {{ business.score | round(0) | int if business.score is not none else "—" }}
+      </span>
+      out of 100, on {{ (business.confidence * 100) | round(0) | int if business.confidence else 0 }}%
+      of the rubric
+      {% if business.confidence is not none and business.confidence < provisional_below %}
+      <em class="provisional">provisional</em>
+      {% endif %}
+    </p>
+    {% if business.confidence is not none and business.confidence < provisional_below %}
+    <p class="fine">
+      Scored on little. Worth a call to learn more, not a decision.
+    </p>
+    {% endif %}
+    <p class="fine">Identified by {{ business.key_rule | replace("_", " ") }}</p>
+  </header>
+
+  <dl class="facts">
+    {% if business.owner_name %}<dt>Owner</dt><dd>{{ business.owner_name }}</dd>{% endif %}
+    {% if business.phone_display %}<dt>Phone</dt><dd>{{ business.phone_display }}</dd>{% endif %}
+    {% if business.website_url %}
+    <dt>Website</dt>
+    <dd><a href="{{ business.website_url }}" target="_blank" rel="noopener noreferrer nofollow">
+      {{ business.website_domain }}</a></dd>
+    {% endif %}
+    {% if business.street %}<dt>Address</dt>
+    <dd>{{ business.street }}{% if business.city %}, {{ business.city }}{% endif %}
+      {{ business.postal_code or "" }}</dd>{% endif %}
+    {% if business.years_in_business %}<dt>Trading</dt>
+    <dd>{{ business.years_in_business }} years{% if business.founded_year %}
+      (since {{ business.founded_year }}){% endif %}</dd>{% endif %}
+    <dt>Sources</dt><dd>{{ business.sources | join(", ") }}</dd>
+  </dl>
+
+  {% if business.contacts %}
+  <h3>Contacts</h3>
+  <ul class="contacts">
+    {% for contact in business.contacts %}
+    <li>
+      <strong>{{ contact.name or contact.email or contact.phone }}</strong>
+      {% if contact.role %}<em>{{ contact.role }}</em>{% endif %}
+      {% if contact.email %}<span>{{ contact.email }}</span>{% endif %}
+      {% if contact.phone %}<span>{{ contact.phone }}</span>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <h3>Why it scored</h3>
+  {% for group, label in group_labels.items() %}
+  {% if business.signals_by_group.get(group) %}
+  <div class="group">
+    <h4>{{ label }}
+      <span class="fine">
+        {{ business.signals_by_group[group] | sum(attribute="points") | round(0) | int }}
+        of {{ group_totals[group] | int }}
+      </span>
+    </h4>
+    <ul class="signals">
+      {% for signal in business.signals_by_group[group] %}
+      <li class="{% if not signal.resolved %}unresolved{% elif signal.points > 0 %}earned{% endif %}">
+        <span class="points">
+          {% if signal.resolved %}+{{ signal.points | round(0) | int }}{% else %}?{% endif %}
+        </span>
+        <span class="what">{{ signal.name | replace("_", " ") }}</span>
+        <span class="value">
+          {% if signal.resolved %}{{ signal.raw_value }}
+          {% else %}not enough information{% endif %}
+        </span>
+        {% if signal.source_url %}
+        <a class="cite" href="{{ signal.source_url }}" target="_blank"
+           rel="noopener noreferrer nofollow">source</a>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+  {% endfor %}
+
+  <h3>Your call</h3>
+  <form hx-post="/businesses/{{ business.id }}/review" hx-target="#detail" hx-swap="innerHTML"
+        class="review">
+    <div class="states">
+      {% for value in review_states %}
+      <label class="check">
+        <input type="radio" name="state" value="{{ value }}"
+               {% if (business.review.state if business.review else "new") == value %}checked{% endif %}>
+        <span>{{ value }}</span>
+      </label>
+      {% endfor %}
+    </div>
+    <textarea name="notes" rows="3" placeholder="Notes travel with this business, even if you re-run the search"
+      >{{ business.review.notes if business.review and business.review.notes else "" }}</textarea>
+    <button type="submit">Save</button>
+  </form>
+</div>

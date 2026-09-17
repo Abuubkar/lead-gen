@@ -1,0 +1,27 @@
+# Render blueprint. Deploy with: render.com -> New -> Blueprint -> this repo.
+#
+# A Docker service rather than a Python one, because the image pins the Python
+# version and the lockfile together.
+services:
+  - type: web
+    name: sourcer
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /healthz
+    autoDeploy: false
+    envVars:
+      # Headless Chromium does not fit the free instance. The HTTP sources work
+      # without it; raise the plan and set this to 1 to enable the browser tier.
+      - key: SOURCER_BROWSER
+        value: "0"
+      # Set in the Render dashboard to enable the optional model step. The tool
+      # is fully functional without it.
+      - key: ANTHROPIC_API_KEY
+        sync: false
+    # A disk needs a paid instance. Without one the committed dataset is
+    # reseeded on each deploy, which is the intended behaviour for a demo.
+    # disk:
+    #   name: sourcer-data
+    #   mountPath: /data
+    #   sizeGB: 1

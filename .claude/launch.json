@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "sourcer",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": ["run", "uvicorn", "sourcer.web:app", "--port", "8099"],
+      "port": 8099
+    }
+  ]
+}

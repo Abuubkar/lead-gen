@@ -218,4 +218,7 @@ def enrich(fetcher, website_url):
     html = " ".join(_html_of(page_response) for _, page_response in pages)
     found = extract(text, html, home_url)
     found["pages_read"] = len(pages)
+    # Handed on for the optional model step, which would otherwise refetch.
+    # Never stored: it has no column, and the Signals are what persist.
+    found["site_text"] = text
     return found, "ok"
