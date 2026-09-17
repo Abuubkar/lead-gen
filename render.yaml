@@ -11,16 +11,21 @@ services:
     healthCheckPath: /healthz
     autoDeploy: false
     envVars:
-      # Headless Chromium does not fit the free instance. The HTTP sources work
-      # without it; raise the plan and set this to 1 to enable the browser tier.
+      # Headless Chromium measured 920 MB to 1.5 GB of resident memory here.
+      # The free instance has 512 MB and Starter has the same 512 MB, so the
+      # first plan that can host the browser tier is Standard (1 CPU, 2 GB).
+      # The HTTP sources work without it, so leave this off unless the service
+      # is on Standard or larger.
       - key: SOURCER_BROWSER
         value: "0"
       # Set in the Render dashboard to enable the optional model step. The tool
       # is fully functional without it.
       - key: ANTHROPIC_API_KEY
         sync: false
-    # A disk needs a paid instance. Without one the committed dataset is
-    # reseeded on each deploy, which is the intended behaviour for a demo.
+    # Free instances cannot attach a persistent disk at all, so the committed
+    # dataset is reseeded on each deploy, which is the intended behaviour for a
+    # demo. Note also that a free service spins down after fifteen minutes
+    # without traffic, so the first request after an idle spell is slow.
     # disk:
     #   name: sourcer-data
     #   mountPath: /data
