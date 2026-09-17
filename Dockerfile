@@ -38,5 +38,8 @@ VOLUME ["/data"]
 #   RUN uv run patchright install --with-deps chromium
 ENV SOURCER_BROWSER=0
 
+# Render assigns the port through PORT and only "usually" detects a hardcoded
+# one, so honour it and keep 8000 as the local default. Shell form, because the
+# exec form does not expand variables.
 EXPOSE 8000
-CMD ["uv", "run", "uvicorn", "sourcer.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "uv run uvicorn sourcer.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
