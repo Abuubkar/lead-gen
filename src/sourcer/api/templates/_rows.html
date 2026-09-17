@@ -1,65 +1,42 @@
 {% if run.run_status in ("pending", "running") %}
-<p class="working">
-  <span class="spinner"></span>
-  {{ run.progress_note or "starting" }}
-</p>
+<p class="working"><i></i>{{ run.progress_note or "starting" }}</p>
 {% endif %}
 
+{% for b in businesses %}
+<a class="business {% if b.review_state and b.review_state != 'new' %}handled{% endif %}"
+   id="b-{{ b.id }}" href="#"
+   hx-get="/businesses/{{ b.id }}" hx-target="#drawer" hx-swap="innerHTML">
+  <span>
+    <span class="name">{{ b.name }}</span>
+    <span class="sub">
+      {{ b.city or run.city }}
+      {%- if b.website_domain %} · {{ b.website_domain }}
+      {%- else %} · <span class="absent">no website</span>{% endif %}
+      {%- if b.review_state and b.review_state != 'new' %} · <span class="state">{{ b.review_state }}</span>{% endif %}
+    </span>
+  </span>
+  <span class="hide cell {% if not b.owner_name %}thin{% endif %}">
+    <b>{{ b.owner_name or "—" }}</b>
+    {% if b.phone_display %}
+    <span>{% with shown=b.phone_display, value=b.phone_display, what="phone" %}{% include "_copy.html" %}{% endwith %}</span>
+    {% endif %}
+  </span>
+  <span class="hide cell {% if not b.years_in_business %}thin{% endif %}">
+    <b class="num">{{ b.years_in_business or "—" }}</b>
+  </span>
+  <span class="hide">
+    {% include "_score.html" %}
+    <span class="evidence">{{ ((b.confidence or 0) * 100) | round(0) | int }}% of the rubric evaluated
+      {%- if b.confidence is not none and b.confidence < provisional_below %} · <em>provisional</em>{% endif %}</span>
+  </span>
+</a>
+{% endfor %}
+
 {% if businesses %}
-<table class="businesses">
-  <thead>
-    <tr>
-      <th>Score</th><th>Conf</th><th>Business</th><th>Owner</th><th>Years</th>
-      <th>Web</th><th>Phone</th><th>Review</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for business in businesses %}
-    <tr hx-get="/businesses/{{ business.id }}" hx-target="#detail" hx-swap="innerHTML"
-        class="business {% if business.review_state and business.review_state != 'new' %}handled{% endif %}">
-      <td class="score">
-        <span class="band {{ business.score | band }}">
-          {{ business.score | shown_score }}
-        </span>
-      </td>
-      <td class="conf" title="share of the rubric we could evaluate">
-        {{ (business.confidence * 100) | round(0) | int if business.confidence else 0 }}%
-        {% if business.confidence is not none and business.confidence < provisional_below %}
-        <em class="provisional">provisional</em>
-        {% endif %}
-      </td>
-      <td class="name">
-        {{ business.name }}
-        <em class="where">{{ business.city or "" }}{% if business.street %} · {{ business.street }}{% endif %}</em>
-      </td>
-      <td>{{ business.owner_name or "—" }}</td>
-      <td class="num">{{ business.years_in_business or "—" }}</td>
-      <td>
-        {% if business.website_url %}
-          <a href="{{ business.website_url }}" target="_blank" rel="noopener noreferrer nofollow"
-             onclick="event.stopPropagation()">{{ business.website_domain or "site" }}</a>
-        {% else %}<span class="flag">none</span>{% endif %}
-      </td>
-      <td class="num">{{ business.phone_display or "—" }}</td>
-      <td>
-        {% if business.review_state and business.review_state != "new" %}
-        <span class="pill {{ business.review_state }}">{{ business.review_state }}</span>
-        {% endif %}
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-<p class="fine">
-  {{ businesses | length }} shown. Click a row to see why it scored.
-  {% if hidden_count %}
-    {{ hidden_count }} thinly-evidenced
-    {{ "business" if hidden_count == 1 else "businesses" }} hidden.
-    <a href="/runs/{{ run.id }}?min_confidence=0">Show everything</a>
-  {% endif %}
-</p>
+<p class="foot-note">{{ businesses | length }} shown.
+  {% if hidden_count %}{{ hidden_count }} thinly-evidenced hidden ·
+    <a href="/runs/{{ run.id }}?min_confidence=0">show everything</a>{% endif %}</p>
 {% elif run.run_status == "done" %}
-<p class="empty">
-  Nothing matched. {% if active_filters %}Try clearing the filters.{% endif %}
-</p>
+<div class="empty"><h2>Nothing matched.</h2>
+  {% if active_filters %}<p>Try clearing the filters.</p>{% endif %}</div>
 {% endif %}

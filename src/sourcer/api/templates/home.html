@@ -1,79 +1,67 @@
 {% extends "base.html" %}
-{% block content %}
-<section class="panel">
-  <h1>Find acquisition targets</h1>
-  <p class="lede">
-    Pick a trade and a market. We search public directories, read each business's
-    own website, and rank them on how likely the owner is to sell.
-  </p>
-
-  <form class="search" method="post" action="/runs">
-    <div class="field">
-      <label for="trade">Trade</label>
-      <select id="trade" name="trade">
-        {% for key, label in trades %}<option value="{{ key }}">{{ label }}</option>{% endfor %}
-      </select>
-    </div>
-    <div class="field">
-      <label for="city">City</label>
-      <input id="city" name="city" value="Austin" autocomplete="off">
-    </div>
-    <div class="field short">
-      <label for="state">State</label>
-      <input id="state" name="state" value="TX" autocomplete="off" maxlength="2">
-    </div>
-    <div class="field short">
-      <label for="pages">Pages</label>
-      <input id="pages" name="pages" type="number" value="2" min="1" max="5">
-    </div>
-    <div class="field wide">
-      <span class="label">Sources</span>
-      <div class="sources">
-        {% for source in sources %}
-        <label class="check">
-          <input type="checkbox" name="sources" value="{{ source.NAME }}"
-                 {% if source.NAME in default_sources %}checked{% endif %}>
-          <span>{{ source.LABEL }}</span>
-          {% if not source.ENABLED_BY_DEFAULT %}<em class="note">terms restrict use</em>{% endif %}
-        </label>
-        {% endfor %}
-      </div>
-    </div>
-    <button type="submit">Search</button>
-  </form>
-</section>
-
-<section class="panel">
-  <h2>How the score works</h2>
-  <p class="lede">A hundred points, and every point names the fact behind it.</p>
+{% block rail %}
+  <h3>How the score works</h3>
+  <p>A hundred points, and every point names the fact behind it.</p>
   <ul class="rubric">
     {% for name, points in group_totals.items() %}
-    <li><strong>{{ points | int }}</strong> {{ group_labels[name] }}</li>
+    <li><span>{{ group_labels[name] }}</span><b class="num">{{ points | int }}</b>
+      <i><s style="width: {{ points | int }}%"></s></i></li>
     {% endfor %}
   </ul>
-  <p class="fine">
-    A business we could not read keeps its score and loses confidence instead, so
-    the least visible targets are never buried.
-  </p>
-</section>
+  <p style="margin-top: 16px">A business we could not read keeps its score and loses
+    <strong>confidence</strong> instead, so the least visible targets are never buried.</p>
+  <div class="foot">
+    <a class="link quiet" href="/api/rubric">Rubric as JSON →</a>
+  </div>
+{% endblock %}
 
-{% if recent %}
-<section class="panel">
-  <h2>Recent searches</h2>
-  <table class="runs">
-    <thead><tr><th>Search</th><th>State</th><th>Found</th><th>Scored</th><th></th></tr></thead>
-    <tbody>
-      {% for run in recent %}
-      <tr>
-        <td><a href="/runs/{{ run.id }}">{{ run.trade }} in {{ run.city }}, {{ run.state }}</a></td>
-        <td><span class="pill {{ run.run_status }}">{{ run.run_status }}</span></td>
-        <td>{{ run.discovered_count }}</td>
-        <td>{{ run.scored_count }}</td>
-        <td class="when">{{ run.created_at[:16] | replace("T", " ") }}</td>
-      </tr>
+{% block main %}
+<div class="home">
+  <h1>Find acquisition targets</h1>
+  <p class="lede">Pick a trade and a market. We search public directories, read each
+     business's own website, and rank them on how likely the owner is to sell.</p>
+
+  <form class="search" method="post" action="/runs">
+    <label class="field"><span>Trade</span>
+      <select name="trade">
+        {% for key, label in trades %}<option value="{{ key }}">{{ label }}</option>{% endfor %}
+      </select></label>
+    <label class="field"><span>City</span>
+      <input name="city" value="Austin" autocomplete="off"></label>
+    <label class="field"><span>State</span>
+      <input name="state" value="TX" maxlength="2" autocomplete="off"></label>
+    <label class="field"><span>Pages</span>
+      <input name="pages" type="number" value="2" min="1" max="5"></label>
+    <div class="sources">
+      {% for source in sources %}
+      <label class="check">
+        <input type="checkbox" name="sources" value="{{ source.NAME }}"
+               {% if source.NAME in default_sources %}checked{% endif %}>
+        {{ source.LABEL }}
+        {% if not source.ENABLED_BY_DEFAULT %}<span class="note">terms restrict use</span>{% endif %}
+      </label>
       {% endfor %}
-    </tbody>
-  </table>
-</section>
-{% endif %}
+    </div>
+    <button class="go" type="submit">Search</button>
+  </form>
+
+  {% if recent %}
+  <section class="runs">
+    <div class="head">
+      <span class="label">Recent searches</span><span class="label hide">State</span>
+      <span class="label hide">Found</span><span class="label hide">Scored</span>
+      <span class="label hide">When</span>
+    </div>
+    {% for run in recent %}
+    <a href="/runs/{{ run.id }}">
+      <b>{{ run.trade | replace("-", " ") | title }} in {{ run.city }}, {{ run.state }}</b>
+      <span class="pill {{ run.run_status }}">{{ run.run_status }}</span>
+      <span class="hush num hide">{{ run.discovered_count }}</span>
+      <span class="hush num hide">{{ run.scored_count }}</span>
+      <span class="hush hide">{{ run.created_at[:16] | replace("T", " ") }}</span>
+    </a>
+    {% endfor %}
+  </section>
+  {% endif %}
+</div>
 {% endblock %}

@@ -1,0 +1,18 @@
+{# The score as one bar in four parts. Each part is as wide as its rubric
+   group's share of the hundred points and filled to the share that group
+   earned, so the bar is the breakdown rather than decoration beside a number. #}
+{% set rows = breakdown.get(b.id, {}) %}
+<span class="score {{ b.score | band }}">
+  <span class="v num {{ b.score | band }}">{{ b.score | shown_score }}</span>
+  <span class="track">
+    {% for g in groups %}
+    {% set row = rows.get(g) %}
+    {% set available = (row.available if row else group_totals[g]) or 1 %}
+    {% set earned = (row.earned if row else 0) %}
+    <i style="flex: {{ group_totals[g] | int }}"
+       title="{{ group_labels[g] }}: {{ earned | round(0) | int }} of {{ group_totals[g] | int }}">
+      <s style="width: {{ ((earned / available) * 100) | round(0) | int }}%"></s>
+    </i>
+    {% endfor %}
+  </span>
+</span>
