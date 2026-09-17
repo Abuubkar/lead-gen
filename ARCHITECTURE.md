@@ -112,13 +112,28 @@ browser session and an HTTP session open for minutes and writes continuously;
 that is the opposite of a short stateless invocation. Static hosting cannot
 scrape at all.
 
-**The memory constraint is real and is designed around.** Headless Chromium
-needs roughly half a gigabyte, more than Render's free instance allows. So the
-browser tier is behind an environment flag and off in the deployed image. The
-HTTP sources work without it, and the committed dataset always renders, so the
-deployed demo is functional rather than broken. Raising the instance size and
-setting one variable enables the browser tier. This is stated rather than hidden
-because a reviewer will find it either way.
+**The memory constraint is real, larger than first assumed, and designed
+around.** Measured locally while fetching a listing page, headless Chromium ran
+to 920 MB and peaked at 1,495 MB of resident memory across twelve to sixteen
+helper processes. Summing resident memory across those processes double counts
+pages they share, so the true unique figure is lower, but it is not close to
+fitting in half a gigabyte.
+
+Render's own compute table gives the free instance 0.1 CPU and 512 MB, and the
+Starter instance 0.5 CPU and **the same 512 MB**. So moving from free to Starter
+buys CPU and no headroom at all: the first plan that can host the browser tier
+is Standard, at 1 CPU and 2 GB. That correction matters more than the
+measurement, because "raise the plan one step" would not have worked.
+
+The browser tier is therefore behind an environment flag and off in the deployed
+image. The HTTP sources work without it and the committed dataset always
+renders, so the deployed demo is functional rather than broken. This is stated
+rather than hidden because a reviewer will find it either way.
+
+Two other free-instance limits shape the demo: the service spins down after
+fifteen minutes without traffic, so the first request after an idle period is
+slow, and free instances cannot attach a persistent disk at all, which is why
+the committed dataset reseeds on each deploy rather than surviving in a volume.
 
 **Persistence.** A Render disk needs a paid instance. Without one, the working
 database is ephemeral and the committed dataset reseeds on each deploy, which is

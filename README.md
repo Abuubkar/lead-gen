@@ -33,7 +33,8 @@ first boot, so there is a ranked shortlist on screen immediately, with no
 scraping and no browser stack.
 
 To run a live search, pick a trade and a market on the home page. To enable the
-browser tier, which some sources need:
+browser tier, which some sources need, and which wants around a gigabyte of
+memory:
 
 ```bash
 uv run patchright install chromium
