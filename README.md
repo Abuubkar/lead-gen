@@ -6,12 +6,22 @@ the fact behind it.
 
 Built for the Caprae Capital AI-readiness pre-work challenge.
 
+**[Live demo](https://lead-gen-liih.onrender.com)** — the shipped dataset: 191
+businesses from four searches, plumbing and HVAC in Austin and Phoenix, ranked
+with the evidence behind every point of every score.
+
 ![The ranked shortlist: 31 HVAC businesses in Phoenix, scored out of 100, with
 the four score groups broken out beside each one](docs/media/shortlist.png)
 
 A silent screen recording of the same flow, end to end, is at
 [`docs/media/walkthrough.webm`](docs/media/walkthrough.webm) (1:42). The
 narration it is scripted against is in [VIDEO.md](./VIDEO.md).
+
+Two things about the demo. It runs on a free instance that sleeps after fifteen
+minutes, so the first request after a quiet spell takes a while. And it browses
+the shipped dataset rather than searching live: every Source refuses a
+datacenter address, which is measured under [Sources](#sources) below. Run it
+locally for a live search.
 
 ## The thesis
 
