@@ -1,17 +1,19 @@
-"""Every read and write this application performs.
+"""Every read and write of application data.
 
-No other module writes SQL. Callers pass a connection and get plain
-dictionaries back, with JSON columns already decoded, so nothing downstream
-handles raw rows, raw JSON text, or a timestamp it has to format itself.
+No module outside this one writes SQL against the five tables. Callers pass a
+connection and get plain dictionaries back, with JSON columns already decoded,
+so nothing downstream handles raw rows, raw JSON text, or a timestamp it has to
+format itself.
 
-The store persists a Score and the Signals behind it but never computes or
-adjusts either. See ADR 0002.
+Merge policy lives in merge.py, not here. The store persists a Score and the
+Signals behind it but never computes or adjusts either. See ADR 0002.
 """
 
 import json
 
 from sourcer.db import now
-from sourcer.identity import dedup_keys, resolve_dedup_key
+from sourcer.identity import DEDUP_RULES, dedup_keys, key_rule_of, resolve_dedup_key
+from sourcer.merge import plan_merge
 
 # Columns holding a JSON document as text.
 JSON_COLUMNS = ("categories", "sources", "source_outcomes")
@@ -38,8 +40,6 @@ BUSINESS_FIELDS = (
     "outreach_angle",
 )
 
-DERIVED_KEY_COLUMNS = ("website_domain", "phone_digits", "name_street_key")
-
 TERMINAL_RUN_STATUSES = ("done", "failed", "cancelled")
 
 
@@ -48,7 +48,7 @@ def _decode(value):
 
 
 def _row(row):
-    """A database row as a plain dictionary, JSON columns decoded."""
+    """A database row as a plain dictionary, with its JSON columns decoded."""
     if row is None:
         return None
     record = dict(row)
@@ -60,10 +60,6 @@ def _row(row):
 
 def _rows(rows):
     return [_row(row) for row in rows]
-
-
-def _is_blank(value):
-    return value is None or (isinstance(value, str) and not value.strip())
 
 
 # --------------------------------------------------------------------------- #
@@ -81,28 +77,30 @@ def create_run(connection, trade, city, state):
     return cursor.lastrowid
 
 
+def _timestamp_column_for(run_status):
+    """Which time column a status transition stamps, if any."""
+    if run_status == "running":
+        return "started_at"
+    return "finished_at" if run_status in TERMINAL_RUN_STATUSES else None
+
+
 def set_run_status(connection, run_id, run_status, error=None):
     """Move a Search Run through its lifecycle, stamping the matching time.
 
     Entering `running` sets the start time; reaching any terminal status sets
     the finish time, so neither has to be remembered by a caller.
     """
-    timestamp = now()
-    if run_status == "running":
-        connection.execute(
-            "UPDATE search_run SET run_status = ?, started_at = ?, error = ? WHERE id = ?",
-            (run_status, timestamp, error, run_id),
-        )
-    elif run_status in TERMINAL_RUN_STATUSES:
-        connection.execute(
-            "UPDATE search_run SET run_status = ?, finished_at = ?, error = ? WHERE id = ?",
-            (run_status, timestamp, error, run_id),
-        )
-    else:
-        connection.execute(
-            "UPDATE search_run SET run_status = ?, error = ? WHERE id = ?",
-            (run_status, error, run_id),
-        )
+    assignments = ["run_status = ?", "error = ?"]
+    params = [run_status, error]
+
+    stamped = _timestamp_column_for(run_status)
+    if stamped:
+        assignments.append(f"{stamped} = ?")
+        params.append(now())
+
+    connection.execute(
+        f"UPDATE search_run SET {', '.join(assignments)} WHERE id = ?", (*params, run_id)
+    )
 
 
 def set_progress_note(connection, run_id, note):
@@ -132,8 +130,9 @@ def record_source_outcome(connection, run_id, source, outcome):
     why a blocked Source records itself here.
     """
     connection.execute(
-        "UPDATE search_run SET source_outcomes = json_patch(source_outcomes, ?) WHERE id = ?",
-        (json.dumps({source: outcome}), run_id),
+        "UPDATE search_run SET source_outcomes ="
+        " json_set(source_outcomes, '$.\"' || ? || '\"', json(?)) WHERE id = ?",
+        (source, json.dumps(outcome), run_id),
     )
 
 
@@ -173,7 +172,7 @@ def _find_existing(connection, run_id, keys, dedup_key):
     """
     clauses = ["dedup_key = ?"]
     params = [dedup_key]
-    for column in DERIVED_KEY_COLUMNS:
+    for column in DEDUP_RULES:
         if keys.get(column):
             clauses.append(f"{column} = ?")
             params.append(keys[column])
@@ -184,27 +183,10 @@ def _find_existing(connection, run_id, keys, dedup_key):
     return _row(row)
 
 
-def _fill_blanks(connection, business_id, existing, values, source):
-    """Write only the columns we do not already have a value for.
-
-    A thin Source must never degrade a rich one, so a populated field is left
-    alone. Contributing Sources are unioned, because provenance has to survive
-    a merge.
-    """
-    updates = {
-        column: value
-        for column, value in values.items()
-        if not _is_blank(value) and _is_blank(existing.get(column))
-    }
-
-    sources = list(existing.get("sources") or [])
-    if source and source not in sources:
-        sources.append(source)
-        updates["sources"] = json.dumps(sources)
-
+def _apply_updates(connection, business_id, updates):
+    """Write a planned set of column updates, or nothing if there are none."""
     if not updates:
         return False
-
     assignments = ", ".join(f"{column} = ?" for column in updates)
     connection.execute(
         f"UPDATE business SET {assignments}, updated_at = ? WHERE id = ?",
@@ -216,31 +198,22 @@ def _fill_blanks(connection, business_id, existing, values, source):
 def upsert_business(connection, run_id, record, source):
     """Store a scraped record, merging it into a matching Business if one exists.
 
-    Returns the Business id and whether it was newly inserted. The merge here is
-    only "fill blanks and union Sources"; cross-Source precedence belongs to
-    step 7 and is deliberately not anticipated.
-
-    The rule that produced the key is not persisted. Storing it would need a new
-    column, and this step's spec puts schema changes out of scope.
+    Returns the Business id and whether it was newly inserted. What a merge
+    changes is decided by merge.plan_merge, not here.
     """
     keys = dedup_keys(record)
-    dedup_key, _key_rule = resolve_dedup_key(record, keys)
+    dedup_key, _ = resolve_dedup_key(record, keys)
     values = _encoded_values(record)
 
     existing = _find_existing(connection, run_id, keys, dedup_key)
     if existing:
-        # A later record may carry a key the first one lacked. Adopt it, so the
-        # next Source matching on that key finds this row.
-        for column in DERIVED_KEY_COLUMNS:
-            if keys.get(column) and _is_blank(existing.get(column)):
-                values[column] = keys[column]
-        _fill_blanks(connection, existing["id"], existing, values, source)
+        _apply_updates(connection, existing["id"], plan_merge(existing, values, keys, source))
         return existing["id"], False
 
     timestamp = now()
     columns = {
         **values,
-        **{column: keys.get(column) for column in DERIVED_KEY_COLUMNS},
+        **{column: keys.get(column) for column in DEDUP_RULES},
         "run_id": run_id,
         "dedup_key": dedup_key,
         "sources": json.dumps([source] if source else []),
@@ -253,14 +226,6 @@ def upsert_business(connection, run_id, record, source):
         tuple(columns.values()),
     )
     return cursor.lastrowid, True
-
-
-def fill_business(connection, business_id, values, source):
-    """Add what Enrichment learned, without overwriting what Discovery found."""
-    existing = get_business_row(connection, business_id)
-    if existing is None:
-        return False
-    return _fill_blanks(connection, business_id, existing, _encoded_values(values), source)
 
 
 def set_business_score(connection, business_id, score, confidence):
@@ -278,10 +243,14 @@ def set_enrichment_status(connection, business_id, status):
     )
 
 
-def get_business_row(connection, business_id):
-    return _row(
+def get_business_fields(connection, business_id):
+    """Just the Business row. get_business_detail assembles the whole aggregate."""
+    business = _row(
         connection.execute("SELECT * FROM business WHERE id = ?", (business_id,)).fetchone()
     )
+    if business is not None:
+        business["key_rule"] = key_rule_of(business)
+    return business
 
 
 # --------------------------------------------------------------------------- #
@@ -324,12 +293,21 @@ def list_contacts(connection, business_id):
 def replace_signals(connection, business_id, signals):
     """Write the full set of Signals for a Business.
 
-    Upserted on the Business and name pair, so a second scoring pass updates
-    rather than accumulating duplicates. A Signal that could not be observed is
-    stored with zero points and marked unresolved, which is what keeps
-    Confidence computable from these rows alone.
+    Replaces, as the name says: any Signal absent from this set is deleted
+    first, because a Signal dropped from the rubric would otherwise linger and
+    skew a Confidence that is meant to be computable from these rows alone.
+    The rest are upserted on the Business and name pair, so a second scoring
+    pass updates rather than accumulating duplicates. A Signal that could not be
+    observed is stored with zero points and marked unresolved.
     """
     timestamp = now()
+    names = [signal["name"] for signal in signals]
+    placeholders = ", ".join("?" for _ in names)
+    connection.execute(
+        "DELETE FROM signal WHERE business_id = ?"
+        + (f" AND name NOT IN ({placeholders})" if names else ""),
+        (business_id, *names),
+    )
     for signal in signals:
         resolved = 1 if signal.get("resolved") else 0
         connection.execute(
@@ -411,9 +389,10 @@ def list_businesses(connection, run_id):
 
     Unscored rows sort after scored ones rather than mixing in, so the top of
     the table is always worth reading. Each row carries the Searcher's own
-    Review State, joined on identity.
+    Review State, joined on identity, and the rule that produced its key, so a
+    weak identity is visible.
     """
-    return _rows(
+    businesses = _rows(
         connection.execute(
             "SELECT business.*, review.state AS review_state, review.notes AS review_notes"
             " FROM business LEFT JOIN review ON review.dedup_key = business.dedup_key"
@@ -422,21 +401,22 @@ def list_businesses(connection, run_id):
             (run_id,),
         ).fetchall()
     )
+    for business in businesses:
+        business["key_rule"] = key_rule_of(business)
+    return businesses
 
 
-def get_business(connection, business_id):
+def get_business_detail(connection, business_id):
     """One Business with everything needed to audit its Score."""
-    business = get_business_row(connection, business_id)
+    business = get_business_fields(connection, business_id)
     if business is None:
         return None
 
-    signals = list_signals(connection, business_id)
     grouped = {}
-    for signal in signals:
+    for signal in list_signals(connection, business_id):
         grouped.setdefault(signal["group_name"], []).append(signal)
 
     business["review"] = get_review(connection, business["dedup_key"])
     business["contacts"] = list_contacts(connection, business_id)
-    business["signals"] = signals
     business["signals_by_group"] = grouped
     return business

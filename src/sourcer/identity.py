@@ -1,19 +1,29 @@
 """Turning messy Source records into a stable Business identity.
 
 Every Source spells a business differently, so the dedup keys are computed here
-and nowhere else. Each normaliser returns None when its input is unusable rather
-than guessing, because a wrong key merges two different Businesses, which is
-worse than failing to merge two records for the same one.
+and nowhere else. The three key normalisers return None when their input is
+unusable rather than guessing, because a wrong key merges two different
+Businesses, which is worse than failing to merge two records for the same one.
+The text helpers below them return an empty string instead, since "no
+distinctive words left" is a normal outcome rather than a failure.
 """
 
+import hashlib
+import json
 import re
 from urllib.parse import urlsplit
 
-# Dropped before comparing names, so "Clarke Kent Plumbing LLC" and
-# "Clarke Kent Plumbing, Inc." resolve to the same key.
-COMPANY_SUFFIXES = {
-    "llc",
+# The dedup key columns, strongest identity first. Declared once: this order is
+# the resolution order, and store.py imports it rather than restating it.
+DEDUP_RULES = ("website_domain", "phone_digits", "name_street_key")
+
+# Dropped from the end of a name before comparing, so "Clarke Kent Plumbing LLC"
+# and "Clarke Kent Plumbing, Inc." resolve to the same key. Multi-word entries
+# are matched as trailing phrases, not as single tokens.
+COMPANY_SUFFIXES = (
+    "and sons",
     "l l c",
+    "llc",
     "inc",
     "incorporated",
     "co",
@@ -27,9 +37,8 @@ COMPANY_SUFFIXES = {
     "pllc",
     "pc",
     "plc",
-    "and sons",
     "group",
-}
+)
 LEADING_ARTICLES = ("the ",)
 
 _NON_ALNUM = re.compile(r"[^a-z0-9]+")
@@ -44,7 +53,7 @@ def website_domain(url):
     """
     if not url:
         return None
-    candidate = url.strip()
+    candidate = str(url).strip()
     if not candidate:
         return None
     # urlsplit only finds a host when there is a scheme.
@@ -73,22 +82,34 @@ def phone_digits(phone):
 
 
 def _normalise_words(text):
-    """Lowercase, strip punctuation, collapse whitespace."""
+    """Lowercase, strip punctuation, collapse whitespace. Empty string if none."""
     if not text:
         return ""
     return _NON_ALNUM.sub(" ", str(text).lower()).strip()
 
 
 def normalise_name(name):
-    """A company name reduced to its distinctive words."""
+    """A company name reduced to its distinctive words.
+
+    Suffixes are stripped repeatedly and longest first, so "Kent and Sons Co"
+    loses both the trailing "co" and the trailing phrase "and sons".
+    """
     words = _normalise_words(name)
     for article in LEADING_ARTICLES:
         if words.startswith(article):
             words = words[len(article) :]
-    parts = words.split()
-    while parts and parts[-1] in COMPANY_SUFFIXES:
-        parts.pop()
-    return " ".join(parts)
+
+    changed = True
+    while changed and words:
+        changed = False
+        for suffix in sorted(COMPANY_SUFFIXES, key=lambda s: -len(s.split())):
+            if words == suffix:
+                return ""
+            if words.endswith(" " + suffix):
+                words = words[: -(len(suffix) + 1)].strip()
+                changed = True
+                break
+    return words
 
 
 def name_street_key(name, street):
@@ -117,16 +138,32 @@ def dedup_keys(record):
     }
 
 
+def _content_key(record):
+    """A digest of everything the record actually says.
+
+    The last resort, for a record with no website, no phone, no street and no
+    name. It must not be a shared constant: a UNIQUE (run_id, dedup_key) would
+    then collapse every unidentifiable record into a single row, losing all but
+    the first. Hashing the content keeps genuinely identical records together
+    and everything else apart.
+    """
+    material = {
+        key: str(value) for key, value in sorted(record.items()) if value not in (None, "", [], {})
+    }
+    digest = hashlib.sha256(json.dumps(material, sort_keys=True).encode()).hexdigest()
+    return f"content:{digest[:16]}"
+
+
 def resolve_dedup_key(record, keys=None):
     """Pick the identity for a record, and say which rule produced it.
 
     Total by construction: the dedup_key column is NOT NULL, so a Business with
-    no website, no phone and no street still needs an identity. The last two
-    rules exist for exactly that case, and naming the rule that won means a weak
+    no website, no phone and no street still needs an identity. The later rules
+    exist for exactly that case, and naming the rule that won means a weak
     identity is visible rather than implied.
     """
     keys = keys if keys is not None else dedup_keys(record)
-    for rule in ("website_domain", "phone_digits", "name_street_key"):
+    for rule in DEDUP_RULES:
         if keys.get(rule):
             return keys[rule], rule
 
@@ -136,6 +173,21 @@ def resolve_dedup_key(record, keys=None):
         return f"{name}|{city}", "name_city"
     if name:
         return name, "name"
-    # Nothing usable at all. The caller still gets a key, but one that can only
-    # ever match itself.
-    return "unidentified", "none"
+    return _content_key(record), "content"
+
+
+def key_rule_of(business):
+    """Which rule produced a stored Business's key, inferred from its columns.
+
+    Computed on read rather than stored, so a weak identity is visible in the
+    interface without the schema change this step's spec rules out.
+    """
+    key = business.get("dedup_key")
+    if not key:
+        return None
+    for rule in DEDUP_RULES:
+        if business.get(rule) and business[rule] == key:
+            return rule
+    if key.startswith("content:"):
+        return "content"
+    return "name_city" if "|" in key else "name"
