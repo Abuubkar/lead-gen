@@ -16,6 +16,8 @@ query string, and profile pages, which the policy allows explicitly.
 import json
 import re
 
+from sourcer.fetch import Disallowed
+from sourcer.identity import slug
 from sourcer.trades import source_key
 
 NAME = "bbb"
@@ -26,16 +28,12 @@ TIER = "http"
 BASE = "https://www.bbb.org"
 
 
-def _slug(text):
-    return re.sub(r"[^a-z0-9]+", "-", (text or "").strip().lower()).strip("-")
-
-
 def category_url(trade_key, city, state):
     """A directory path with no query string, so robots permits it."""
     category = source_key(trade_key, NAME)
     if not category:
         return None
-    return f"{BASE}/us/{_slug(state)}/{_slug(city)}/category/{category}"
+    return f"{BASE}/us/{slug(state)}/{slug(city)}/category/{category}"
 
 
 def _structured_listings(response):
@@ -62,8 +60,15 @@ def _record(business, state):
         "city": address.get("addressLocality"),
         "state": address.get("addressRegion") or state,
         "postal_code": address.get("postalCode"),
-        "profile_url": business.get("url"),
+        # A query string on a profile URL is disallowed by robots, so it is
+        # dropped rather than fetched and silently refused.
+        "profile_url": _permitted(business.get("url")),
     }
+
+
+def _permitted(url):
+    """A profile URL robots allows, or nothing."""
+    return url if url and "?" not in url else None
 
 
 def _profile_links(response):
@@ -138,7 +143,11 @@ def _profile_of(fetcher, profile_url, include_name=False):
     """Read one profile, tolerating a refusal on that single page."""
     try:
         response = fetcher.get(profile_url, referer=BASE, tier=TIER)
+    except Disallowed:
+        # A boundary we agreed to respect, not a failure to hide.
+        raise
     except Exception:
+        # One unreadable profile should not end discovery.
         return {}
 
     found = _from_profile(response)

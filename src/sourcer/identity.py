@@ -45,6 +45,14 @@ _NON_ALNUM = re.compile(r"[^a-z0-9]+")
 _HOSTLIKE = re.compile(r"^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$")
 
 
+def slug(text):
+    """A URL path segment: lowercase, punctuation collapsed to hyphens.
+
+    Lives here rather than in each adapter, where it was byte-identical twice.
+    """
+    return _NON_ALNUM.sub("-", (text or "").strip().lower()).strip("-")
+
+
 def website_domain(url):
     """The bare host of a website, lowercased and without a leading "www.".
 

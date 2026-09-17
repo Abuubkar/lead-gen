@@ -84,11 +84,6 @@ TRADES = {
 }
 
 
-def trade(key):
-    """One trade's catalogue entry, or None if we do not cover it."""
-    return TRADES.get(key)
-
-
 def choices():
     """Key and label for every trade, for a dropdown."""
     return [(key, entry["label"]) for key, entry in sorted(TRADES.items())]

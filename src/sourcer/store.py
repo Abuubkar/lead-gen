@@ -242,8 +242,7 @@ def list_businesses_to_enrich(connection, run_id):
     """Businesses in a run that Enrichment has not yet attempted."""
     return _rows(
         connection.execute(
-            "SELECT * FROM business WHERE run_id = ? AND enrichment_status = 'pending'"
-            " ORDER BY id",
+            "SELECT * FROM business WHERE run_id = ? AND enrichment_status = 'pending' ORDER BY id",
             (run_id,),
         ).fetchall()
     )

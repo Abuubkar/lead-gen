@@ -59,12 +59,21 @@ A hundred points across four groups. Weights live in one module as plain data.
 | Acquirability | 25 | Single location, no chain markers, small team, its own domain |
 | Demand proof | 20 | Review volume, rating, BBB accreditation, listing completeness |
 
+The plan also wanted a BBB letter grade to count towards demand proof. Only the
+accreditation flag is read, because the grade is only available from the source
+that ships disabled. That gap is a signal that resolves rarely rather than one
+that is missing.
+
 Two rules matter more than the weights.
 
 **Every point traces to evidence.** Click any row and the panel lists each
-signal, the value observed, the points awarded and a link to where it was seen.
-A searcher has to defend a shortlist to their investors, and a number nobody can
-audit is worth less than a smaller number they can trace.
+signal, the value observed, the points awarded, and where the fact came from.
+Provenance is derived from which fields the rule actually read, so a signal built
+on a directory listing cites the listing and one built on the business's own site
+links to the page. A fact supplied by the optional model is labelled as such,
+because a guess is weaker evidence than a page we read. A searcher has to defend
+a shortlist to their investors, and a number nobody can audit is worth less than
+a smaller number they can trace.
 
 **Missing data never costs points.** A signal we could not evaluate is recorded
 unresolved and excluded from the denominator, so a business scored on half the
@@ -95,10 +104,14 @@ the switch is off because the answer was no.
 
 ## Collection ethics
 
-- **robots.txt is checked before every fetch.** A disallowed path raises rather
-  than proceeding. A robots file we cannot read is not treated as permission,
-  and not as refusal either: the site has told us nothing, so we proceed under
-  our own rate limit rather than inventing rules.
+- **robots.txt is checked before every page fetch**, and reading the policy
+  itself waits its turn in the same per-host queue. A disallowed path raises
+  rather than proceeding. The one exception is the OpenStreetMap Overpass
+  endpoint, which is a public API rather than a crawlable site, and is called
+  once per run; the exemption is named in the code where it is taken. A robots
+  file we cannot read is not treated as permission, and not as refusal either:
+  the site has told us nothing, so we proceed under our own rate limit rather
+  than inventing rules.
 - **One request at a time per host**, with a delay between, deliberately slower
   than necessary for a single page.
 - **No login-walled source.** No LinkedIn, no Apollo, no Crunchbase.
@@ -131,7 +144,7 @@ library. A background thread per search run. One Docker container on Render.
 | `src/sourcer/scoring.py` | The rubric. Weights as plain data |
 | `src/sourcer/runner.py` | Orchestrating a run in the background |
 | `src/sourcer/web.py` | Routes, filters, CSV export, JSON API |
-| `src/sourcer/llm.py` | Optional model step. Never touches the score |
+| `src/sourcer/llm.py` | Optional model step. Cannot produce a score |
 | `CONTEXT.md` | The domain glossary the code follows |
 | `docs/adr/` | Decisions that were hard to reverse |
 | `PLAN.md` | The plan this was built from |

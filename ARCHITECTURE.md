@@ -11,7 +11,7 @@ rather than an obvious default.
 |---|---|---|
 | Language | Python 3.13 | Pinned locally and in the image. Top of Scrapling's supported range |
 | Packaging | `uv` with a committed lockfile | The image resolves from the same lockfile a developer uses |
-| HTTP | FastAPI on Starlette, Uvicorn | Async routes and a JSON API from the same app as the HTML |
+| HTTP | Starlette, with FastAPI's response and template helpers, on Uvicorn | Async routes and a JSON API from the same app as the HTML. The app object is a plain Starlette one: nothing here needs request-body validation or generated OpenAPI, so the heavier layer would have earned nothing |
 | Templates | Jinja2, server-rendered | No client state to synchronise, no hydration |
 | Interactivity | HTMX 2 from a CDN | Live rows and a detail panel with no bundler and no build step |
 | Styling | One hand-written stylesheet | Custom properties for the palette, no framework |
@@ -38,7 +38,8 @@ Five tables: a search run, a business, a contact, a signal, and a review state.
 
 **Signals are rows, not columns.** This is the decision the product rests on. A
 signal row carries its name, its group, the value observed, the points awarded,
-the points available, whether it resolved, and the URL it was seen at. That is
+the points available, whether it resolved, the source the fact came from, and a
+URL to cite where there is one. That is
 what makes the score auditable, lets confidence be computed from the database
 alone, and means adding a signal needs no migration.
 
@@ -76,8 +77,14 @@ concurrency this workload does not have.
 - **Indexes** on the run, the three dedup keys, and run with score descending,
   which is the ordering the results table actually uses.
 - **Enrichment is capped** at three pages per business and rate limited per host.
-- **Adaptive selectors** are stored in a project-local file, so a site redesign
-  is survivable and a dependency reinstall does not discard what was learned.
+- **Adaptive selectors.** The YellowPages listing selector is saved on every
+  successful parse and relocated by structure and text when the selector stops
+  matching. Measured against a real page with the listing class renamed, the
+  plain selector matched nothing and the adaptive one recovered seven of
+  thirty-seven cards. That is partial recovery, not immunity: it turns a silent
+  zero into a degraded run that still returns something and still signals that
+  the markup moved. The fingerprint store is a project-local file, so a
+  dependency reinstall does not discard what was learned.
 
 The honest performance limit: a run is bounded by politeness, not by compute. A
 hundred businesses takes minutes because we wait between requests on purpose.
@@ -139,10 +146,17 @@ fetched, to recover an owner name the rules missed, a founding year, a team-size
 estimate, and a one-line outreach angle. Results persist, so a second pass costs
 nothing.
 
-**It never produces or adjusts a score.** The reply is parsed, unexpected keys
-are discarded, and values of the wrong shape are rejected, so a model that
-returned a score could not apply one. Absent an API key the step does nothing
-and the tool is unchanged. See
+**It cannot produce or adjust a score, and it can still move one.** Those are
+different claims and the distinction matters. The reply is parsed, unexpected
+keys are discarded and wrong-shaped values rejected, so a model that returned a
+score or a confidence could not apply either. But a founding year or an owner
+name it supplies is read by the rubric like any other fact, and those rules are
+worth up to twenty-seven points. So every fact the model contributes is recorded
+as model-derived, and the signals built on it say so in the detail panel. The
+rule stays what ADR 0002 set out, which is that the arithmetic is ours and
+auditable; the honest qualification is that the inputs are only as good as where
+they came from, which is why the panel names the source of each one. Absent an
+API key the step does nothing and the tool is unchanged. See
 [ADR 0002](docs/adr/0002-deterministic-scoring.md).
 
 ## Testing

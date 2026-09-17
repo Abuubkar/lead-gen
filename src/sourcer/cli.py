@@ -18,8 +18,11 @@ def cmd_init_db(_args):
 def cmd_seed(args):
     """Fill the working database with the dataset shipped in the repository."""
     count = load_seed(force=args.force)
-    print(f"loaded {count} Search Runs from the shipped seed" if count
-          else "seed already present; pass --force to replace it")
+    print(
+        f"loaded {count} Search Runs from the shipped seed"
+        if count
+        else "seed already present; pass --force to replace it"
+    )
     return 0
 
 

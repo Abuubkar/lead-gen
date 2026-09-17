@@ -10,6 +10,7 @@ rather script against it than click.
 
 import csv
 import io
+import logging
 from pathlib import Path
 
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, StreamingResponse
@@ -74,10 +75,25 @@ DEFAULT_MIN_CONFIDENCE = "0.35"
 PROVISIONAL_BELOW = 0.35
 
 EXPORT_COLUMNS = (
-    "score", "confidence", "name", "owner_name", "phone_display", "website_url",
-    "street", "city", "state", "postal_code", "years_in_business", "founded_year",
-    "public_rating", "public_review_count", "categories", "sources", "review_state",
-    "review_notes", "key_rule",
+    "score",
+    "confidence",
+    "name",
+    "owner_name",
+    "phone_display",
+    "website_url",
+    "street",
+    "city",
+    "state",
+    "postal_code",
+    "years_in_business",
+    "founded_year",
+    "public_rating",
+    "public_review_count",
+    "categories",
+    "sources",
+    "review_state",
+    "review_notes",
+    "key_rule",
 )
 
 
@@ -312,12 +328,14 @@ async def api_run(request):
     finally:
         connection.close()
 
-    return JSONResponse({
-        "run": run,
-        "filters": active,
-        "count": len(businesses),
-        "businesses": businesses,
-    })
+    return JSONResponse(
+        {
+            "run": run,
+            "filters": active,
+            "count": len(businesses),
+            "businesses": businesses,
+        }
+    )
 
 
 async def api_business(request):
@@ -335,17 +353,19 @@ async def api_business(request):
 
 async def api_rubric(request):
     """The rubric itself, so a reader can check the weights without the code."""
-    return JSONResponse({
-        "total_points": scoring.TOTAL_POINTS,
-        "groups": [
-            {"name": name, "label": scoring.GROUP_LABELS[name], "points": points}
-            for name, points in scoring.group_totals().items()
-        ],
-        "signals": [
-            {"name": name, "group": group, "max_points": max_points}
-            for name, group, max_points, _ in scoring.SIGNALS
-        ],
-    })
+    return JSONResponse(
+        {
+            "total_points": scoring.TOTAL_POINTS,
+            "groups": [
+                {"name": name, "label": scoring.GROUP_LABELS[name], "points": points}
+                for name, points in scoring.group_totals().items()
+            ],
+            "signals": [
+                {"name": name, "group": group, "max_points": max_points}
+                for name, group, max_points, _ in scoring.SIGNALS
+            ],
+        }
+    )
 
 
 async def healthz(request):
@@ -374,8 +394,9 @@ def build():
     try:
         load_seed()
     except Exception:
-        # A malformed or absent seed must never stop the application booting.
-        pass
+        # A malformed seed must never stop the application booting, but it must
+        # not vanish either: an empty table would otherwise look like a design.
+        logging.getLogger("sourcer").exception("could not load the shipped dataset")
     return Starlette(routes=routes)
 
 

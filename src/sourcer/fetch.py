@@ -17,9 +17,25 @@ import time
 from urllib.parse import urlsplit, urlunsplit
 
 from protego import Protego
+from scrapling.engines.toolbelt.proxy_rotation import ProxyRotator
 from scrapling.fetchers import FetcherSession, StealthySession
 
 from sourcer.paths import selector_store_path
+
+
+def selector_config():
+    """Parsing options shared by both tiers.
+
+    Adaptive parsing lets a saved selector be relocated by structure and text
+    after a site redesign, instead of silently matching nothing. The fingerprint
+    store is pointed inside the project; the library's default is a file in its
+    own installed package directory, which a reinstall would discard.
+    """
+    return {
+        "adaptive": True,
+        "storage_args": {"storage_file": str(selector_store_path())},
+    }
+
 
 # A polite floor between two requests to the same host. YellowPages starts
 # refusing after roughly ten requests in a few minutes from one address, so this
@@ -111,6 +127,9 @@ class Fetcher:
         self._last_request_at = {}
         self._lock = threading.Lock()
         self._proxies = proxies()
+        # One proxy is just a proxy; several rotate. Without this the list was
+        # accepted and only its first entry ever used.
+        self._rotator = ProxyRotator(self._proxies) if len(self._proxies) > 1 else None
 
     # -- lifecycle ------------------------------------------------------- #
 
@@ -138,7 +157,9 @@ class Fetcher:
                 timeout=30,
                 retries=2,
                 retry_delay=3,
-                proxy=self._proxies[0] if self._proxies else None,
+                selector_config=selector_config(),
+                proxy_rotator=self._rotator,
+                proxy=self._proxies[0] if self._proxies and not self._rotator else None,
             )
             # __enter__ returns the object carrying the request methods, which is
             # not the session itself. Both are kept: one to call, one to close.
@@ -152,8 +173,9 @@ class Fetcher:
                 headless=True,
                 network_idle=True,
                 timeout=60000,
-                selector_config={"storage_args": {"storage_file": str(selector_store_path())}},
-                proxy=self._proxies[0] if self._proxies else None,
+                selector_config=selector_config(),
+                proxy=self._proxies[0] if self._proxies and not self._rotator else None,
+                proxy_rotator=self._rotator,
             )
             self._browser = session.__enter__()
             self._browser_owner = session
@@ -180,6 +202,9 @@ class Fetcher:
 
         policy = None
         robots_url = urlunsplit((*origin, "/robots.txt", "", ""))
+        # Reading the policy is a request to the same host, so it waits its turn
+        # like any other.
+        self._wait_turn(robots_url)
         try:
             if tier == "browser" and self.allow_browser:
                 response = self._browser_session().fetch(robots_url, google_search=False)
