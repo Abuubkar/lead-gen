@@ -361,8 +361,13 @@ async def api_rubric(request):
                 for name, points in scoring.group_totals().items()
             ],
             "signals": [
-                {"name": name, "group": group, "max_points": max_points}
-                for name, group, max_points, _ in scoring.SIGNALS
+                {
+                    "name": name,
+                    "group": group,
+                    "max_points": max_points,
+                    "reads": list(reads),
+                }
+                for name, group, max_points, _, reads in scoring.SIGNALS
             ],
         }
     )
