@@ -13,9 +13,10 @@ reviewer can read it.
 import json
 import time
 
-from sourcer import runner, store
-from sourcer.db import connect, init_db, transaction
-from sourcer.paths import seed_dir
+from sourcer.config import seed_dir
+from sourcer.db import repository as store
+from sourcer.db.database import connect, init_db, transaction
+from sourcer.workers import runner
 
 SEED_FILE = "dataset.json"
 WAIT_LIMIT_SECONDS = 1800

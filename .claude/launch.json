@@ -4,7 +4,7 @@
     {
       "name": "sourcer",
       "runtimeExecutable": "uv",
-      "runtimeArgs": ["run", "uvicorn", "sourcer.web:app", "--port", "8099"],
+      "runtimeArgs": ["run", "uvicorn", "sourcer.main:app", "--port", "8099"],
       "port": 8099
     }
   ]

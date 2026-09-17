@@ -13,7 +13,7 @@ Business row, so a second pass over the same market costs nothing.
 import json
 import os
 
-from sourcer.scoring import CURRENT_YEAR, EARLIEST_PLAUSIBLE_YEAR
+from sourcer.config import CURRENT_YEAR, EARLIEST_PLAUSIBLE_YEAR
 
 MODEL = "claude-haiku-4-5-20251001"
 MAX_CHARS = 6000

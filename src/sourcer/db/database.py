@@ -10,7 +10,7 @@ from contextlib import contextmanager
 from datetime import UTC, datetime
 from pathlib import Path
 
-from sourcer.paths import db_path
+from sourcer.config import db_path
 
 SCHEMA_FILE = Path(__file__).with_name("schema.sql")
 

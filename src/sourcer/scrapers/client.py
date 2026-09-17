@@ -11,7 +11,6 @@ reached when a block is detected and the browser tier is enabled, because it
 needs memory the free deployment tier does not have.
 """
 
-import os
 import threading
 import time
 from urllib.parse import urlsplit, urlunsplit
@@ -20,7 +19,7 @@ from protego import Protego
 from scrapling.engines.toolbelt.proxy_rotation import ProxyRotator
 from scrapling.fetchers import FetcherSession, StealthySession
 
-from sourcer.paths import selector_store_path
+from sourcer.config import browser_enabled, proxies, selector_store_path
 
 
 def selector_config():
@@ -74,21 +73,6 @@ class Disallowed(Exception):
     def __init__(self, url):
         self.url = url
         super().__init__(f"robots policy disallows {url}")
-
-
-def browser_enabled():
-    """Whether the browser tier may be used.
-
-    Off by default. Headless Chromium needs more memory than the free
-    deployment tier allows, and the HTTP-only Sources must keep working there.
-    """
-    return os.environ.get("SOURCER_BROWSER", "").strip().lower() in ("1", "true", "yes")
-
-
-def proxies():
-    """A rotation list from the environment, empty when none is configured."""
-    raw = os.environ.get("SOURCER_PROXIES", "")
-    return [entry.strip() for entry in raw.split(",") if entry.strip()]
 
 
 def _title_of(response):
@@ -200,8 +184,8 @@ class Fetcher:
         if origin in self._robots:
             return self._robots[origin]
 
-        policy = None
         robots_url = urlunsplit((*origin, "/robots.txt", "", ""))
+        policy = None
         # Reading the policy is a request to the same host, so it waits its turn
         # like any other.
         self._wait_turn(robots_url)
@@ -217,11 +201,18 @@ class Fetcher:
                 )
         except Exception:
             policy = None
+
         # A robots file we cannot read is not permission. It is also not a
         # refusal: a site that blocks robots.txt has told us nothing, so we
         # proceed under our own rate limit rather than inventing rules.
-        self._robots[origin] = policy
-        return policy
+        #
+        # But a failure is only cached until the policy is read once. Sites that
+        # refuse us intermittently refuse robots.txt too, and caching that
+        # failure would silently widen what we consider allowed for the rest of
+        # the process, after we had already been told the rules.
+        if policy is not None or origin not in self._robots:
+            self._robots[origin] = policy
+        return self._robots[origin]
 
     def allowed(self, url, tier="http"):
         policy = self._robots_for(url, tier=tier)

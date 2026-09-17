@@ -5,6 +5,20 @@ performance, hosting model, deployment, cloud provider, and the exact
 technologies. This answers each one, and says where a choice was a trade-off
 rather than an obvious default.
 
+## Layout
+
+The package follows the shape most Python services use, so a reader can find
+things before they understand the domain: `api/` for handlers, `db/` for
+storage, `services/` for outbound integrations, `workers/` for background jobs,
+`config.py` for paths and flags. The scraping half borrows Scrapy's vocabulary
+for the same reason: `scrapers/` fetch, `extractors/` pull fields out of pages,
+and `pipelines/` clean, deduplicate and score what came back.
+
+Each package changes for one reason. Storage changes when the schema does,
+scrapers when a site does, pipelines when the thesis does. There is no
+`models/` or `utils/`: no ORM and no request-validation layer means the first
+would be an empty promise, and nothing here is generic enough for the second.
+
 ## Stack
 
 | Layer | Choice | Why this one |

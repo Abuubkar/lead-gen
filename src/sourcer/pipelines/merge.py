@@ -11,7 +11,7 @@ something about how Sources disagree, which is what step 7 is for.
 
 import json
 
-from sourcer.identity import DEDUP_RULES
+from sourcer.pipelines.dedup import DEDUP_RULES
 
 # Encoded JSON for an empty list or object. A column defaulting to '[]' holds no
 # information, so it must count as blank or a later Source could never fill it.

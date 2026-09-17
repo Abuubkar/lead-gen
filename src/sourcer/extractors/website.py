@@ -11,8 +11,8 @@ rules leave and never replaces them, so the tool works fully with no API key.
 import re
 from urllib.parse import urljoin, urlsplit
 
-from sourcer.fetch import Blocked, Disallowed
-from sourcer.scoring import CURRENT_YEAR, EARLIEST_PLAUSIBLE_YEAR
+from sourcer.config import CURRENT_YEAR, EARLIEST_PLAUSIBLE_YEAR
+from sourcer.scrapers.client import Blocked, Disallowed
 
 # Three pages is enough. The homepage carries the tagline and the footer, and
 # an about or contact page carries the founding year and the owner's name.
