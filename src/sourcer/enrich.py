@@ -32,9 +32,68 @@ YEARS_OF = re.compile(
     r"(\d{1,3})\+?\s*years?\s+(?:of\s+)?(?:experience|service|in\s+business)", re.I
 )
 
+# Words that precede a role rather than ending a name: "Chris Knox, Project
+# Owner" must not yield "Chris Knox Project". Stripped from the captured name.
+ROLE_QUALIFIERS = (
+    "project",
+    "vice",
+    "senior",
+    "managing",
+    "general",
+    "co",
+    "assistant",
+    "deputy",
+    "executive",
+    "operations",
+    "practice",
+    "regional",
+    "branch",
+)
+# A capitalised phrase is not a person if it contains trade or company words.
+# Without this, "Green Building, Principal Partner" reads as someone called
+# Building.
+NOT_A_NAME = {
+    "building",
+    "project",
+    "company",
+    "services",
+    "service",
+    "group",
+    "inc",
+    "llc",
+    "construction",
+    "plumbing",
+    "heating",
+    "air",
+    "electric",
+    "electrical",
+    "roofing",
+    "solutions",
+    "systems",
+    "contractors",
+    "team",
+    "the",
+    "our",
+    "about",
+    "contact",
+    "home",
+    "commercial",
+    "residential",
+    "quality",
+    "family",
+    "customer",
+    "emergency",
+    "repair",
+    "installation",
+    "conditioning",
+    "mechanical",
+    "and",
+}
+
 OWNER_ROLE = re.compile(
-    r"([A-Z][\w'’-]+(?:\s+[A-Z][\w'’-]+){1,2})\s*[,\-–—]\s*"
-    r"(Owner|Founder|President|Co-?Founder|Principal|CEO|Proprietor|General\s+Manager)",
+    r"([A-Z][\w'’-]+(?:\s+[A-Z][\w'’-]+){1,3})\s*[,\-–—]\s*"
+    r"(?:(?:Project|Vice|Senior|Managing|General|Executive)[\s-]+)?"
+    r"(Owner|Founder|President|Co-?Founder|Principal|CEO|Proprietor|Manager)",
 )
 ROLE_FIRST = re.compile(
     r"(Owner|Founder|President|Proprietor)\s*[,:\-–—]?\s*"
@@ -42,7 +101,7 @@ ROLE_FIRST = re.compile(
 )
 # "owned by Gary Hacker", "founded by Gary Hacker".
 OWNED_BY = re.compile(
-    r"(?:owned|founded|started|established)\s+by\s+"
+    r"(?i:owned|founded|started|established)\s+(?i:by)\s+"
     r"(?:Dr\.?\s+)?([A-Z][\w'’-]+(?:\s+[A-Z][\w'’-]+){1,2})",
 )
 # A credentialled principal, which is how practices name theirs.
@@ -128,23 +187,50 @@ def _html_of(response):
     return body.decode("utf-8", "ignore") if isinstance(body, bytes) else str(body)
 
 
+def _clean_person(name):
+    """A captured phrase reduced to a plausible person's name, or nothing.
+
+    Two failure modes seen on real sites. A role qualifier gets absorbed, so
+    "Chris Knox, Project Owner" yields "Chris Knox Project". And a capitalised
+    trade phrase matches, so "Green Building, Principal Partner" yields someone
+    called Building.
+    """
+    if not name:
+        return None
+    words = name.strip().split()
+    while words and words[-1].lower() in ROLE_QUALIFIERS:
+        words.pop()
+    if not 2 <= len(words) <= 3:
+        return None
+    if any(word.lower().strip(".,") in NOT_A_NAME for word in words):
+        return None
+    return " ".join(words)
+
+
 def _read_owner(text):
     match = OWNER_ROLE.search(text)
     if match:
-        return match.group(1).strip(), match.group(2).strip()
+        person = _clean_person(match.group(1))
+        if person:
+            return person, match.group(2).strip()
     match = ROLE_FIRST.search(text)
     if match:
-        return match.group(2).strip(), match.group(1).strip()
+        person = _clean_person(match.group(2))
+        if person:
+            return person, match.group(1).strip()
     match = OWNED_BY.search(text)
     if match:
-        return match.group(1).strip(), "Owner"
+        person = _clean_person(match.group(1))
+        if person:
+            return person, "Owner"
     # A titled name only counts when the page frames it as whose practice this
     # is. Otherwise a referral or a staff list would read as ownership.
     if PRACTICE_PRINCIPAL.search(text):
         match = CREDENTIALLED.search(text)
         if match:
-            credential = match.group(2)
-            return match.group(1).strip(), credential or "Principal"
+            person = _clean_person(match.group(1))
+            if person:
+                return person, match.group(2) or "Principal"
     return None, None
 
 
