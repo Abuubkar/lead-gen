@@ -49,10 +49,38 @@ ROLE_QUALIFIERS = (
     "regional",
     "branch",
 )
+# Titles and roles that lead a name as often as they follow it, so that
+# "CEO Matt Burns, President" does not yield a person called CEO Matt.
+NAME_PREFIXES = (
+    "ceo",
+    "cfo",
+    "coo",
+    "president",
+    "owner",
+    "founder",
+    "co-founder",
+    "principal",
+    "proprietor",
+    "manager",
+    "director",
+    "dr",
+    "mr",
+    "mrs",
+    "ms",
+)
 # A capitalised phrase is not a person if it contains trade or company words.
 # Without this, "Green Building, Principal Partner" reads as someone called
 # Building.
 NOT_A_NAME = {
+    "ste",
+    "suite",
+    "unit",
+    "apt",
+    "floor",
+    "road",
+    "street",
+    "avenue",
+    "drive",
     "building",
     "project",
     "company",
@@ -200,7 +228,14 @@ def _clean_person(name):
     words = name.strip().split()
     while words and words[-1].lower() in ROLE_QUALIFIERS:
         words.pop()
+    # A role can lead as easily as follow: "CEO Matt Burns, President".
+    while words and words[0].lower().strip(".,") in NAME_PREFIXES:
+        words.pop(0)
     if not 2 <= len(words) <= 3:
+        return None
+    # A digit means an address or a suite number, not a person. "Ste C124"
+    # otherwise passes every other check.
+    if any(character.isdigit() for character in " ".join(words)):
         return None
     if any(word.lower().strip(".,") in NOT_A_NAME for word in words):
         return None
