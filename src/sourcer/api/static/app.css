@@ -348,7 +348,7 @@ body:has(.drawer:not(:empty)) .drawer { transform: none; }
 .home { padding: var(--sp-10) var(--sp-8) var(--sp-16); max-width: 760px; }
 .home h1 { font-size: var(--t-3xl); }
 .home .lede { color: var(--ink-2); margin: var(--sp-3) 0 var(--sp-8); max-width: 56ch; }
-.search { display: grid; grid-template-columns: 1fr 1fr 96px 96px; gap: var(--sp-3);
+.search { display: grid; grid-template-columns: 1fr 1fr 96px; gap: var(--sp-3);
           border: 1px solid var(--edge); background: var(--surface); padding: var(--sp-4); }
 .search .field { display: grid; gap: var(--sp-1); }
 .search .field span { font: 600 var(--t-3xs)/1 var(--text); letter-spacing: 0.1em;
@@ -356,13 +356,13 @@ body:has(.drawer:not(:empty)) .drawer { transform: none; }
 .search input, .search select { font: 400 var(--t-m)/1 var(--text); padding: 10px;
   border: 1px solid var(--rule); background: var(--surface); color: var(--ink); width: 100%; }
 .search input:focus, .search select:focus { outline: 0; border-color: var(--edge); }
-.search .sources { grid-column: 1 / 5; display: flex; flex-wrap: wrap; gap: var(--sp-4);
+.search .sources { grid-column: 1 / 4; display: flex; flex-wrap: wrap; gap: var(--sp-4);
                    padding-top: var(--sp-2); border-top: 1px solid var(--rule); }
 .search .sources .check { display: inline-flex; align-items: center; gap: var(--sp-2);
                           font-size: var(--t-s); cursor: pointer; white-space: nowrap; }
 .search .sources .check input { accent-color: var(--ink); margin: 0; }
 .search .sources .check .note { color: var(--signal); font-size: var(--t-2xs); }
-.search .go { grid-column: 1 / 5; font: 500 var(--t-m)/1 var(--text); padding: 12px;
+.search .go { grid-column: 1 / 4; font: 500 var(--t-m)/1 var(--text); padding: 12px;
               background: var(--ink); color: var(--surface); border: 0; cursor: pointer; }
 .search .go:hover { background: var(--lime); color: var(--ink); }
 

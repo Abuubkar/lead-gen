@@ -26,12 +26,11 @@
       <select name="trade">
         {% for key, label in trades %}<option value="{{ key }}">{{ label }}</option>{% endfor %}
       </select></label>
-    <label class="field"><span>City</span>
-      <input name="city" value="Austin" list="markets" required autocomplete="off"></label>
-    <label class="field"><span>State</span>
-      <select name="state">
-        {% for code in states %}
-        <option value="{{ code }}" {% if code == "TX" %}selected{% endif %}>{{ code }}</option>
+    <label class="field"><span>Market</span>
+      <select name="market">
+        {% for city, state in markets %}
+        <option value="{{ city }},{{ state }}"
+                {% if city == "Austin" %}selected{% endif %}>{{ city }}, {{ state }}</option>
         {% endfor %}
       </select></label>
     <label class="field"><span>Pages</span>
@@ -48,9 +47,6 @@
     </div>
     <button class="go" type="submit">Search</button>
   </form>
-  <datalist id="markets">
-    {% for city, state in markets %}<option value="{{ city }}">{{ city }}, {{ state }}</option>{% endfor %}
-  </datalist>
 
   {% if recent %}
   <section class="runs">

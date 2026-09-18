@@ -255,6 +255,10 @@ def _enrich_all(connection, run_id):
 
             store.set_enrichment_status(connection, business["id"], outcome)
             store.bump_run_counts(connection, run_id, enriched=1)
+            # Scored here rather than in a later pass. The table streams while
+            # the run works, and a row with no Score yet reads as a Business
+            # worth nothing rather than one not yet judged.
+            _score_one(connection, run_id, store.get_business_fields(connection, business["id"]))
 
 
 # Facts a website gave us that the schema has no column for, such as the
@@ -266,6 +270,11 @@ def _enrich_all(connection, run_id):
 # entries for the lifetime of the process.
 _findings = {}
 _findings_lock = threading.Lock()
+
+# Which Businesses of a run already carry a Score, so neither the Enrichment
+# step nor the pass after it scores one twice and counts it twice.
+_scored = {}
+_scored_lock = threading.Lock()
 
 
 def _remember(run_id, business_id, found):
@@ -281,21 +290,40 @@ def _recall(run_id, business_id):
 def _forget_run(run_id):
     with _findings_lock:
         _findings.pop(run_id, None)
+    with _scored_lock:
+        _scored.pop(run_id, None)
+
+
+def _score_one(connection, run_id, business):
+    """Signals and Score for one Business. Skips a Business already scored.
+
+    Enrichment scores each Business it reads, and the pass that follows catches
+    the rest, so the guard is what stops a Business being counted twice.
+    """
+    if business is None:
+        return
+    with _scored_lock:
+        already = _scored.setdefault(run_id, set())
+        if business["id"] in already:
+            return
+        already.add(business["id"])
+
+    context = {
+        **business,
+        **_recall(run_id, business["id"]),
+    }
+    signals, computed_score, confidence = scoring.assess(context)
+    store.replace_signals(connection, business["id"], signals)
+    store.set_business_score(connection, business["id"], computed_score, confidence)
+    store.bump_run_counts(connection, run_id, scored=1)
 
 
 def _score_all(connection, run_id):
+    """Everything Enrichment did not already score: the Businesses with no site."""
     businesses = store.list_businesses(connection, run_id)
     total = len(businesses)
     for index, business in enumerate(businesses, start=1):
         if is_cancelled(run_id):
             return
         store.set_progress_note(connection, run_id, f"scoring {index}/{total}")
-
-        context = {
-            **business,
-            **_recall(run_id, business["id"]),
-        }
-        signals, computed_score, confidence = scoring.assess(context)
-        store.replace_signals(connection, business["id"], signals)
-        store.set_business_score(connection, business["id"], computed_score, confidence)
-        store.bump_run_counts(connection, run_id, scored=1)
+        _score_one(connection, run_id, business)

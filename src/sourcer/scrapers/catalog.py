@@ -1,9 +1,10 @@
-"""What a Searcher picks from: the trades, and the states.
+"""What a Searcher picks from: the trades, and the markets.
 
-The trades are a curated catalogue rather than free text. Three Sources use
-three different taxonomies, so free text would mean guessing a mapping at
-request time and half-working. A dozen trades that always work beat a thousand
-that sometimes do.
+Both are curated catalogues rather than free text. Three Sources use three
+different taxonomies for a trade, so free text would mean guessing a mapping
+at request time and half-working. A dozen trades that always work beat a
+thousand that sometimes do, and a market that is chosen cannot be a city and
+a state that do not belong together.
 
 Chosen for what search funds actually buy: fragmented, owner-operated, local
 demand, unglamorous.
@@ -90,25 +91,77 @@ def choices():
     return [(key, entry["label"]) for key, entry in sorted(TRADES.items())]
 
 
-# The fifty states and DC, as the codes that go into a Source's path. A closed
-# set, unlike the city, which every Source slugs the same way and so may be
-# anywhere. Codes rather than names, because the field is 96px of code, and
-# sorted by code, because that is what the dropdown shows.
-US_STATES = tuple(
-    "AK AL AR AZ CA CO CT DC DE FL GA HI IA ID IL IN KS KY LA MA MD ME MI "
-    "MN MO MS MT NC ND NE NH NJ NM NV NY OH OK OR PA RI SC SD TN TX UT VA "
-    "VT WA WI WV WY".split()
+# The markets a Searcher can pick, as (city, state) pairs. Curated for the same
+# reason the trades are: a pair that is chosen cannot be a pair that does not
+# exist, so "Phoenix, TX" stops being reachable. Add a line to add a market.
+MARKETS = (
+    ("Albuquerque", "NM"),
+    ("Atlanta", "GA"),
+    ("Austin", "TX"),
+    ("Baltimore", "MD"),
+    ("Birmingham", "AL"),
+    ("Boise", "ID"),
+    ("Boston", "MA"),
+    ("Charlotte", "NC"),
+    ("Chicago", "IL"),
+    ("Cincinnati", "OH"),
+    ("Cleveland", "OH"),
+    ("Colorado Springs", "CO"),
+    ("Columbus", "OH"),
+    ("Dallas", "TX"),
+    ("Denver", "CO"),
+    ("Des Moines", "IA"),
+    ("Detroit", "MI"),
+    ("El Paso", "TX"),
+    ("Fort Worth", "TX"),
+    ("Fresno", "CA"),
+    ("Grand Rapids", "MI"),
+    ("Greenville", "SC"),
+    ("Houston", "TX"),
+    ("Indianapolis", "IN"),
+    ("Jacksonville", "FL"),
+    ("Kansas City", "MO"),
+    ("Knoxville", "TN"),
+    ("Las Vegas", "NV"),
+    ("Little Rock", "AR"),
+    ("Louisville", "KY"),
+    ("Memphis", "TN"),
+    ("Miami", "FL"),
+    ("Milwaukee", "WI"),
+    ("Minneapolis", "MN"),
+    ("Nashville", "TN"),
+    ("New Orleans", "LA"),
+    ("Oklahoma City", "OK"),
+    ("Omaha", "NE"),
+    ("Orlando", "FL"),
+    ("Philadelphia", "PA"),
+    ("Phoenix", "AZ"),
+    ("Pittsburgh", "PA"),
+    ("Portland", "OR"),
+    ("Raleigh", "NC"),
+    ("Richmond", "VA"),
+    ("Sacramento", "CA"),
+    ("Salt Lake City", "UT"),
+    ("San Antonio", "TX"),
+    ("San Diego", "CA"),
+    ("Seattle", "WA"),
+    ("Spokane", "WA"),
+    ("St. Louis", "MO"),
+    ("Tampa", "FL"),
+    ("Tucson", "AZ"),
+    ("Tulsa", "OK"),
+    ("Wichita", "KS"),
 )
 
 
-def states():
-    """Every state code, for a dropdown."""
-    return list(US_STATES)
+def markets():
+    """Every market, as (city, state), for a dropdown."""
+    return list(MARKETS)
 
 
-def is_state(code):
-    """Whether a submitted state is one we can build a URL for."""
-    return (code or "").strip().upper() in US_STATES
+def is_market(city, state):
+    """Whether a submitted market is one we cover."""
+    return (city, (state or "").upper()) in MARKETS
 
 
 def is_trade(key):

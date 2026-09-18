@@ -148,23 +148,6 @@ def list_runs(connection, limit=20):
     )
 
 
-def known_markets(connection):
-    """Every city and state already searched, newest first.
-
-    Offered as suggestions on the search form. The city is free text because any
-    city can be slugged into a Source's path, but a Searcher still wants to know
-    which markets already hold data.
-    """
-    return [
-        (row["city"], row["state"])
-        for row in connection.execute(
-            "SELECT city, state, MAX(created_at) AS seen FROM search_run"
-            " WHERE city <> '' AND state <> ''"
-            " GROUP BY city, state ORDER BY seen DESC"
-        ).fetchall()
-    ]
-
-
 # --------------------------------------------------------------------------- #
 # Business
 # --------------------------------------------------------------------------- #

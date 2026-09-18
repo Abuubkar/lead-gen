@@ -104,6 +104,14 @@ The honest performance limit: a run is bounded by politeness, not by compute. A
 hundred businesses takes minutes because we wait between requests on purpose.
 That is why the run is a background thread and rows stream into the table.
 
+**Each business is scored as soon as its website has been read**, not in a pass
+after every business has been enriched. The difference only shows on a live run,
+and it is the difference between a table that fills with ranked businesses and
+one that fills with placeholders and ranks them all at the end. A business with
+no website to read is scored in the pass that follows, which is also what
+catches anything the enrichment step skipped. A run-scoped set of the businesses
+already scored is what keeps the two paths from scoring one twice.
+
 ## Concurrency
 
 **A background thread per search run, and no queue.**

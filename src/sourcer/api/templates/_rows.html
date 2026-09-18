@@ -26,8 +26,11 @@
   </span>
   <span class="hide">
     {% include "_score.html" %}
-    <span class="evidence">{{ ((b.confidence or 0) * 100) | round(0) | int }}% of the rubric evaluated
-      {%- if b.confidence is not none and b.confidence < provisional_below %} · <em>provisional</em>{% endif %}</span>
+    <span class="evidence">
+      {%- if b.score is none %}not scored yet
+      {%- else %}{{ ((b.confidence or 0) * 100) | round(0) | int }}% of the rubric evaluated
+      {%- if b.confidence is not none and b.confidence < provisional_below %} · <em>provisional</em>{% endif %}
+      {%- endif %}</span>
   </span>
 </a>
 {% endfor %}
