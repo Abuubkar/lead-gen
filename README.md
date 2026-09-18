@@ -85,6 +85,17 @@ accreditation flag is read, because the grade is only available from the source
 that ships disabled. That gap is a signal that resolves rarely rather than one
 that is missing.
 
+**Single location currently resolves for nobody**, and it is worth stating
+plainly because it is ten of the hundred points. It used to be awarded whenever
+a listing carried a street address, which every listing does, so it paid out in
+full for a business having been found at all: 162 of the 191 businesses in the
+shipped dataset held those ten points on that basis. One address in one
+directory is evidence of one directory entry, not of one location. The signal
+now reads a count of locations, no source reports one, so it stays unresolved
+and costs confidence instead. Confidence therefore tops out at 0.90 until a
+source carries the field, which is the honest reading of having no evidence
+either way.
+
 Two rules matter more than the weights.
 
 **Every point traces to evidence.** Click any row and a drawer lists each

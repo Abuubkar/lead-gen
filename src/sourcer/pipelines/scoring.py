@@ -173,12 +173,19 @@ def _no_booking(context):
 
 
 def _single_location(context):
+    """Ten points for one location, and only on a count of them.
+
+    A street address on a listing was standing in for this, which every listing
+    has, so the signal paid out in full for having been found at all. One
+    address in one directory is not evidence of one location: it is evidence of
+    one directory entry. No Source fills location_count today, so this resolves
+    for nobody and costs ten points of Confidence instead, which is the honest
+    reading of having no evidence either way.
+    """
     count = context.get("location_count")
-    if count is not None:
-        return (10.0, f"{count} location") if count <= 1 else (0.0, f"{count} locations")
-    if context.get("street"):
-        return 10.0, "one address listed"
-    return None, None
+    if count is None:
+        return None, None
+    return (10.0, f"{count} location") if count <= 1 else (0.0, f"{count} locations")
 
 
 def _not_a_chain(context):
@@ -257,7 +264,7 @@ SIGNALS = (
     ("stale_copyright", "underinvestment", 7.0, _stale_copyright, ("copyright_year",)),
     ("weak_web_platform", "underinvestment", 4.0, _weak_platform, ("site_builder", "https")),
     ("no_online_booking", "underinvestment", 2.0, _no_booking, ("has_booking",)),
-    ("single_location", "acquirability", 10.0, _single_location, ("location_count", "street")),
+    ("single_location", "acquirability", 10.0, _single_location, ("location_count",)),
     ("not_a_chain", "acquirability", 8.0, _not_a_chain, ("is_franchise", "franchise_language")),
     ("small_team", "acquirability", 4.0, _small_team, ("employee_estimate",)),
     (

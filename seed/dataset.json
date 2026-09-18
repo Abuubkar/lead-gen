@@ -8,7 +8,7 @@
        "Plumbers"
       ],
       "city": "Austin, TX 78748",
-      "confidence": 0.49,
+      "confidence": 0.39,
       "created_at": "2026-09-17T17:36:44+00:00",
       "dedup_key": "5128922254",
       "employee_estimate": null,
@@ -25,7 +25,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": 27,
-      "score": 93.9,
+      "score": 92.3,
       "sources": [
        "yellowpages"
       ],
@@ -65,10 +65,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -224,7 +224,7 @@
        "Building Contractors"
       ],
       "city": "Austin, TX 78758",
-      "confidence": 0.55,
+      "confidence": 0.45,
       "created_at": "2026-09-17T17:36:44+00:00",
       "dedup_key": "5123509589",
       "employee_estimate": null,
@@ -241,7 +241,7 @@
       "postal_code": null,
       "public_rating": 5.0,
       "public_review_count": 5,
-      "score": 89.1,
+      "score": 86.7,
       "sources": [
        "yellowpages"
       ],
@@ -281,10 +281,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -440,7 +440,7 @@
        "Water Heaters"
       ],
       "city": "Austin",
-      "confidence": 0.27,
+      "confidence": 0.17,
       "created_at": "2026-09-17T17:36:44+00:00",
       "dedup_key": "8555666978",
       "employee_estimate": null,
@@ -457,7 +457,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": null,
-      "score": 88.9,
+      "score": 82.4,
       "sources": [
        "yellowpages"
       ],
@@ -497,10 +497,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -656,7 +656,7 @@
        "Building Contractors-Commercial & Industrial"
       ],
       "city": "Austin, TX 78704",
-      "confidence": 0.49,
+      "confidence": 0.39,
       "created_at": "2026-09-17T17:36:44+00:00",
       "dedup_key": "5122804600",
       "employee_estimate": null,
@@ -673,7 +673,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": 23,
-      "score": 83.7,
+      "score": 79.5,
       "sources": [
        "yellowpages"
       ],
@@ -713,10 +713,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -872,7 +872,7 @@
        "Pumps-Service & Repair"
       ],
       "city": "Marble Falls, TX 78654",
-      "confidence": 0.92,
+      "confidence": 0.82,
       "created_at": "2026-09-17T17:36:44+00:00",
       "dedup_key": "texanwater.com",
       "employee_estimate": null,
@@ -889,7 +889,7 @@
       "postal_code": null,
       "public_rating": 4.5,
       "public_review_count": 8,
-      "score": 78.3,
+      "score": 75.6,
       "sources": [
        "yellowpages",
        "website"
@@ -961,10 +961,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -1120,7 +1120,7 @@
        "Building Contractors-Commercial & Industrial"
       ],
       "city": "Austin, TX 78751",
-      "confidence": 0.79,
+      "confidence": 0.69,
       "created_at": "2026-09-17T17:36:44+00:00",
       "dedup_key": "wilsonplumbingaustin.com",
       "employee_estimate": null,
@@ -1137,7 +1137,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": 79,
-      "score": 70.9,
+      "score": 66.7,
       "sources": [
        "yellowpages",
        "website"
@@ -1189,10 +1189,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -1348,7 +1348,7 @@
        "Plumbing-Drain & Sewer Cleaning"
       ],
       "city": "Austin, TX 78754",
-      "confidence": 0.35,
+      "confidence": 0.25,
       "created_at": "2026-09-17T17:36:44+00:00",
       "dedup_key": "8339479225",
       "employee_estimate": null,
@@ -1365,7 +1365,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": 1,
-      "score": 68.6,
+      "score": 56.0,
       "sources": [
        "yellowpages"
       ],
@@ -1405,10 +1405,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -1563,7 +1563,7 @@
        "Sewer Cleaners & Repairers"
       ],
       "city": "Austin, TX 78737",
-      "confidence": 0.79,
+      "confidence": 0.69,
       "created_at": "2026-09-17T17:36:44+00:00",
       "dedup_key": "adeptplumbing.com",
       "employee_estimate": null,
@@ -1580,7 +1580,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": 29,
-      "score": 64.6,
+      "score": 59.4,
       "sources": [
        "yellowpages",
        "website"
@@ -1632,10 +1632,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -1789,7 +1789,7 @@
        "Plumbers"
       ],
       "city": "Austin, TX 78748",
-      "confidence": 0.79,
+      "confidence": 0.69,
       "created_at": "2026-09-17T17:36:44+00:00",
       "dedup_key": "butlerplumbing7259871.localsearch.com",
       "employee_estimate": null,
@@ -1806,7 +1806,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": 75,
-      "score": 64.6,
+      "score": 59.4,
       "sources": [
        "yellowpages",
        "website"
@@ -1847,10 +1847,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -2006,7 +2006,7 @@
        "Pest Control Services"
       ],
       "city": "Austin, TX 78724",
-      "confidence": 0.92,
+      "confidence": 0.82,
       "created_at": "2026-09-17T17:36:44+00:00",
       "dedup_key": "abchomeandcommercial.com",
       "employee_estimate": null,
@@ -2023,7 +2023,7 @@
       "postal_code": null,
       "public_rating": 3.0,
       "public_review_count": 2,
-      "score": 64.1,
+      "score": 59.8,
       "sources": [
        "yellowpages",
        "website"
@@ -2075,10 +2075,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -2234,7 +2234,7 @@
        "Sewer Contractors"
       ],
       "city": "Austin, TX 78752",
-      "confidence": 0.92,
+      "confidence": 0.82,
       "created_at": "2026-09-17T17:36:44+00:00",
       "dedup_key": "johnnyrooter.com",
       "employee_estimate": null,
@@ -2251,7 +2251,7 @@
       "postal_code": null,
       "public_rating": 4.0,
       "public_review_count": 5,
-      "score": 62.0,
+      "score": 57.3,
       "sources": [
        "yellowpages",
        "website"
@@ -2292,10 +2292,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -2449,7 +2449,7 @@
        "Plumbers"
       ],
       "city": "Austin, TX 78758",
-      "confidence": 0.71,
+      "confidence": 0.61,
       "created_at": "2026-09-17T17:36:44+00:00",
       "dedup_key": "rotorooterplumbingdrainservices23379138.localsearch.com",
       "employee_estimate": null,
@@ -2466,7 +2466,7 @@
       "postal_code": null,
       "public_rating": 5.0,
       "public_review_count": 34,
-      "score": 60.6,
+      "score": 54.1,
       "sources": [
        "yellowpages",
        "website"
@@ -2507,10 +2507,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -2666,7 +2666,7 @@
        "Drainage Contractors"
       ],
       "city": "New Braunfels, TX 78130",
-      "confidence": 0.71,
+      "confidence": 0.61,
       "created_at": "2026-09-17T17:36:44+00:00",
       "dedup_key": "nbplumbinganddrain.com",
       "employee_estimate": null,
@@ -2683,7 +2683,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": null,
-      "score": 59.2,
+      "score": 52.5,
       "sources": [
        "yellowpages",
        "website"
@@ -2735,10 +2735,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -2893,7 +2893,7 @@
        "Plumbing-Drain & Sewer Cleaning"
       ],
       "city": "Austin, TX 78704",
-      "confidence": 0.92,
+      "confidence": 0.82,
       "created_at": "2026-09-17T17:36:44+00:00",
       "dedup_key": "clarkekentplumbing.com",
       "employee_estimate": null,
@@ -2910,7 +2910,7 @@
       "postal_code": null,
       "public_rating": 3.0,
       "public_review_count": 15,
-      "score": 57.6,
+      "score": 52.4,
       "sources": [
        "yellowpages",
        "website"
@@ -2962,10 +2962,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -3120,7 +3120,7 @@
        "Plumbing-Drain & Sewer Cleaning"
       ],
       "city": "Austin, TX 78735",
-      "confidence": 0.85,
+      "confidence": 0.75,
       "created_at": "2026-09-17T17:36:44+00:00",
       "dedup_key": "westmorelandplumbing.com",
       "employee_estimate": null,
@@ -3137,7 +3137,7 @@
       "postal_code": null,
       "public_rating": 1.0,
       "public_review_count": 1,
-      "score": 56.5,
+      "score": 50.7,
       "sources": [
        "yellowpages",
        "website"
@@ -3189,10 +3189,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -3346,7 +3346,7 @@
        "plumber"
       ],
       "city": null,
-      "confidence": 0.27,
+      "confidence": 0.17,
       "created_at": "2026-09-17T17:36:52+00:00",
       "dedup_key": "lantzhomeservices.com",
       "employee_estimate": null,
@@ -3363,7 +3363,7 @@
       "postal_code": "78703",
       "public_rating": null,
       "public_review_count": null,
-      "score": 55.6,
+      "score": 29.4,
       "sources": [
        "overpass"
       ],
@@ -3403,10 +3403,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -3560,7 +3560,7 @@
        "plumber"
       ],
       "city": "Austin",
-      "confidence": 0.27,
+      "confidence": 0.17,
       "created_at": "2026-09-17T17:36:52+00:00",
       "dedup_key": "mcdowdplumbing.com",
       "employee_estimate": null,
@@ -3577,7 +3577,7 @@
       "postal_code": "78757",
       "public_rating": null,
       "public_review_count": null,
-      "score": 55.6,
+      "score": 29.4,
       "sources": [
        "overpass"
       ],
@@ -3617,10 +3617,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -3774,7 +3774,7 @@
        "Plumbers"
       ],
       "city": "Austin, TX 78748",
-      "confidence": 0.85,
+      "confidence": 0.75,
       "created_at": "2026-09-17T17:36:44+00:00",
       "dedup_key": "1stplumbingservices.com",
       "employee_estimate": null,
@@ -3791,7 +3791,7 @@
       "postal_code": null,
       "public_rating": 5.0,
       "public_review_count": 1,
-      "score": 55.3,
+      "score": 49.3,
       "sources": [
        "yellowpages",
        "website"
@@ -3832,10 +3832,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -3991,7 +3991,7 @@
        "Garbage Disposal Repair"
       ],
       "city": "Austin, TX 78728",
-      "confidence": 0.92,
+      "confidence": 0.82,
       "created_at": "2026-09-17T17:36:44+00:00",
       "dedup_key": "plumbquickinc.com",
       "employee_estimate": null,
@@ -4008,7 +4008,7 @@
       "postal_code": null,
       "public_rating": 5.0,
       "public_review_count": 3,
-      "score": 53.3,
+      "score": 47.6,
       "sources": [
        "yellowpages",
        "website"
@@ -4049,10 +4049,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -4208,7 +4208,7 @@
        "Construction Consultants"
       ],
       "city": "Austin, TX 78749",
-      "confidence": 0.85,
+      "confidence": 0.75,
       "created_at": "2026-09-17T17:36:44+00:00",
       "dedup_key": "bradbplumbing.com",
       "employee_estimate": null,
@@ -4225,7 +4225,7 @@
       "postal_code": null,
       "public_rating": 5.0,
       "public_review_count": 8,
-      "score": 52.9,
+      "score": 46.7,
       "sources": [
        "yellowpages",
        "website"
@@ -4266,10 +4266,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -4425,7 +4425,7 @@
        "Tree Service"
       ],
       "city": "Del Valle, TX 78617",
-      "confidence": 0.65,
+      "confidence": 0.55,
       "created_at": "2026-09-17T17:36:44+00:00",
       "dedup_key": "dalecookbackhoeservice.com",
       "employee_estimate": null,
@@ -4442,7 +4442,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": 4,
-      "score": 52.3,
+      "score": 43.6,
       "sources": [
        "yellowpages",
        "website"
@@ -4483,10 +4483,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -4641,7 +4641,7 @@
        "Plumbing Contractors-Commercial & Industrial"
       ],
       "city": "Austin, TX 78704",
-      "confidence": 0.57,
+      "confidence": 0.47,
       "created_at": "2026-09-17T17:36:44+00:00",
       "dedup_key": "muscleplumbingservices.localsearch.com",
       "employee_estimate": null,
@@ -4658,7 +4658,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": null,
-      "score": 50.9,
+      "score": 40.4,
       "sources": [
        "yellowpages",
        "website"
@@ -4699,10 +4699,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -4857,7 +4857,7 @@
        "Plumbing Contractors-Commercial & Industrial"
       ],
       "city": "Austin, TX 78758",
-      "confidence": 0.57,
+      "confidence": 0.47,
       "created_at": "2026-09-17T17:36:44+00:00",
       "dedup_key": "torresplumbing.localsearch.com",
       "employee_estimate": null,
@@ -4874,7 +4874,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": null,
-      "score": 50.9,
+      "score": 40.4,
       "sources": [
        "yellowpages",
        "website"
@@ -4915,10 +4915,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -5074,7 +5074,7 @@
        "Sewer Contractors"
       ],
       "city": "Austin, TX 78729",
-      "confidence": 0.92,
+      "confidence": 0.82,
       "created_at": "2026-09-17T17:36:44+00:00",
       "dedup_key": "benfranklinplumbersaustin.com",
       "employee_estimate": null,
@@ -5091,7 +5091,7 @@
       "postal_code": null,
       "public_rating": 5.0,
       "public_review_count": 2,
-      "score": 47.8,
+      "score": 41.5,
       "sources": [
        "yellowpages",
        "website"
@@ -5153,10 +5153,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -5312,7 +5312,7 @@
        "Plumbing, Drains & Sewer Consultants"
       ],
       "city": "Austin, TX 78754",
-      "confidence": 0.86,
+      "confidence": 0.76,
       "created_at": "2026-09-17T17:36:44+00:00",
       "dedup_key": "rotorooter.com",
       "employee_estimate": null,
@@ -5329,7 +5329,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": 91,
-      "score": 43.0,
+      "score": 35.5,
       "sources": [
        "yellowpages",
        "website"
@@ -5370,10 +5370,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -5527,7 +5527,7 @@
        "Plumbers"
       ],
       "city": "Austin, TX 78751",
-      "confidence": 0.78,
+      "confidence": 0.68,
       "created_at": "2026-09-17T17:36:44+00:00",
       "dedup_key": "adplumbingkaty.com",
       "employee_estimate": null,
@@ -5544,7 +5544,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": null,
-      "score": 41.0,
+      "score": 32.4,
       "sources": [
        "yellowpages",
        "website"
@@ -5596,10 +5596,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -5753,7 +5753,7 @@
        "plumber"
       ],
       "city": "Austin",
-      "confidence": 0.71,
+      "confidence": 0.61,
       "created_at": "2026-09-17T17:36:52+00:00",
       "dedup_key": "plumbersthatcare.com",
       "employee_estimate": null,
@@ -5770,7 +5770,7 @@
       "postal_code": "78702",
       "public_rating": null,
       "public_review_count": null,
-      "score": 38.0,
+      "score": 27.9,
       "sources": [
        "overpass",
        "website"
@@ -5811,10 +5811,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -5970,7 +5970,7 @@
        "Heating Contractors & Specialties"
       ],
       "city": "Austin, TX 78736",
-      "confidence": 0.79,
+      "confidence": 0.69,
       "created_at": "2026-09-17T17:36:44+00:00",
       "dedup_key": "midstateplumbinginctx.localsearch.com",
       "employee_estimate": null,
@@ -5987,7 +5987,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": 3,
-      "score": 36.7,
+      "score": 27.5,
       "sources": [
        "yellowpages",
        "website"
@@ -6028,10 +6028,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:39:31+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -6215,7 +6215,7 @@
        "Heating Contractors & Specialties"
       ],
       "city": "Austin",
-      "confidence": 0.27,
+      "confidence": 0.17,
       "created_at": "2026-09-17T17:39:47+00:00",
       "dedup_key": "8555665921",
       "employee_estimate": null,
@@ -6232,7 +6232,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": null,
-      "score": 88.9,
+      "score": 82.4,
       "sources": [
        "yellowpages"
       ],
@@ -6272,10 +6272,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -6431,7 +6431,7 @@
        "Heating Contractors & Specialties"
       ],
       "city": "Austin, TX 78748",
-      "confidence": 0.27,
+      "confidence": 0.17,
       "created_at": "2026-09-17T17:39:47+00:00",
       "dedup_key": "5126231759",
       "employee_estimate": null,
@@ -6448,7 +6448,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": null,
-      "score": 88.9,
+      "score": 82.4,
       "sources": [
        "yellowpages"
       ],
@@ -6488,10 +6488,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -6647,7 +6647,7 @@
        "Heating Contractors & Specialties"
       ],
       "city": "Austin",
-      "confidence": 0.27,
+      "confidence": 0.17,
       "created_at": "2026-09-17T17:39:47+00:00",
       "dedup_key": "8554032011",
       "employee_estimate": null,
@@ -6664,7 +6664,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": null,
-      "score": 88.9,
+      "score": 82.4,
       "sources": [
        "yellowpages"
       ],
@@ -6704,10 +6704,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -6863,7 +6863,7 @@
        "Heating Contractors & Specialties"
       ],
       "city": "Austin, TX 78728",
-      "confidence": 0.27,
+      "confidence": 0.17,
       "created_at": "2026-09-17T17:39:47+00:00",
       "dedup_key": "5124678800",
       "employee_estimate": null,
@@ -6880,7 +6880,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": null,
-      "score": 88.9,
+      "score": 82.4,
       "sources": [
        "yellowpages"
       ],
@@ -6920,10 +6920,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -7077,7 +7077,7 @@
        "hvac"
       ],
       "city": "Austin",
-      "confidence": 0.57,
+      "confidence": 0.47,
       "created_at": "2026-09-17T17:39:51+00:00",
       "dedup_key": "eliteaustinac.com",
       "employee_estimate": null,
@@ -7094,7 +7094,7 @@
       "postal_code": "78758",
       "public_rating": null,
       "public_review_count": null,
-      "score": 78.9,
+      "score": 74.5,
       "sources": [
        "overpass",
        "website"
@@ -7146,10 +7146,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -7305,7 +7305,7 @@
        "Heating Contractors & Specialties"
       ],
       "city": "Austin, TX 78746",
-      "confidence": 0.79,
+      "confidence": 0.69,
       "created_at": "2026-09-17T17:39:47+00:00",
       "dedup_key": "porch.com",
       "employee_estimate": null,
@@ -7322,7 +7322,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": 30,
-      "score": 75.9,
+      "score": 72.5,
       "sources": [
        "yellowpages",
        "website"
@@ -7394,10 +7394,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -7551,7 +7551,7 @@
        "hvac"
       ],
       "city": "Austin",
-      "confidence": 0.78,
+      "confidence": 0.68,
       "created_at": "2026-09-17T17:39:51+00:00",
       "dedup_key": "efficienttexas.com",
       "employee_estimate": null,
@@ -7568,7 +7568,7 @@
       "postal_code": "78758",
       "public_rating": null,
       "public_review_count": null,
-      "score": 73.1,
+      "score": 69.1,
       "sources": [
        "overpass",
        "website"
@@ -7630,10 +7630,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -7789,7 +7789,7 @@
        "Refrigerators & Freezers-Repair & Service"
       ],
       "city": "Austin, TX 78737",
-      "confidence": 0.92,
+      "confidence": 0.82,
       "created_at": "2026-09-17T17:39:47+00:00",
       "dedup_key": "hanksacservice.com",
       "employee_estimate": null,
@@ -7806,7 +7806,7 @@
       "postal_code": null,
       "public_rating": 5.0,
       "public_review_count": 58,
-      "score": 71.7,
+      "score": 68.3,
       "sources": [
        "yellowpages",
        "website"
@@ -7858,10 +7858,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -8016,7 +8016,7 @@
        "Heating Contractors & Specialties"
       ],
       "city": "Austin, TX 78717",
-      "confidence": 0.55,
+      "confidence": 0.45,
       "created_at": "2026-09-17T17:39:47+00:00",
       "dedup_key": "5123394300",
       "employee_estimate": null,
@@ -8033,7 +8033,7 @@
       "postal_code": null,
       "public_rating": 5.0,
       "public_review_count": 1,
-      "score": 70.9,
+      "score": 64.4,
       "sources": [
        "yellowpages"
       ],
@@ -8073,10 +8073,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -8232,7 +8232,7 @@
        "Electricians"
       ],
       "city": "Austin, TX 78745",
-      "confidence": 0.85,
+      "confidence": 0.75,
       "created_at": "2026-09-17T17:39:47+00:00",
       "dedup_key": "ipropane.com",
       "employee_estimate": null,
@@ -8249,7 +8249,7 @@
       "postal_code": null,
       "public_rating": 4.5,
       "public_review_count": 2,
-      "score": 70.6,
+      "score": 66.7,
       "sources": [
        "yellowpages",
        "website"
@@ -8301,10 +8301,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -8460,7 +8460,7 @@
        "Plumbing-Drain & Sewer Cleaning"
       ],
       "city": "Austin, TX 78754",
-      "confidence": 0.35,
+      "confidence": 0.25,
       "created_at": "2026-09-17T17:39:47+00:00",
       "dedup_key": "8339479225",
       "employee_estimate": null,
@@ -8477,7 +8477,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": 1,
-      "score": 68.6,
+      "score": 56.0,
       "sources": [
        "yellowpages"
       ],
@@ -8517,10 +8517,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -8676,7 +8676,7 @@
        "Heating Contractors & Specialties"
       ],
       "city": "Austin, TX 78757",
-      "confidence": 0.86,
+      "confidence": 0.76,
       "created_at": "2026-09-17T17:39:47+00:00",
       "dedup_key": "aircondspecialists.com",
       "employee_estimate": null,
@@ -8693,7 +8693,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": 54,
-      "score": 65.1,
+      "score": 60.5,
       "sources": [
        "yellowpages",
        "website"
@@ -8745,10 +8745,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -8904,7 +8904,7 @@
        "Ventilating Contractors"
       ],
       "city": "Austin, TX 78701",
-      "confidence": 0.79,
+      "confidence": 0.69,
       "created_at": "2026-09-17T17:39:47+00:00",
       "dedup_key": "austinmgmair.localsearch.com",
       "employee_estimate": null,
@@ -8921,7 +8921,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": 30,
-      "score": 64.6,
+      "score": 59.4,
       "sources": [
        "yellowpages",
        "website"
@@ -8962,10 +8962,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -9119,7 +9119,7 @@
        "Air Conditioning Contractors & Systems"
       ],
       "city": "Austin, TX 78745",
-      "confidence": 0.79,
+      "confidence": 0.69,
       "created_at": "2026-09-17T17:39:47+00:00",
       "dedup_key": "castilloacservicetaclb6767e.localsearch.com",
       "employee_estimate": null,
@@ -9136,7 +9136,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": 38,
-      "score": 64.6,
+      "score": 59.4,
       "sources": [
        "yellowpages",
        "website"
@@ -9177,10 +9177,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -9336,7 +9336,7 @@
        "Heating Contractors & Specialties"
       ],
       "city": "Austin, TX 78759",
-      "confidence": 0.79,
+      "confidence": 0.69,
       "created_at": "2026-09-17T17:39:47+00:00",
       "dedup_key": "mainman.localsearch.com",
       "employee_estimate": null,
@@ -9353,7 +9353,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": 31,
-      "score": 64.6,
+      "score": 59.4,
       "sources": [
        "yellowpages",
        "website"
@@ -9394,10 +9394,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -9553,7 +9553,7 @@
        "Pest Control Services"
       ],
       "city": "Austin, TX 78724",
-      "confidence": 0.92,
+      "confidence": 0.82,
       "created_at": "2026-09-17T17:39:47+00:00",
       "dedup_key": "abchomeandcommercial.com",
       "employee_estimate": null,
@@ -9570,7 +9570,7 @@
       "postal_code": null,
       "public_rating": 3.0,
       "public_review_count": 2,
-      "score": 64.1,
+      "score": 59.8,
       "sources": [
        "yellowpages",
        "website"
@@ -9622,10 +9622,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -9779,7 +9779,7 @@
        "hvac"
       ],
       "city": "Austin",
-      "confidence": 0.64,
+      "confidence": 0.54,
       "created_at": "2026-09-17T17:39:51+00:00",
       "dedup_key": "austinductcleaning.us",
       "employee_estimate": null,
@@ -9796,7 +9796,7 @@
       "postal_code": "78701",
       "public_rating": null,
       "public_review_count": null,
-      "score": 64.1,
+      "score": 57.4,
       "sources": [
        "overpass",
        "website"
@@ -9848,10 +9848,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -10007,7 +10007,7 @@
        "Heating Contractors & Specialties"
       ],
       "city": "Austin, TX 78728",
-      "confidence": 0.85,
+      "confidence": 0.75,
       "created_at": "2026-09-17T17:39:47+00:00",
       "dedup_key": "superiorservicecompanytx.localsearch.com",
       "employee_estimate": null,
@@ -10024,7 +10024,7 @@
       "postal_code": null,
       "public_rating": 2.5,
       "public_review_count": 5,
-      "score": 56.5,
+      "score": 50.7,
       "sources": [
        "yellowpages",
        "website"
@@ -10065,10 +10065,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -10222,7 +10222,7 @@
        "hvac"
       ],
       "city": "Austin",
-      "confidence": 0.27,
+      "confidence": 0.17,
       "created_at": "2026-09-17T17:39:51+00:00",
       "dedup_key": "acrepairaustin.org",
       "employee_estimate": null,
@@ -10239,7 +10239,7 @@
       "postal_code": "78703",
       "public_rating": null,
       "public_review_count": null,
-      "score": 55.6,
+      "score": 29.4,
       "sources": [
        "overpass"
       ],
@@ -10279,10 +10279,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -10436,7 +10436,7 @@
        "hvac"
       ],
       "city": "Austin",
-      "confidence": 0.27,
+      "confidence": 0.17,
       "created_at": "2026-09-17T17:39:51+00:00",
       "dedup_key": "johnstonesupply.com",
       "employee_estimate": null,
@@ -10453,7 +10453,7 @@
       "postal_code": "78758",
       "public_rating": null,
       "public_review_count": null,
-      "score": 55.6,
+      "score": 29.4,
       "sources": [
        "overpass"
       ],
@@ -10493,10 +10493,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -10652,7 +10652,7 @@
        "Heating Contractors & Specialties"
       ],
       "city": "Austin, TX 78703",
-      "confidence": 0.27,
+      "confidence": 0.17,
       "created_at": "2026-09-17T17:39:47+00:00",
       "dedup_key": "cpalolley.com",
       "employee_estimate": null,
@@ -10669,7 +10669,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": null,
-      "score": 55.6,
+      "score": 29.4,
       "sources": [
        "yellowpages"
       ],
@@ -10709,10 +10709,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -10866,7 +10866,7 @@
        "hvac"
       ],
       "city": "Austin",
-      "confidence": 0.27,
+      "confidence": 0.17,
       "created_at": "2026-09-17T17:39:51+00:00",
       "dedup_key": "rmadden.com",
       "employee_estimate": null,
@@ -10883,7 +10883,7 @@
       "postal_code": "78758",
       "public_rating": null,
       "public_review_count": null,
-      "score": 55.6,
+      "score": 29.4,
       "sources": [
        "overpass"
       ],
@@ -10923,10 +10923,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -11080,7 +11080,7 @@
        "hvac"
       ],
       "city": "Austin",
-      "confidence": 0.27,
+      "confidence": 0.17,
       "created_at": "2026-09-17T17:39:51+00:00",
       "dedup_key": "smartairaustin.com",
       "employee_estimate": null,
@@ -11097,7 +11097,7 @@
       "postal_code": "78704",
       "public_rating": null,
       "public_review_count": null,
-      "score": 55.6,
+      "score": 29.4,
       "sources": [
        "overpass"
       ],
@@ -11137,10 +11137,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -11296,7 +11296,7 @@
        "Appliance Installation"
       ],
       "city": "Austin, TX 78726",
-      "confidence": 0.79,
+      "confidence": 0.69,
       "created_at": "2026-09-17T17:39:47+00:00",
       "dedup_key": "acentralairconditionheatingandappliancerepair497645208.localsearch.com",
       "employee_estimate": null,
@@ -11313,7 +11313,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": 19,
-      "score": 54.4,
+      "score": 47.8,
       "sources": [
        "yellowpages",
        "website"
@@ -11354,10 +11354,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -11511,7 +11511,7 @@
        "hvac"
       ],
       "city": "Austin",
-      "confidence": 0.78,
+      "confidence": 0.68,
       "created_at": "2026-09-17T17:39:51+00:00",
       "dedup_key": "goettl.com",
       "employee_estimate": null,
@@ -11528,7 +11528,7 @@
       "postal_code": "78744",
       "public_rating": null,
       "public_review_count": null,
-      "score": 52.6,
+      "score": 45.6,
       "sources": [
        "overpass",
        "website"
@@ -11580,10 +11580,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -11738,7 +11738,7 @@
        "Heating Contractors & Specialties"
       ],
       "city": "Austin, TX 78758",
-      "confidence": 0.85,
+      "confidence": 0.75,
       "created_at": "2026-09-17T17:39:47+00:00",
       "dedup_key": "cleancoolairllc.localsearch.com",
       "employee_estimate": null,
@@ -11755,7 +11755,7 @@
       "postal_code": null,
       "public_rating": 5.0,
       "public_review_count": 3,
-      "score": 51.8,
+      "score": 45.3,
       "sources": [
        "yellowpages",
        "website"
@@ -11796,10 +11796,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -11955,7 +11955,7 @@
        "Automobile Air Conditioning Equipment"
       ],
       "city": "Austin, TX 78758",
-      "confidence": 0.85,
+      "confidence": 0.75,
       "created_at": "2026-09-17T17:39:47+00:00",
       "dedup_key": "eliteimportauto.com",
       "employee_estimate": null,
@@ -11972,7 +11972,7 @@
       "postal_code": null,
       "public_rating": 5.0,
       "public_review_count": 4,
-      "score": 51.8,
+      "score": 45.3,
       "sources": [
        "yellowpages",
        "website"
@@ -12013,10 +12013,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -12171,7 +12171,7 @@
        "Air Conditioning Service & Repair"
       ],
       "city": "Austin, TX 78724",
-      "confidence": 0.85,
+      "confidence": 0.75,
       "created_at": "2026-09-17T17:39:47+00:00",
       "dedup_key": "marksairconditioningheat.localsearch.com",
       "employee_estimate": null,
@@ -12188,7 +12188,7 @@
       "postal_code": null,
       "public_rating": 5.0,
       "public_review_count": 1,
-      "score": 51.8,
+      "score": 45.3,
       "sources": [
        "yellowpages",
        "website"
@@ -12229,10 +12229,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -12388,7 +12388,7 @@
        "Home Builders"
       ],
       "city": "Austin, TX 78758",
-      "confidence": 0.57,
+      "confidence": 0.47,
       "created_at": "2026-09-17T17:39:47+00:00",
       "dedup_key": "airactionairconditioning38heatingllc.localsearch.com",
       "employee_estimate": null,
@@ -12405,7 +12405,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": null,
-      "score": 50.9,
+      "score": 40.4,
       "sources": [
        "yellowpages",
        "website"
@@ -12446,10 +12446,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -12603,7 +12603,7 @@
        "Air Conditioning Contractors & Systems"
       ],
       "city": "Austin, TX 78748",
-      "confidence": 0.57,
+      "confidence": 0.47,
       "created_at": "2026-09-17T17:39:47+00:00",
       "dedup_key": "airmovementtx.localsearch.com",
       "employee_estimate": null,
@@ -12620,7 +12620,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": null,
-      "score": 50.9,
+      "score": 40.4,
       "sources": [
        "yellowpages",
        "website"
@@ -12661,10 +12661,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -12820,7 +12820,7 @@
        "Heating Contractors & Specialties"
       ],
       "city": "Austin, TX 78745",
-      "confidence": 0.57,
+      "confidence": 0.47,
       "created_at": "2026-09-17T17:39:47+00:00",
       "dedup_key": "blackburnsserviceco.localsearch.com",
       "employee_estimate": null,
@@ -12837,7 +12837,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": null,
-      "score": 50.9,
+      "score": 40.4,
       "sources": [
        "yellowpages",
        "website"
@@ -12878,10 +12878,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -13037,7 +13037,7 @@
        "Air Conditioning Service & Repair"
       ],
       "city": "Austin, TX 78745",
-      "confidence": 0.85,
+      "confidence": 0.75,
       "created_at": "2026-09-17T17:39:47+00:00",
       "dedup_key": "idealaircare.localsearch.com",
       "employee_estimate": null,
@@ -13054,7 +13054,7 @@
       "postal_code": null,
       "public_rating": 5.0,
       "public_review_count": 1,
-      "score": 45.9,
+      "score": 38.7,
       "sources": [
        "yellowpages",
        "website"
@@ -13095,10 +13095,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -13254,7 +13254,7 @@
        "Air Conditioning Equipment & Systems"
       ],
       "city": "Austin, TX 78736",
-      "confidence": 0.78,
+      "confidence": 0.68,
       "created_at": "2026-09-17T17:39:47+00:00",
       "dedup_key": "temperatureprowestaustin.com",
       "employee_estimate": null,
@@ -13271,7 +13271,7 @@
       "postal_code": null,
       "public_rating": 5.0,
       "public_review_count": 1,
-      "score": 44.9,
+      "score": 36.8,
       "sources": [
        "yellowpages",
        "website"
@@ -13323,10 +13323,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -13480,7 +13480,7 @@
        "hvac"
       ],
       "city": "Austin",
-      "confidence": 0.57,
+      "confidence": 0.47,
       "created_at": "2026-09-17T17:39:51+00:00",
       "dedup_key": "morscohvacsupply.com",
       "employee_estimate": null,
@@ -13497,7 +13497,7 @@
       "postal_code": "78758",
       "public_rating": null,
       "public_review_count": null,
-      "score": 43.9,
+      "score": 31.9,
       "sources": [
        "overpass",
        "website"
@@ -13538,10 +13538,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -13697,7 +13697,7 @@
        "Air Conditioning Equipment & Systems"
       ],
       "city": "Bertram, TX 78605",
-      "confidence": 0.35,
+      "confidence": 0.25,
       "created_at": "2026-09-17T17:39:47+00:00",
       "dedup_key": "acaappliance.com",
       "employee_estimate": null,
@@ -13714,7 +13714,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": 4,
-      "score": 42.9,
+      "score": 20.0,
       "sources": [
        "yellowpages"
       ],
@@ -13754,10 +13754,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -13911,7 +13911,7 @@
        "hvac"
       ],
       "city": "Austin",
-      "confidence": 0.64,
+      "confidence": 0.54,
       "created_at": "2026-09-17T17:39:51+00:00",
       "dedup_key": "austinairconditioner.org",
       "employee_estimate": null,
@@ -13928,7 +13928,7 @@
       "postal_code": "78745",
       "public_rating": null,
       "public_review_count": null,
-      "score": 42.2,
+      "score": 31.5,
       "sources": [
        "overpass",
        "website"
@@ -13980,10 +13980,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -14137,7 +14137,7 @@
        "hvac"
       ],
       "city": "Austin",
-      "confidence": 0.78,
+      "confidence": 0.68,
       "created_at": "2026-09-17T17:39:51+00:00",
       "dedup_key": "iairservices.com",
       "employee_estimate": null,
@@ -14154,7 +14154,7 @@
       "postal_code": "78756",
       "public_rating": null,
       "public_review_count": null,
-      "score": 39.7,
+      "score": 30.9,
       "sources": [
        "overpass",
        "website"
@@ -14195,10 +14195,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -14352,7 +14352,7 @@
        "hvac"
       ],
       "city": "Austin",
-      "confidence": 0.64,
+      "confidence": 0.54,
       "created_at": "2026-09-17T17:39:51+00:00",
       "dedup_key": "onehourheatandair.com",
       "employee_estimate": null,
@@ -14369,7 +14369,7 @@
       "postal_code": "78731",
       "public_rating": null,
       "public_review_count": null,
-      "score": 23.4,
+      "score": 9.3,
       "sources": [
        "overpass",
        "website"
@@ -14431,10 +14431,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:45:40+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -14616,7 +14616,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "advanced drainage systems|505 north 51st avenue",
       "employee_estimate": null,
@@ -14633,7 +14633,7 @@
       "postal_code": "85043",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -14739,10 +14739,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -14830,7 +14830,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "alliance plumbing|2626 east elwood street",
       "employee_estimate": null,
@@ -14847,7 +14847,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -14953,10 +14953,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -15044,7 +15044,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "backflow prevention device inspections|3831 east grove street",
       "employee_estimate": null,
@@ -15061,7 +15061,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -15167,10 +15167,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -15258,7 +15258,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "brown s partsmaster|2515 east rose garden lane",
       "employee_estimate": null,
@@ -15275,7 +15275,7 @@
       "postal_code": "85050",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -15381,10 +15381,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -15472,7 +15472,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "george brazil plumbing electrical|3830 south 38th street",
       "employee_estimate": null,
@@ -15489,7 +15489,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -15595,10 +15595,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -15686,7 +15686,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "jfn mechanical|5127 west roosevelt street",
       "employee_estimate": null,
@@ -15703,7 +15703,7 @@
       "postal_code": "85043",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -15809,10 +15809,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -15900,7 +15900,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "moon valley plumbing|2239 east rose garden loop",
       "employee_estimate": null,
@@ -15917,7 +15917,7 @@
       "postal_code": "85024",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -16023,10 +16023,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -16114,7 +16114,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "oh no plumbing air conditioning|3450 south 36th street",
       "employee_estimate": null,
@@ -16131,7 +16131,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -16237,10 +16237,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -16328,7 +16328,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "option one plumbing|3826 east illini street",
       "employee_estimate": null,
@@ -16345,7 +16345,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -16451,10 +16451,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -16542,7 +16542,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "phoenix plumbers drain clean services|1613 east mcdowell road",
       "employee_estimate": null,
@@ -16559,7 +16559,7 @@
       "postal_code": "85006",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -16665,10 +16665,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -16756,7 +16756,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "southwest water solutions|2424 south 19th street",
       "employee_estimate": null,
@@ -16773,7 +16773,7 @@
       "postal_code": "85034",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -16879,10 +16879,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -16970,7 +16970,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "plumber s choice|3655 east la salle street",
       "employee_estimate": null,
@@ -16987,7 +16987,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -17093,10 +17093,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -17184,7 +17184,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "van marcke plumbing supply|813 east university drive",
       "employee_estimate": null,
@@ -17201,7 +17201,7 @@
       "postal_code": "85034",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -17307,10 +17307,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -17398,7 +17398,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "walker plumbing hvac|2228 east rose garden loop",
       "employee_estimate": null,
@@ -17415,7 +17415,7 @@
       "postal_code": "85024",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -17521,10 +17521,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -17612,7 +17612,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "water treatment technologies|2445 east university drive",
       "employee_estimate": null,
@@ -17629,7 +17629,7 @@
       "postal_code": "85034",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -17735,10 +17735,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -19324,7 +19324,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.78,
+      "confidence": 0.68,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "affordableplumbingaz.com",
       "employee_estimate": null,
@@ -19341,7 +19341,7 @@
       "postal_code": "85016",
       "public_rating": null,
       "public_review_count": null,
-      "score": 62.8,
+      "score": 57.4,
       "sources": [
        "overpass",
        "website"
@@ -19393,10 +19393,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -19550,7 +19550,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.27,
+      "confidence": 0.17,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "ethicalcommunity.org",
       "employee_estimate": null,
@@ -19567,7 +19567,7 @@
       "postal_code": "85021",
       "public_rating": null,
       "public_review_count": null,
-      "score": 55.6,
+      "score": 29.4,
       "sources": [
        "overpass"
       ],
@@ -19607,10 +19607,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -19764,7 +19764,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.78,
+      "confidence": 0.68,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "desertwateraz.com",
       "employee_estimate": null,
@@ -19781,7 +19781,7 @@
       "postal_code": "85027",
       "public_rating": null,
       "public_review_count": null,
-      "score": 52.6,
+      "score": 45.6,
       "sources": [
        "overpass",
        "website"
@@ -19822,10 +19822,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -19979,7 +19979,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.78,
+      "confidence": 0.68,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "goettl.com",
       "employee_estimate": null,
@@ -19996,7 +19996,7 @@
       "postal_code": "85042",
       "public_rating": null,
       "public_review_count": null,
-      "score": 52.6,
+      "score": 45.6,
       "sources": [
        "overpass",
        "website"
@@ -20048,10 +20048,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -20205,7 +20205,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.78,
+      "confidence": 0.68,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "plumberofphoenix.com",
       "employee_estimate": null,
@@ -20222,7 +20222,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 52.6,
+      "score": 45.6,
       "sources": [
        "overpass",
        "website"
@@ -20274,10 +20274,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -20431,7 +20431,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.64,
+      "confidence": 0.54,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "rooterranger.com",
       "employee_estimate": null,
@@ -20448,7 +20448,7 @@
       "postal_code": "85016",
       "public_rating": null,
       "public_review_count": null,
-      "score": 45.3,
+      "score": 35.2,
       "sources": [
        "overpass",
        "website"
@@ -20489,10 +20489,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -20646,7 +20646,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.35,
+      "confidence": 0.25,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "hayscoolingandheating.com",
       "employee_estimate": null,
@@ -20663,7 +20663,7 @@
       "postal_code": "85085",
       "public_rating": null,
       "public_review_count": null,
-      "score": 42.9,
+      "score": 20.0,
       "sources": [
        "overpass"
       ],
@@ -20703,10 +20703,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -20860,7 +20860,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.35,
+      "confidence": 0.25,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "pipenwrench.com",
       "employee_estimate": null,
@@ -20877,7 +20877,7 @@
       "postal_code": "85353",
       "public_rating": null,
       "public_review_count": null,
-      "score": 42.9,
+      "score": 20.0,
       "sources": [
        "overpass"
       ],
@@ -20917,10 +20917,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -21074,7 +21074,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.35,
+      "confidence": 0.25,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "itsjustplumbsmart.com",
       "employee_estimate": null,
@@ -21091,7 +21091,7 @@
       "postal_code": "85027",
       "public_rating": null,
       "public_review_count": null,
-      "score": 42.9,
+      "score": 20.0,
       "sources": [
        "overpass"
       ],
@@ -21131,10 +21131,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -21288,7 +21288,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.64,
+      "confidence": 0.54,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "zippitysplitplumbing.com",
       "employee_estimate": null,
@@ -21305,7 +21305,7 @@
       "postal_code": "85032",
       "public_rating": null,
       "public_review_count": null,
-      "score": 42.2,
+      "score": 31.5,
       "sources": [
        "overpass",
        "website"
@@ -21346,10 +21346,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -21503,7 +21503,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.78,
+      "confidence": 0.68,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "reliantplumbingandrooter.com",
       "employee_estimate": null,
@@ -21520,7 +21520,7 @@
       "postal_code": "85008",
       "public_rating": null,
       "public_review_count": null,
-      "score": 41.0,
+      "score": 32.4,
       "sources": [
        "overpass",
        "website"
@@ -21572,10 +21572,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -21944,7 +21944,7 @@
        "plumber"
       ],
       "city": "Phoenix",
-      "confidence": 0.64,
+      "confidence": 0.54,
       "created_at": "2026-09-17T17:46:01+00:00",
       "dedup_key": "miplomeroenphoenix.com",
       "employee_estimate": null,
@@ -21961,7 +21961,7 @@
       "postal_code": "85027",
       "public_rating": null,
       "public_review_count": null,
-      "score": 32.8,
+      "score": 20.4,
       "sources": [
        "overpass",
        "website"
@@ -22013,10 +22013,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:46:53+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -22199,7 +22199,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "ace home services|4814 south 35th street",
       "employee_estimate": null,
@@ -22216,7 +22216,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -22322,10 +22322,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -22413,7 +22413,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "accurate energy management|1210 east southern avenue",
       "employee_estimate": null,
@@ -22430,7 +22430,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -22536,10 +22536,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -22627,7 +22627,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "advanced air|2410 south central avenue",
       "employee_estimate": null,
@@ -22644,7 +22644,7 @@
       "postal_code": "85004",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -22750,10 +22750,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -22841,7 +22841,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "air conditioning by roberts|1421 east mcdowell road",
       "employee_estimate": null,
@@ -22858,7 +22858,7 @@
       "postal_code": "85006",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -22964,10 +22964,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -23055,7 +23055,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "american refrigeration supplies|2632 east chambers street",
       "employee_estimate": null,
@@ -23072,7 +23072,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -23178,10 +23178,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -23269,7 +23269,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "andrews refrigeration|2221 west granada road",
       "employee_estimate": null,
@@ -23286,7 +23286,7 @@
       "postal_code": "85009",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -23392,10 +23392,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -23483,7 +23483,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "apex refrigeration boiler|2801 west willetta street",
       "employee_estimate": null,
@@ -23500,7 +23500,7 @@
       "postal_code": "85009",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -23606,10 +23606,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -23697,7 +23697,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "dp air phoenix|5216 south 40th street",
       "employee_estimate": null,
@@ -23714,7 +23714,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -23820,10 +23820,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -23911,7 +23911,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "dave downing associates|3906 east roeser road",
       "employee_estimate": null,
@@ -23928,7 +23928,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -24034,10 +24034,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -24125,7 +24125,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "day night air conditioning heating plumbing|3669 east la salle street",
       "employee_estimate": null,
@@ -24142,7 +24142,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -24248,10 +24248,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -24339,7 +24339,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "emcor services arizona|3000 east chambers street",
       "employee_estimate": null,
@@ -24356,7 +24356,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -24462,10 +24462,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -24553,7 +24553,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "environmental mechanical equipment|4611 south 33rd street",
       "employee_estimate": null,
@@ -24570,7 +24570,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -24676,10 +24676,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -24767,7 +24767,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "ferguson hvac supply|3402 east roeser road",
       "employee_estimate": null,
@@ -24784,7 +24784,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -24890,10 +24890,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -24981,7 +24981,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "george brazil air conditioning heating|2655 east magnolia street",
       "employee_estimate": null,
@@ -24998,7 +24998,7 @@
       "postal_code": "85034",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -25104,10 +25104,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -25195,7 +25195,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "gonzales heating cooling|1547 grand avenue",
       "employee_estimate": null,
@@ -25212,7 +25212,7 @@
       "postal_code": "85007",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -25318,10 +25318,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -25409,7 +25409,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "gorilla air|2401 south 18th street",
       "employee_estimate": null,
@@ -25426,7 +25426,7 @@
       "postal_code": "85034",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -25532,10 +25532,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -25623,7 +25623,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "heating cooling supply|5002 south 38th place",
       "employee_estimate": null,
@@ -25640,7 +25640,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -25746,10 +25746,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -25837,7 +25837,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "hill phoenix|1031 east riverview drive",
       "employee_estimate": null,
@@ -25854,7 +25854,7 @@
       "postal_code": "85034",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -25960,10 +25960,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -26051,7 +26051,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "hussmann|5610 south 40th street",
       "employee_estimate": null,
@@ -26068,7 +26068,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -26174,10 +26174,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -26265,7 +26265,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "ideal air conditioning insulation|4127 east university drive",
       "employee_estimate": null,
@@ -26282,7 +26282,7 @@
       "postal_code": "85034",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -26388,10 +26388,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -26479,7 +26479,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "integrated control systems|4615 south 33rd place",
       "employee_estimate": null,
@@ -26496,7 +26496,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -26602,10 +26602,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -26693,7 +26693,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "integrity air conditioning heating|2250 east rose garden loop",
       "employee_estimate": null,
@@ -26710,7 +26710,7 @@
       "postal_code": "85024",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -26816,10 +26816,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -26907,7 +26907,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "johnson controls rental solutions|2233 south 16th street",
       "employee_estimate": null,
@@ -26924,7 +26924,7 @@
       "postal_code": "85034",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -27030,10 +27030,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -27121,7 +27121,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "johnstone supply|3834 east roeser road",
       "employee_estimate": null,
@@ -27138,7 +27138,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -27244,10 +27244,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -27335,7 +27335,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "kelso building services of phoenix|5246 south 40th street",
       "employee_estimate": null,
@@ -27352,7 +27352,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -27458,10 +27458,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -27549,7 +27549,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "liberty cooling heating|4825 south 32nd street",
       "employee_estimate": null,
@@ -27566,7 +27566,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -27672,10 +27672,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -27763,7 +27763,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "marlin services|2928 south 38th street",
       "employee_estimate": null,
@@ -27780,7 +27780,7 @@
       "postal_code": "85034",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -27886,10 +27886,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -27977,7 +27977,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "nextech|5215 south 39th street",
       "employee_estimate": null,
@@ -27994,7 +27994,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -28100,10 +28100,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -28191,7 +28191,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "norman s wright co manufacturer s representative|2121 east magnolia street",
       "employee_estimate": null,
@@ -28208,7 +28208,7 @@
       "postal_code": "85034",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -28314,10 +28314,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -28405,7 +28405,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "ontario refrigeration services|5824 south 25th street",
       "employee_estimate": null,
@@ -28422,7 +28422,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -28528,10 +28528,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -28619,7 +28619,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "parker sons|3636 east anne street",
       "employee_estimate": null,
@@ -28636,7 +28636,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -28742,10 +28742,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -28833,7 +28833,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "preferred mechanical|2310 east magnolia street",
       "employee_estimate": null,
@@ -28850,7 +28850,7 @@
       "postal_code": "85034",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -28956,10 +28956,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -29047,7 +29047,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "reeis|3525 east corona avenue",
       "employee_estimate": null,
@@ -29064,7 +29064,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -29170,10 +29170,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -29261,7 +29261,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "rsa air conditioning|1764 grand avenue",
       "employee_estimate": null,
@@ -29278,7 +29278,7 @@
       "postal_code": "85007",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -29384,10 +29384,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -29475,7 +29475,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "rooter hero plumbing air of phoenix|5424 south 40th street",
       "employee_estimate": null,
@@ -29492,7 +29492,7 @@
       "postal_code": "85040",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -29598,10 +29598,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -29689,7 +29689,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.12,
+      "confidence": 0.02,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "southland industries|246 east watkins street",
       "employee_estimate": null,
@@ -29706,7 +29706,7 @@
       "postal_code": "85004",
       "public_rating": null,
       "public_review_count": null,
-      "score": 83.3,
+      "score": 0.0,
       "sources": [
        "overpass"
       ],
@@ -29812,10 +29812,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -29903,7 +29903,7 @@
        "Air Conditioning Contractors & Systems"
       ],
       "city": "Phoenix, AZ 85015",
-      "confidence": 0.55,
+      "confidence": 0.45,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "6028855199",
       "employee_estimate": null,
@@ -29920,7 +29920,7 @@
       "postal_code": null,
       "public_rating": 5.0,
       "public_review_count": 1,
-      "score": 70.9,
+      "score": 64.4,
       "sources": [
        "yellowpages"
       ],
@@ -29960,10 +29960,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -34399,7 +34399,7 @@
        "Heating Contractors & Specialties"
       ],
       "city": "Phoenix, AZ 85040",
-      "confidence": 0.86,
+      "confidence": 0.76,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "accurateenergymanagement.com",
       "employee_estimate": null,
@@ -34416,7 +34416,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": 46,
-      "score": 67.4,
+      "score": 63.2,
       "sources": [
        "yellowpages",
        "website"
@@ -34457,10 +34457,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -34616,7 +34616,7 @@
        "Heating, Ventilating & Air Conditioning Engineers"
       ],
       "city": "Peoria, AZ 85345",
-      "confidence": 0.79,
+      "confidence": 0.69,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "citysearch.com",
       "employee_estimate": null,
@@ -34633,7 +34633,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": 50,
-      "score": 64.6,
+      "score": 59.4,
       "sources": [
        "yellowpages",
        "website"
@@ -34674,10 +34674,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -34833,7 +34833,7 @@
        "Sheet Metal Work"
       ],
       "city": "Phoenix, AZ 85020",
-      "confidence": 0.79,
+      "confidence": 0.69,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "cdaci.net",
       "employee_estimate": null,
@@ -34850,7 +34850,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": 63,
-      "score": 64.6,
+      "score": 59.4,
       "sources": [
        "yellowpages",
        "website"
@@ -34891,10 +34891,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -35050,7 +35050,7 @@
        "Heating Equipment & Systems"
       ],
       "city": "Phoenix, AZ 85040",
-      "confidence": 0.79,
+      "confidence": 0.69,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "searscarpetcleaningserviceaz.localsearch.com",
       "employee_estimate": null,
@@ -35067,7 +35067,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": 28,
-      "score": 64.6,
+      "score": 59.4,
       "sources": [
        "yellowpages",
        "website"
@@ -35108,10 +35108,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -35267,7 +35267,7 @@
        "Mechanical Engineers"
       ],
       "city": "Phoenix, AZ 85020",
-      "confidence": 0.85,
+      "confidence": 0.75,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "daltonairconditioningaz.localsearch.com",
       "employee_estimate": null,
@@ -35284,7 +35284,7 @@
       "postal_code": null,
       "public_rating": 5.0,
       "public_review_count": 1,
-      "score": 63.5,
+      "score": 58.7,
       "sources": [
        "yellowpages",
        "website"
@@ -35325,10 +35325,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -35484,7 +35484,7 @@
        "Plumbers"
       ],
       "city": "Phoenix, AZ 85031",
-      "confidence": 0.71,
+      "confidence": 0.61,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "belairemechanical.com",
       "employee_estimate": null,
@@ -35501,7 +35501,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": null,
-      "score": 60.6,
+      "score": 54.1,
       "sources": [
        "yellowpages",
        "website"
@@ -35542,10 +35542,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -35701,7 +35701,7 @@
        "Heating Contractors & Specialties"
       ],
       "city": "Phoenix, AZ 85029",
-      "confidence": 0.71,
+      "confidence": 0.61,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "cpmechanical.com",
       "employee_estimate": null,
@@ -35718,7 +35718,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": null,
-      "score": 60.6,
+      "score": 54.1,
       "sources": [
        "yellowpages",
        "website"
@@ -35770,10 +35770,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -35927,7 +35927,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.78,
+      "confidence": 0.68,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "lincolnair.com",
       "employee_estimate": null,
@@ -35944,7 +35944,7 @@
       "postal_code": "85029",
       "public_rating": null,
       "public_review_count": null,
-      "score": 60.3,
+      "score": 54.4,
       "sources": [
        "overpass",
        "website"
@@ -35996,10 +35996,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -36155,7 +36155,7 @@
        "Air Conditioning Service & Repair"
       ],
       "city": "Phoenix, AZ 85037",
-      "confidence": 0.57,
+      "confidence": 0.47,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "airtechplus.localsearch.com",
       "employee_estimate": null,
@@ -36172,7 +36172,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": null,
-      "score": 59.6,
+      "score": 51.1,
       "sources": [
        "yellowpages",
        "website"
@@ -36213,10 +36213,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -36372,7 +36372,7 @@
        "Heating Equipment & Systems-Repairing"
       ],
       "city": "Phoenix, AZ 85020",
-      "confidence": 0.86,
+      "confidence": 0.76,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "mearsac.com",
       "employee_estimate": null,
@@ -36389,7 +36389,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": 53,
-      "score": 58.1,
+      "score": 52.6,
       "sources": [
        "yellowpages",
        "website"
@@ -36441,10 +36441,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -36600,7 +36600,7 @@
        "Heating Contractors & Specialties"
       ],
       "city": "Phoenix, AZ 85020",
-      "confidence": 0.85,
+      "confidence": 0.75,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "americanstandardair.com",
       "employee_estimate": null,
@@ -36617,7 +36617,7 @@
       "postal_code": null,
       "public_rating": 4.0,
       "public_review_count": 4,
-      "score": 57.6,
+      "score": 52.0,
       "sources": [
        "yellowpages",
        "website"
@@ -36658,10 +36658,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -36816,7 +36816,7 @@
        "Plumbers"
       ],
       "city": "Tempe, AZ 85282",
-      "confidence": 0.86,
+      "confidence": 0.76,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "wolfgangscooling.com",
       "employee_estimate": null,
@@ -36833,7 +36833,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": 44,
-      "score": 57.0,
+      "score": 51.3,
       "sources": [
        "yellowpages",
        "website"
@@ -36885,10 +36885,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -37044,7 +37044,7 @@
        "Heating Contractors & Specialties"
       ],
       "city": "Phoenix, AZ 85027",
-      "confidence": 0.27,
+      "confidence": 0.17,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "comairinc.com",
       "employee_estimate": null,
@@ -37061,7 +37061,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": null,
-      "score": 55.6,
+      "score": 29.4,
       "sources": [
        "yellowpages"
       ],
@@ -37101,10 +37101,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -37258,7 +37258,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.27,
+      "confidence": 0.17,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "hayscoolingandheating.com",
       "employee_estimate": null,
@@ -37275,7 +37275,7 @@
       "postal_code": "85085",
       "public_rating": null,
       "public_review_count": null,
-      "score": 55.6,
+      "score": 29.4,
       "sources": [
        "overpass"
       ],
@@ -37315,10 +37315,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -37473,7 +37473,7 @@
        "Heating Contractors & Specialties"
       ],
       "city": "Phoenix, AZ 85033",
-      "confidence": 0.27,
+      "confidence": 0.17,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "ontimeairaz.com",
       "employee_estimate": null,
@@ -37490,7 +37490,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": null,
-      "score": 55.6,
+      "score": 29.4,
       "sources": [
        "yellowpages"
       ],
@@ -37530,10 +37530,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -37689,7 +37689,7 @@
        "Home Builders"
       ],
       "city": "Phoenix, AZ 85032",
-      "confidence": 0.92,
+      "confidence": 0.82,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "johnbondac.com",
       "employee_estimate": null,
@@ -37706,7 +37706,7 @@
       "postal_code": null,
       "public_rating": 5.0,
       "public_review_count": 1,
-      "score": 55.4,
+      "score": 50.0,
       "sources": [
        "yellowpages",
        "website"
@@ -37747,10 +37747,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -37906,7 +37906,7 @@
        "Heating Contractors & Specialties"
       ],
       "city": "Phoenix, AZ 85027",
-      "confidence": 0.79,
+      "confidence": 0.69,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "acrepairphoenix.com",
       "employee_estimate": null,
@@ -37923,7 +37923,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": 19,
-      "score": 54.4,
+      "score": 47.8,
       "sources": [
        "yellowpages",
        "website"
@@ -37964,10 +37964,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -38121,7 +38121,7 @@
        "Air Conditioning Contractors & Systems"
       ],
       "city": "Phoenix, AZ 85040",
-      "confidence": 0.57,
+      "confidence": 0.47,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "calhounsairconditioning.localsearch.com",
       "employee_estimate": null,
@@ -38138,7 +38138,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": null,
-      "score": 50.9,
+      "score": 40.4,
       "sources": [
        "yellowpages",
        "website"
@@ -38179,10 +38179,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -38338,7 +38338,7 @@
        "Heating Contractors & Specialties"
       ],
       "city": "Phoenix, AZ 85040",
-      "confidence": 0.57,
+      "confidence": 0.47,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "centercoolinc.localsearch.com",
       "employee_estimate": null,
@@ -38355,7 +38355,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": null,
-      "score": 50.9,
+      "score": 40.4,
       "sources": [
        "yellowpages",
        "website"
@@ -38396,10 +38396,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -38555,7 +38555,7 @@
        "Major Appliances"
       ],
       "city": "Phoenix, AZ 85022",
-      "confidence": 0.57,
+      "confidence": 0.47,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "coolingarizonainc.localsearch.com",
       "employee_estimate": null,
@@ -38572,7 +38572,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": null,
-      "score": 50.9,
+      "score": 40.4,
       "sources": [
        "yellowpages",
        "website"
@@ -38613,10 +38613,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -38770,7 +38770,7 @@
        "Air Conditioning Contractors & Systems"
       ],
       "city": "Phoenix, AZ 85027",
-      "confidence": 0.57,
+      "confidence": 0.47,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "forrestandersonplbghtngac.localsearch.com",
       "employee_estimate": null,
@@ -38787,7 +38787,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": null,
-      "score": 50.9,
+      "score": 40.4,
       "sources": [
        "yellowpages",
        "website"
@@ -38828,10 +38828,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -38986,7 +38986,7 @@
        "Air Conditioning Service & Repair"
       ],
       "city": "Phoenix, AZ 85016",
-      "confidence": 0.57,
+      "confidence": 0.47,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "scottcooling.localsearch.com",
       "employee_estimate": null,
@@ -39003,7 +39003,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": null,
-      "score": 50.9,
+      "score": 40.4,
       "sources": [
        "yellowpages",
        "website"
@@ -39044,10 +39044,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -39203,7 +39203,7 @@
        "Heating Contractors & Specialties"
       ],
       "city": "Phoenix, AZ 85044",
-      "confidence": 0.57,
+      "confidence": 0.47,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "southmountainairconditioning.localsearch.com",
       "employee_estimate": null,
@@ -39220,7 +39220,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": null,
-      "score": 50.9,
+      "score": 40.4,
       "sources": [
        "yellowpages",
        "website"
@@ -39261,10 +39261,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -39418,7 +39418,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.64,
+      "confidence": 0.54,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "mountainsideair.com",
       "employee_estimate": null,
@@ -39435,7 +39435,7 @@
       "postal_code": "85027",
       "public_rating": null,
       "public_review_count": null,
-      "score": 50.0,
+      "score": 40.7,
       "sources": [
        "overpass",
        "website"
@@ -39476,10 +39476,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -39633,7 +39633,7 @@
        "Air Conditioning Contractors & Systems"
       ],
       "city": "Phoenix, AZ 85032",
-      "confidence": 0.71,
+      "confidence": 0.61,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "happybearinc.localsearch.com",
       "employee_estimate": null,
@@ -39650,7 +39650,7 @@
       "postal_code": null,
       "public_rating": 5.0,
       "public_review_count": 1,
-      "score": 49.3,
+      "score": 41.0,
       "sources": [
        "yellowpages",
        "website"
@@ -39691,10 +39691,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -39850,7 +39850,7 @@
        "Building Contractors-Commercial & Industrial"
       ],
       "city": "Phoenix, AZ 85018",
-      "confidence": 0.78,
+      "confidence": 0.68,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "idesignac.com",
       "employee_estimate": null,
@@ -39867,7 +39867,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": null,
-      "score": 48.7,
+      "score": 41.2,
       "sources": [
        "yellowpages",
        "website"
@@ -39929,10 +39929,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -40086,7 +40086,7 @@
        "Air Conditioning Contractors & Systems"
       ],
       "city": "Phoenix, AZ 85051",
-      "confidence": 0.86,
+      "confidence": 0.76,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "alienairconditioning.com",
       "employee_estimate": null,
@@ -40103,7 +40103,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": 29,
-      "score": 47.7,
+      "score": 40.8,
       "sources": [
        "yellowpages",
        "website"
@@ -40144,10 +40144,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -40301,7 +40301,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.78,
+      "confidence": 0.68,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "1stchoicemechanicalaz.com",
       "employee_estimate": null,
@@ -40318,7 +40318,7 @@
       "postal_code": "85027",
       "public_rating": null,
       "public_review_count": null,
-      "score": 46.2,
+      "score": 38.2,
       "sources": [
        "overpass",
        "website"
@@ -40359,10 +40359,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -40518,7 +40518,7 @@
        "Heating Contractors & Specialties"
       ],
       "city": "Phoenix, AZ 85053",
-      "confidence": 0.64,
+      "confidence": 0.54,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "climatec.com",
       "employee_estimate": null,
@@ -40535,7 +40535,7 @@
       "postal_code": null,
       "public_rating": null,
       "public_review_count": null,
-      "score": 45.3,
+      "score": 35.2,
       "sources": [
        "yellowpages",
        "website"
@@ -40576,10 +40576,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -40733,7 +40733,7 @@
        "hvac"
       ],
       "city": "Phoenix",
-      "confidence": 0.64,
+      "confidence": 0.54,
       "created_at": "2026-09-17T17:47:12+00:00",
       "dedup_key": "anyhourservices.com",
       "employee_estimate": null,
@@ -40750,7 +40750,7 @@
       "postal_code": "85051",
       "public_rating": null,
       "public_review_count": null,
-      "score": 42.2,
+      "score": 31.5,
       "sources": [
        "overpass",
        "website"
@@ -40812,10 +40812,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "overpass",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -40969,7 +40969,7 @@
        "Air Conditioning Contractors & Systems"
       ],
       "city": "Phoenix, AZ 85009",
-      "confidence": 0.71,
+      "confidence": 0.61,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "lsairconditioningheating.localsearch.com",
       "employee_estimate": null,
@@ -40986,7 +40986,7 @@
       "postal_code": null,
       "public_rating": 1.0,
       "public_review_count": 2,
-      "score": 40.8,
+      "score": 31.1,
       "sources": [
        "yellowpages",
        "website"
@@ -41027,10 +41027,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
@@ -41184,7 +41184,7 @@
        "Air Conditioning Contractors & Systems"
       ],
       "city": "Phoenix, AZ 85051",
-      "confidence": 0.71,
+      "confidence": 0.61,
       "created_at": "2026-09-17T17:47:08+00:00",
       "dedup_key": "sundevilheatingandcoooling.localsearch.com",
       "employee_estimate": null,
@@ -41201,7 +41201,7 @@
       "postal_code": null,
       "public_rating": 2.0,
       "public_review_count": 1,
-      "score": 40.8,
+      "score": 31.1,
       "sources": [
        "yellowpages",
        "website"
@@ -41242,10 +41242,10 @@
        "max_points": 10.0,
        "name": "single_location",
        "observed_at": "2026-09-17T17:50:54+00:00",
-       "points": 10.0,
-       "raw_value": "one address listed",
-       "resolved": 1,
-       "source": "yellowpages",
+       "points": 0.0,
+       "raw_value": null,
+       "resolved": 0,
+       "source": null,
        "source_url": null
       },
       {
