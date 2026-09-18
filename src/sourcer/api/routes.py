@@ -74,7 +74,6 @@ async def home(request):
     connection = connect()
     try:
         recent = store.list_runs(connection, limit=10)
-        markets = store.known_markets(connection)
     finally:
         connection.close()
 
@@ -83,8 +82,7 @@ async def home(request):
         "home.html",
         {
             "trades": trades.choices(),
-            "states": trades.states(),
-            "markets": markets,
+            "markets": trades.markets(),
             "recent": recent,
             "sources": sources.REGISTRY,
             "default_sources": sources.DEFAULT_NAMES,
@@ -97,16 +95,21 @@ async def home(request):
 async def start_run(request):
     form = await request.form()
     trade = (form.get("trade") or "").strip()
-    city = (form.get("city") or "").strip()
-    state = (form.get("state") or "").strip().upper()
-    # Each of these used to fall back to a default in silence, which searched
-    # something the Searcher did not ask for and returned nothing much.
+    # One field, because a city and a state are only meaningful together: the
+    # pair is what a Source turns into a path. Older callers may still send the
+    # two separately.
+    market = (form.get("market") or "").strip()
+    if market:
+        city, _, state = market.partition(",")
+    else:
+        city, state = form.get("city") or "", form.get("state") or ""
+    city, state = city.strip(), state.strip().upper()
+    # These used to fall back to a default in silence, which searched something
+    # the Searcher did not ask for and returned nothing much.
     if not trades.is_trade(trade):
         return HTMLResponse("<h1>Not a trade we have a mapping for</h1>", status_code=400)
-    if not city:
-        return HTMLResponse("<h1>Name a city</h1>", status_code=400)
-    if not trades.is_state(state):
-        return HTMLResponse("<h1>Not a state we can search</h1>", status_code=400)
+    if not trades.is_market(city, state):
+        return HTMLResponse("<h1>Not a market we cover</h1>", status_code=400)
     chosen = form.getlist("sources") or list(sources.DEFAULT_NAMES)
     pages = int(form.get("pages") or 2)
 
