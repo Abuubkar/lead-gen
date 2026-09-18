@@ -1,8 +1,9 @@
-"""The trades a Searcher can look for, and how each Source names them.
+"""What a Searcher picks from: the trades, and the states.
 
-A curated catalogue rather than free text. Three Sources use three different
-taxonomies, so free text would mean guessing a mapping at request time and
-half-working. A dozen trades that always work beat a thousand that sometimes do.
+The trades are a curated catalogue rather than free text. Three Sources use
+three different taxonomies, so free text would mean guessing a mapping at
+request time and half-working. A dozen trades that always work beat a thousand
+that sometimes do.
 
 Chosen for what search funds actually buy: fragmented, owner-operated, local
 demand, unglamorous.
@@ -87,6 +88,32 @@ TRADES = {
 def choices():
     """Key and label for every trade, for a dropdown."""
     return [(key, entry["label"]) for key, entry in sorted(TRADES.items())]
+
+
+# The fifty states and DC, as the codes that go into a Source's path. A closed
+# set, unlike the city, which every Source slugs the same way and so may be
+# anywhere. Codes rather than names, because the field is 96px of code, and
+# sorted by code, because that is what the dropdown shows.
+US_STATES = tuple(
+    "AK AL AR AZ CA CO CT DC DE FL GA HI IA ID IL IN KS KY LA MA MD ME MI "
+    "MN MO MS MT NC ND NE NH NJ NM NV NY OH OK OR PA RI SC SD TN TX UT VA "
+    "VT WA WI WV WY".split()
+)
+
+
+def states():
+    """Every state code, for a dropdown."""
+    return list(US_STATES)
+
+
+def is_state(code):
+    """Whether a submitted state is one we can build a URL for."""
+    return (code or "").strip().upper() in US_STATES
+
+
+def is_trade(key):
+    """Whether a submitted trade is one the Sources can be asked for."""
+    return key in TRADES
 
 
 def source_key(trade_key, source):
