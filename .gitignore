@@ -1,5 +1,7 @@
-# Confidential interview brief. Never commit.
+# Confidential interview brief, and anything that quotes it. Never commit:
+# the repository is public.
 TASK.md
+SUBMISSION-CHECK.md
 
 # Python
 __pycache__/
