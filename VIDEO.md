@@ -26,7 +26,7 @@ is the pace the marks assume.
 
 **0:26 — the argument. Slow down here; it is half the video.** (67 words)
 
-> Accurate Energy: sixty-seven out of a hundred, on eighty-six percent of the
+> Accurate Energy: sixty-three out of a hundred, on seventy-six percent of the
 > rubric. Forty-six years trading. The copyright still reads 2019, seven years
 > stale. Built on Wix. Every line shows its points and where the fact came from,
 > the listing or the company's own site. A searcher has to defend a shortlist to
@@ -40,16 +40,16 @@ is the pace the marks assume.
 
 **1:04 — confidence, not score** (37 words)
 
-> Now the top-ranked business: seventy-one points, but on only fifty-five percent
+> Now the top-ranked business: sixty-four points, but on only forty-five percent
 > of the rubric, because there is no website to read. Missing data lowers
 > confidence, never the score. The least digitally present businesses are often
 > the best targets.
 
 **1:18 — narrowing** (28 words)
 
-> Thirty years or more trading, and thirty-one becomes nine. Rows below the
-> evidence floor are hidden by default, and it says so, with one click to show
-> all ninety.
+> Thirty years or more trading, and thirty-one becomes nine. Fifty-nine rows sit
+> below the evidence floor and are hidden by default, and it says so, with one
+> click to show all ninety.
 
 **1:30 — the export** (10 words)
 
