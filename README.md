@@ -99,6 +99,15 @@ a smaller number they can trace.
 ![The evidence drawer for one business: every signal with its points, the value
 observed, and the source the fact came from](docs/media/evidence.png)
 
+**Absence only counts when the source would have said so.** The largest single
+award in the rubric is twelve points for having no website, which is the
+strongest underinvestment signal there is. It is also the easiest to get wrong:
+OpenStreetMap carried a website for one of the fifty-seven businesses it alone
+reported in a real run, so an empty column there describes the map's coverage
+rather than the business. A signal that reads absence is therefore only resolved
+when a source that reports the field listed the business, or when we read the
+site ourselves. Otherwise it stays unresolved and costs confidence instead.
+
 **Missing data never costs points.** A signal we could not evaluate is recorded
 unresolved and excluded from the denominator, so a business scored on half the
 rubric is compared fairly against one scored on all of it. Confidence reports
