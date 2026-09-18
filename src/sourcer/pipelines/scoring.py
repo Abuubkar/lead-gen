@@ -36,6 +36,14 @@ PLATFORM_DOMAINS = (
 
 STALE_COPYRIGHT_YEARS = 3
 
+# Sources that report a website when the Business has one, so silence from them
+# is evidence of absence. OpenStreetMap is not one: measured over a real run it
+# carried a website for one of fifty-seven Businesses it alone reported, which
+# describes its own coverage rather than the trades of Phoenix. Inferring
+# "no website" from an OpenStreetMap record rewarded a Business for the gaps in
+# a map, and rewarded it in the group where absence pays best.
+SOURCES_REPORTING_WEBSITE = ("yellowpages", "bbb")
+
 GROUP_LABELS = {
     "succession": "Succession likelihood",
     "underinvestment": "Digital underinvestment",
@@ -51,6 +59,22 @@ def _enrichment_attempted(context):
     places, so a new status does not mean hunting for them.
     """
     return context.get("enrichment_status") == "ok"
+
+
+def _website_known(context):
+    """Whether we are entitled to an opinion about this Business's website.
+
+    True when we have one, when a Source that reports websites listed the
+    Business and gave none, or when we read the site ourselves. False when the
+    only Source that saw it does not carry the field, where an empty column
+    means we never asked.
+    """
+    if context.get("website_url"):
+        return True
+    if _enrichment_attempted(context):
+        return True
+    sources = context.get("sources") or []
+    return any(name in sources for name in SOURCES_REPORTING_WEBSITE)
 
 
 def _years(context):
@@ -105,9 +129,16 @@ def _succession_language(context):
 
 
 def _no_website(context):
-    """No website at all is the strongest underinvestment signal there is."""
+    """No website at all is the strongest underinvestment signal there is.
+
+    Which is exactly why it may not be inferred from a Source that does not
+    report websites: twelve points is the largest award in the rubric, and
+    handing it out for a blank column turns a thin record into a strong target.
+    """
     if context.get("website_url"):
         return 0.0, "has a website"
+    if not _website_known(context):
+        return None, None
     return 12.0, "no website found"
 
 
@@ -174,7 +205,9 @@ def _small_team(context):
 def _own_domain(context):
     domain = (context.get("website_domain") or "").lower()
     if not context.get("website_url"):
-        return 0.0, "no domain of its own"
+        # Same rule as no_website: a blank column from a Source that never
+        # fills it is not a Business without a domain.
+        return (0.0, "no domain of its own") if _website_known(context) else (None, None)
     if any(platform in domain for platform in PLATFORM_DOMAINS):
         return 0.0, f"presence on {domain} only"
     return 3.0, f"own domain, {domain}"
@@ -220,14 +253,20 @@ SIGNALS = (
     ("owner_named", "succession", 10.0, _owner_named, ("owner_name", "owner_role")),
     ("owner_operator_language", "succession", 3.0, _owner_language, ("ownership_language",)),
     ("succession_language", "succession", 3.0, _succession_language, ("succession_language",)),
-    ("no_website", "underinvestment", 12.0, _no_website, ("website_url",)),
+    ("no_website", "underinvestment", 12.0, _no_website, ("website_url", "sources")),
     ("stale_copyright", "underinvestment", 7.0, _stale_copyright, ("copyright_year",)),
     ("weak_web_platform", "underinvestment", 4.0, _weak_platform, ("site_builder", "https")),
     ("no_online_booking", "underinvestment", 2.0, _no_booking, ("has_booking",)),
     ("single_location", "acquirability", 10.0, _single_location, ("location_count", "street")),
     ("not_a_chain", "acquirability", 8.0, _not_a_chain, ("is_franchise", "franchise_language")),
     ("small_team", "acquirability", 4.0, _small_team, ("employee_estimate",)),
-    ("own_domain", "acquirability", 3.0, _own_domain, ("website_domain", "website_url")),
+    (
+        "own_domain",
+        "acquirability",
+        3.0,
+        _own_domain,
+        ("website_domain", "website_url", "sources"),
+    ),
     ("review_volume", "demand", 8.0, _reviews, ("public_review_count",)),
     ("rating", "demand", 6.0, _rating, ("public_rating",)),
     ("bbb_accredited", "demand", 4.0, _accredited, ("bbb_accredited",)),
