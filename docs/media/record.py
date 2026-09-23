@@ -1,9 +1,9 @@
-"""Records the walkthrough in VIDEO.md against a local server on port 8099.
+"""Records the walkthrough against a local server on port 8099.
 
 Not part of the application. It drives the real pages with Playwright, which
 scrapling already installs, and writes docs/media/walkthrough.webm. The flow is
-scripted so the pacing survives a re-shoot: the marks in VIDEO.md are measured
-off this script's waits.
+scripted so the pacing survives a re-shoot, because the narration is timed
+against this script's waits.
 
 Playwright records no mouse pointer, so a cursor is injected and moved to each
 target before the click. Clear the review table first if you want the list to

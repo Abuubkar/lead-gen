@@ -14,8 +14,7 @@ with the evidence behind every point of every score.
 the four score groups broken out beside each one](docs/media/shortlist.png)
 
 A silent screen recording of the same flow, end to end, is at
-[`docs/media/walkthrough.webm`](docs/media/walkthrough.webm) (1:42). The
-narration it is scripted against is in [VIDEO.md](./VIDEO.md).
+[`docs/media/walkthrough.webm`](docs/media/walkthrough.webm) (1:42).
 
 Two things about the demo. It runs on a free instance that sleeps after fifteen
 minutes, so the first request after a quiet spell takes a while. And it browses
