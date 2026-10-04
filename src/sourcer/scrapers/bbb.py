@@ -1,5 +1,10 @@
 """Better Business Bureau, through category directory pages and profiles.
 
+NOT WORKING AND NOT REGISTERED. Every request was refused at Cloudflare's edge,
+from the development network and from the Render host alike, so this adapter
+never returned a business. It is commented out of the registry and kept only as
+a record of the approach. See ADR 0001.
+
 The richest Source we found. A profile carries the date a business started and
 the owner's name by role, which are the two facts a Searcher most wants and
 which no competitor surfaces. Disabled by default anyway, for three reasons
