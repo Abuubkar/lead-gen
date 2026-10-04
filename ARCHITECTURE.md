@@ -1,9 +1,8 @@
 # Architecture
 
-The challenge asks for the backend in specifics: data storage, caching and
-performance, hosting model, deployment, cloud provider, and the exact
-technologies. This answers each one, and says where a choice was a trade-off
-rather than an obvious default.
+How the tool is built, for whoever maintains it: data storage, sources,
+caching and performance, hosting, deployment, and the exact technologies. It
+says where a choice was a trade-off rather than an obvious default.
 
 ## Layout
 
@@ -44,9 +43,17 @@ server. An ORM would have added a dependency, a model layer and a migration tool
 to a schema that fits on one screen and is reviewed as SQL by a human.
 
 The schema lives in one readable file and is applied with `executescript` on
-every open. Every statement is idempotent, so there is no migration tool and no
-state where the code and the database disagree. Tables are `STRICT`, so SQLite
-enforces the declared column types rather than silently coercing.
+every open. Every statement is idempotent, so there is no migration tool to run
+by hand. Tables are `STRICT`, so SQLite enforces the declared column types
+rather than silently coercing.
+
+`CREATE TABLE IF NOT EXISTS` leaves an existing table alone, so a column added
+to the schema file alone would never reach a database created before it. Each
+column added since is also listed in `database.ADDED_COLUMNS` and added on open
+if missing. A database holding Search Runs worth keeping is upgraded in place
+rather than rebuilt, and a fresh database and an upgraded one end up identical.
+New columns carry no index in the schema file, because on an existing database
+the index would run before the column existed.
 
 Five tables: a search run, a business, a contact, a signal, and a review state.
 
@@ -58,7 +65,7 @@ what makes the score auditable, lets confidence be computed from the database
 alone, and means adding a signal needs no migration.
 
 **Review state is keyed on the dedup key, not a business id.** Business rows are
-scoped to a run, so keying a searcher's own notes and decisions to a business id
+scoped to a run, so keying a Rep's own notes and decisions to a business id
 would discard them whenever the same search was re-run. It therefore has no
 foreign key into `business`, deliberately.
 
@@ -74,6 +81,25 @@ multiple concurrent searchers, and it is a one-file change behind the store
 module if that day comes. For a demo it would have added a service to run, a
 driver to install and a connection string to configure, in exchange for
 concurrency this workload does not have.
+
+## Sources and markets
+
+Each Source declares the countries it covers as ISO 3166-1 codes, and a Search
+Run asks only the Sources that cover its Market's country. The registry runs
+them in a fixed order, and because merging fills blanks and never overwrites,
+the first Source to report a field owns it. Companies House runs last: its
+address is the registered office, often an accountant's, so leading with it
+would hand a Rep the wrong address.
+
+A Market carries coordinates, taken once from OpenStreetMap's Nominatim geocoder
+during development and kept in the catalogue, so the application never calls
+Nominatim. OpenStreetMap is searched within a radius of them rather than by the
+name of an administrative boundary, which failed in Pakistan, where boundaries
+are named in Urdu, and wherever two places in one country share a name.
+
+The two rubrics live in one module as data. A rule returns the fraction of its
+Signal's points it earns, so both rubrics can share a rule, such as whether a
+business has a phone, at different weights.
 
 ## Caching and performance
 
@@ -186,9 +212,9 @@ nothing.
 **It cannot produce or adjust a score, and it can still move one.** Those are
 different claims and the distinction matters. The reply is parsed, unexpected
 keys are discarded and wrong-shaped values rejected, so a model that returned a
-score or a confidence could not apply either. But a founding year or an owner
-name it supplies is read by the rubric like any other fact, and those rules are
-worth up to twenty-seven points. So every fact the model contributes is recorded
+score or a confidence could not apply either. But a founding year it supplies
+is read by the rubric like any other fact, and in the web rubric the rule that
+reads it is worth up to fifteen points. So every fact the model contributes is recorded
 as model-derived, and the signals built on it say so in the detail panel. The
 rule stays what ADR 0002 set out, which is that the arithmetic is ours and
 auditable; the honest qualification is that the inputs are only as good as where

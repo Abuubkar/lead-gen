@@ -1,39 +1,43 @@
-# Lead Sourcing
+# Prospecting for BritNova
 
-A sourcing tool for search-fund principals: it finds small businesses in a market, enriches them with public signals, and ranks them as acquisition targets.
+A prospecting tool for BritNova's business development team: it finds businesses in a market, reads their own websites, and ranks them by how well they fit one of BritNova's two service lines. It covers the United Kingdom, Pakistan and the United States.
 
 ## People
 
-**Searcher**:
-The user of the tool: a search-fund principal or analyst looking for a small business to acquire.
-_Avoid_: user, sales rep, SDR
+**Rep**:
+The user of the tool: a member of BritNova's business development team looking for businesses to approach.
+_Avoid_: user, searcher, SDR
 
 **Contact**:
-A named person reachable at a Business, usually the owner. A Business has zero or more Contacts.
+A named person or address reachable at a Business, read from its own website. A Business has zero or more Contacts.
 _Avoid_: lead, person, decision-maker
 
 ## The target
 
 **Business**:
-A single company that could be an acquisition target. The unit of work; every other record hangs off it.
-_Avoid_: lead, company, prospect, account
+A single company that could become a BritNova client. The unit of work; every other record hangs off it. User-facing headings may call it a prospect, the plain word a Rep uses, but code and data say Business.
+_Avoid_: lead, company, account
 
-**Succession**:
-The likelihood that a Business needs a new owner soon, inferred from its age and from whether one named owner still runs it.
-_Avoid_: retirement, exit
+**Mode**:
+Which of BritNova's service lines a Search Run looks for, and so which rubric scores it. *Web* finds local businesses that need a website; *tech* finds companies that need engineers. A trade belongs to exactly one Mode, so the trade a Rep picks decides it.
+_Avoid_: type, category, line
 
-**Underinvestment**:
-Visible neglect of a Business's online presence, read as room for a new operator to grow it rather than as a defect.
-_Avoid_: bad website, low quality
+**Market**:
+A city searched for Businesses, with its region, its country and the coordinates a Source searches around. The country decides which Sources run and which Contact Rule applies.
+_Avoid_: location, area, city
+
+**Website Need**:
+How much a Business would benefit from a new or better website: no site, a stale one, a consumer site builder, no HTTPS, no online booking. The core of the web rubric.
+_Avoid_: bad website, underinvestment, low quality
 
 ## Sourcing
 
 **Source**:
-One place Businesses are discovered, with its own coverage, fields and access rules. Each Source is reachable or not independently of the others.
+One place Businesses are discovered, with its own coverage, fields and access rules. Each declares the countries it covers and is reachable or not independently of the others.
 _Avoid_: site, provider, scraper
 
 **Discovery**:
-Finding which Businesses exist in a market. Distinct from Enrichment, and usually from a different place.
+Finding which Businesses exist in a Market. Distinct from Enrichment, and usually from a different place.
 _Avoid_: search, scraping
 
 **Enrichment**:
@@ -41,7 +45,7 @@ Reading a Business's own website to learn what a Source does not carry.
 _Avoid_: scraping, crawling
 
 **Search Run**:
-One Searcher request for a trade in a city, and everything discovered under it. Results persist after it ends.
+One Rep request for a trade in a Market, and everything discovered under it. Results persist after it ends.
 _Avoid_: job, query, session
 
 **Run Status**:
@@ -59,17 +63,25 @@ One observed fact about a Business that moves its Score, carrying its own value,
 _Avoid_: feature, attribute, field
 
 **Score**:
-How well a Business fits an acquisition thesis, computed only from resolved Signals.
+How well a Business fits the service line of its Search Run's Mode, computed only from resolved Signals.
 _Avoid_: rating, rank, grade
 
+**Core Group**:
+The group of Signals a Business needs at least one resolved Signal in before it is scored at all: Website Need for web, technical fit for tech. Without one there is no evidence it needs what BritNova sells, and it is left unscored rather than ranked on reachability alone.
+_Avoid_: required group, gate
+
 **Confidence**:
-How much of the Score rests on Signals we actually resolved. Reported beside the Score, never folded into it.
+How much of the rubric rests on Signals we actually resolved. Reported beside the Score, never folded into it.
 _Avoid_: accuracy, certainty
 
 **Reputation**:
-The public rating and review count a Source reports for a Business. Feeds the demand-proof Signals; it is not itself the Score.
+The public rating and review count a Source reports for a Business. Feeds the established Signals; it is not itself the Score.
 _Avoid_: rating, score, reviews
 
+**Contact Rule**:
+Whether a Rep may email a Business without asking first, and what a call or email must include, under the law of the Business's country. Reported beside the Score and never part of it. Guidance from the regulator's published rules, not legal advice.
+_Avoid_: compliance score, permission, eligibility
+
 **Review State**:
-What the Searcher has decided about a Business so far, and their notes on it.
+What the Rep has decided about a Business so far, and their notes on it.
 _Avoid_: status, stage, pipeline

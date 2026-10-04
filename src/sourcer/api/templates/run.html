@@ -41,8 +41,10 @@
     <label class="check"><input type="checkbox" name="owner_known" value="1"
       {% if active_filters.get('owner_known') %}checked{% endif %}> Owner known</label>
     <button class="go" type="submit">Apply</button>
+    {% if hidden_count %}
     <span class="aside">{{ hidden_count }} below the evidence floor ·
       <a href="/runs/{{ run.id }}?min_confidence=0">show all {{ total_count }}</a></span>
+    {% endif %}
   </form>
 
   <div class="foot">
