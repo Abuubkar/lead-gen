@@ -142,6 +142,7 @@ PRACTICE_PRINCIPAL = re.compile(
 )
 
 EMAIL = re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]+")
+TOP_LEVEL_DOMAIN = re.compile(r"\.[a-z]{2,}$")
 
 # Addresses that belong to the tooling a site embeds, not to anyone who works
 # there. Error trackers and tag managers leave these in the markup, and a
@@ -339,6 +340,13 @@ def _is_contactable(address):
     local, _, domain = address.rpartition("@")
     domain = domain.lower().strip(".")
     if not local or not domain:
+        return False
+    # A real address ends in a lettered top-level domain. Without this, the
+    # pattern read JavaScript package specifiers in a page's CDN links as
+    # addresses: core-js-bundle@3.2.1 and focus-within-polyfill@5.0.9 were 9 of
+    # the 58 "emails" in the shipped data, and each scored as a way to reach the
+    # business.
+    if not TOP_LEVEL_DOMAIN.search(domain):
         return False
     if any(domain == vendor or domain.endswith("." + vendor) for vendor in VENDOR_EMAIL_DOMAINS):
         return False

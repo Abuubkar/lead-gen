@@ -252,6 +252,31 @@ def list_businesses_to_enrich(connection, run_id):
     )
 
 
+def reset_for_rescore(connection, run_id, refetch):
+    """Ready a finished run to be scored again from scratch.
+
+    Counts go back to zero, because rescoring increments them as it goes and
+    would otherwise double what the home page shows. With refetch, every
+    business is marked unread so the site reader visits it again.
+    """
+    connection.execute(
+        "UPDATE search_run SET enriched_count = 0, scored_count = 0 WHERE id = ?", (run_id,)
+    )
+    if refetch:
+        connection.execute(
+            "UPDATE business SET enrichment_status = 'pending', updated_at = ? WHERE run_id = ?",
+            (now(), run_id),
+        )
+        # Every Contact comes from reading a site, and re-reading regenerates
+        # them, so the old ones go first. Without this a rescore appended a
+        # second copy of each.
+        connection.execute(
+            "DELETE FROM contact WHERE source = 'website'"
+            " AND business_id IN (SELECT id FROM business WHERE run_id = ?)",
+            (run_id,),
+        )
+
+
 def set_business_score(connection, business_id, score, confidence):
     """Persist a computed Score. This module never computes one."""
     connection.execute(
@@ -283,6 +308,13 @@ def get_business_fields(connection, business_id):
 
 
 def add_contact(connection, business_id, contact):
+    """Record a Contact, unless the same one is already recorded for the business."""
+    existing = connection.execute(
+        "SELECT id FROM contact WHERE business_id = ? AND name IS ? AND email IS ? AND phone IS ?",
+        (business_id, contact.get("name"), contact.get("email"), contact.get("phone")),
+    ).fetchone()
+    if existing:
+        return existing["id"]
     cursor = connection.execute(
         "INSERT INTO contact (business_id, name, role, email, phone, source, source_url,"
         " confidence, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",

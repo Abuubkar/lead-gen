@@ -29,7 +29,7 @@ from sourcer.api.filters import (
 from sourcer.config import companies_house_key
 from sourcer.db import repository as store
 from sourcer.db.database import connect
-from sourcer.pipelines import scoring
+from sourcer.pipelines import compliance, scoring
 from sourcer.scrapers import catalog as trades
 from sourcer.scrapers import registry as sources
 from sourcer.workers import runner
@@ -49,10 +49,18 @@ def _run_context(connection, run_id, params):
     mode = run.get("mode") or scoring.DEFAULT_MODE
     everything = store.list_businesses(connection, run_id)
     businesses, active = apply_filters(everything, params or {})
+    country = run.get("country")
     return {
         "run": run,
+        "contact_rules": {
+            b["id"]: compliance.guidance(b, b.get("country") or country) for b in businesses
+        },
+        # Which businesses we can call "no website" honestly. The rest are
+        # unknown: their only Sources do not report websites.
+        "website_known": {b["id"]: scoring.website_known(b) for b in businesses},
         "mode": mode,
         "mode_label": scoring.rubric(mode)["label"],
+        "country_label": trades.COUNTRY_LABELS.get(run.get("country"), run.get("country")),
         "businesses": businesses,
         "breakdown": store.group_breakdown(connection, run_id),
         "groups": list(scoring.group_labels(mode)),
@@ -160,9 +168,11 @@ def _detail_context(connection, business):
     """What the evidence drawer needs, scored by the rubric of the business's run."""
     run = store.get_run(connection, business["run_id"]) if business else None
     mode = (run or {}).get("mode") or scoring.DEFAULT_MODE
+    country = (business or {}).get("country") or (run or {}).get("country")
     return {
         "business": business,
         "mode": mode,
+        "contact_rules": compliance.guidance(business or {}, country),
         "group_labels": scoring.group_labels(mode),
         "group_totals": scoring.group_totals(mode),
         "review_states": REVIEW_STATES,

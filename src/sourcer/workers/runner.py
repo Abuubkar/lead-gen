@@ -105,6 +105,36 @@ def _work(run_id, trade, market, mode, source_names, page_limit):
         connection.close()
 
 
+def rescore(run_id, refetch=True):
+    """Bring a finished Search Run up to the current rubric and site reader.
+
+    The Signals a run stored belong to whatever rubric scored it, so a change
+    to the rubric leaves old runs showing groups that no longer exist. This
+    re-reads each site with the current reader and scores everything again by
+    the same path a live run takes, so there is no second scoring route to drift.
+
+    refetch=False rescores from stored columns alone. It is fast, but facts read
+    from a site and never given a column (copyright year, platform, HTTPS,
+    booking) come back unresolved, so most site Signals go quiet.
+    """
+    connection = init_db()
+    try:
+        run = store.get_run(connection, run_id)
+        if run is None:
+            return None
+        mode = run.get("mode") or scoring.DEFAULT_MODE
+        store.reset_for_rescore(connection, run_id, refetch)
+        _forget_run(run_id)
+        if refetch:
+            _enrich_all(connection, run_id, mode)
+        _score_all(connection, run_id, mode)
+        store.set_progress_note(connection, run_id, "rescored")
+        return run_id
+    finally:
+        _forget_run(run_id)
+        connection.close()
+
+
 def _discover_all(connection, run_id, trade, market, source_names, page_limit):
     # Only the Sources that cover the market's country; YellowPages has nothing
     # to say about Lahore and the Food Standards Agency nothing about Phoenix.

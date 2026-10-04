@@ -112,7 +112,7 @@ def _enrichment_attempted(context):
     return context.get("enrichment_status") == "ok"
 
 
-def _website_known(context):
+def website_known(context):
     """Whether we are entitled to an opinion about this Business's website.
 
     True when we have one, when we read the site ourselves, or when a Source
@@ -145,7 +145,7 @@ def _no_website(context):
     """
     if context.get("website_url"):
         return 0.0, "has a website"
-    if not _website_known(context):
+    if not website_known(context):
         return None, None
     return 1.0, "no website found"
 

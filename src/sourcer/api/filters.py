@@ -4,6 +4,8 @@ Defined once and applied by the page, the CSV export and the JSON API, so
 "export what is on screen" is true by construction rather than by discipline.
 """
 
+from sourcer.pipelines import scoring
+
 REVIEW_STATES = ("new", "contacted", "passed")
 
 # A Business scored on under a third of the rubric is a lead to investigate, not
@@ -24,7 +26,14 @@ FILTERS = {
         lambda b, v: b["confidence"] is None or b["confidence"] >= float(v),
     ),
     "min_years": ("Minimum years trading", lambda b, v: (b["years_in_business"] or 0) >= int(v)),
-    "no_website": ("No website only", lambda b, v: not b["website_url"]),
+    # Known to have none, not merely unknown. A Food Standards Agency or
+    # OpenStreetMap find often has a site those sources do not record, and
+    # counting it here would fill the filter a web rep relies on with businesses
+    # that already have one.
+    "no_website": (
+        "No website only",
+        lambda b, v: not b["website_url"] and scoring.website_known(b),
+    ),
     "owner_known": ("Owner known only", lambda b, v: bool(b["owner_name"])),
     "state": ("Review state", lambda b, v: (b["review_state"] or "new") == v),
 }

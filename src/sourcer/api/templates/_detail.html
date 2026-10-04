@@ -12,7 +12,13 @@
     </div>
     <div class="d-score">
       <b class="num {{ business.score | band }}">{{ business.score | shown_score }}</b>
+      {% if business.score is not none %}
       <span>of 100 · {{ ((business.confidence or 0) * 100) | round(0) | int }}% evaluated</span>
+      {% elif business.confidence %}
+      <span>not scored · no evidence yet that they need it</span>
+      {% else %}
+      <span>not scored yet</span>
+      {% endif %}
     </div>
   </header>
   {% if business.confidence is not none and business.confidence < provisional_below %}
@@ -30,6 +36,11 @@
       {% else %}<span class="absent">none found</span>{% endif %}</dd>
     {% if business.street %}<dt>Address</dt>
     <dd>{{ business.street }}{% if business.postal_code %}, {{ business.postal_code }}{% endif %}</dd>{% endif %}
+    {% if business.company_number %}<dt>Company</dt>
+    <dd>{{ (business.company_type or "").upper() }}
+      <a href="https://find-and-update.company-information.service.gov.uk/company/{{ business.company_number }}"
+         target="_blank" rel="noopener noreferrer nofollow" class="num">{{ business.company_number }}</a></dd>{% endif %}
+    {% if business.tech_stack %}<dt>Runs on</dt><dd>{{ business.tech_stack | join(", ") }}</dd>{% endif %}
     <dt>Sources</dt><dd>{{ business.sources | join(", ") }}</dd>
   </dl>
 
@@ -45,6 +56,23 @@
     </li>
     {% endfor %}
   </ul>
+  {% endif %}
+
+  {% if contact_rules %}
+  <h3 class="d-h3">Before you reach out</h3>
+  <section class="rules rules--{{ contact_rules.verdict }}">
+    <p class="rules__verdict"><b>Email:</b> {{ contact_rules.summary }}</p>
+    <p class="rules__basis">{{ contact_rules.basis }}</p>
+    <ul class="rules__must">
+      {% for item in contact_rules.must %}<li>{{ item }}</li>{% endfor %}
+    </ul>
+    {% if contact_rules.phone %}
+    <p class="rules__verdict"><b>Phone:</b> {{ contact_rules.phone.summary }}</p>
+    <p class="rules__basis">{{ contact_rules.phone.detail }}</p>
+    {% endif %}
+    <p class="rules__source">From the regulator's published rules, not legal advice.
+      <a href="{{ contact_rules.source }}" target="_blank" rel="noopener noreferrer nofollow">Source</a></p>
+  </section>
   {% endif %}
 
   <h3 class="d-h3">The score, group by group</h3>

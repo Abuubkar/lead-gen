@@ -34,6 +34,26 @@ def cmd_build_seed(args):
     return 0
 
 
+def cmd_rescore(args):
+    """Score finished runs again under the current rubric and site reader."""
+    from sourcer.db.database import connect
+    from sourcer.db.repository import list_runs
+    from sourcer.workers.runner import rescore
+
+    run_ids = args.runs
+    if not run_ids:
+        connection = connect()
+        try:
+            run_ids = [run["id"] for run in list_runs(connection, limit=10_000)]
+        finally:
+            connection.close()
+    for run_id in run_ids:
+        print(f"  rescoring run {run_id}{'' if args.refetch else ' (no refetch)'}", flush=True)
+        if rescore(run_id, refetch=args.refetch) is None:
+            print(f"  run {run_id} does not exist")
+    return 0
+
+
 def main():
     parser = argparse.ArgumentParser(prog="sourcer", description="Acquisition target sourcing.")
     subcommands = parser.add_subparsers(dest="command", required=True)
@@ -57,6 +77,19 @@ def main():
     build.add_argument("--trades", nargs="+", default=["solicitors", "restaurants", "software"])
     build.add_argument("--pages", type=int, default=2)
     build.set_defaults(handler=cmd_build_seed)
+
+    again = subcommands.add_parser(
+        "rescore", help="Score finished runs again under the current rubric."
+    )
+    again.add_argument("runs", nargs="*", type=int, help="Run ids. Every run if omitted.")
+    again.add_argument(
+        "--no-refetch",
+        dest="refetch",
+        action="store_false",
+        help="Rescore from stored columns without re-reading websites. Faster, but "
+        "site-derived Signals come back unresolved.",
+    )
+    again.set_defaults(handler=cmd_rescore)
 
     args = parser.parse_args()
     raise SystemExit(args.handler(args))

@@ -111,6 +111,12 @@ h2 { font-size: var(--t-xl); letter-spacing: var(--tr-xl); line-height: 1.2; }
 .rail .fx b { font-family: var(--display); font-size: var(--t-l); font-weight: 600;
               color: var(--rail-ink); }
 .rail .fx.blocked b { color: var(--signal); }
+/* Unreachable is a server that did not answer, not a refusal, and not configured
+   is setup we were never given: neither is the site turning us away. */
+.rail .fx.unreachable b, .rail .fx.not_configured b { color: var(--rail-faint); }
+.rail .fx.unreachable .why { color: #d8b24a; }
+.rail .run-mode { display: flex; align-items: center; gap: var(--sp-2); margin: var(--sp-2) 0 0;
+                  font-size: var(--t-xs); color: var(--rail-dim); }
 .rail .fx .why { display: block; font-size: var(--t-2xs); color: var(--rail-faint); }
 .rail p { color: var(--rail-dim); font-size: var(--t-s); margin: 0 0 var(--sp-3); }
 .rail p strong { color: var(--rail-ink); font-weight: 500; }
@@ -407,6 +413,27 @@ body:has(.drawer:not(:empty)) .drawer { transform: none; }
        padding: 3px 5px; border: 1px solid currentColor; }
 .tag.mode-web { color: var(--ink-2); }
 .tag.mode-tech { color: var(--ink); background: var(--lime); border-color: var(--lime); }
+
+/* A fact we do not have, as distinct from one we know is missing. */
+.unknown { color: var(--ink-4); font-style: italic; }
+
+/* Whether a business may be emailed unprompted. Advice, not a score. */
+.email-rule { font: 600 var(--t-3xs)/1 var(--text); letter-spacing: 0.06em; text-transform: uppercase;
+              padding: 2px 5px; margin-left: var(--sp-2); vertical-align: 2px; white-space: nowrap; }
+.email-rule--allowed { color: #3f6212; border: 1px solid #b5d28a; }
+.email-rule--consent { color: var(--signal); border: 1px solid #f0b6a8; }
+
+.rules { border-left: 3px solid var(--rule); padding: var(--sp-1) 0 var(--sp-1) var(--sp-4);
+         margin-bottom: var(--sp-6); }
+.rules--allowed { border-left-color: var(--lime-2); }
+.rules--consent { border-left-color: var(--signal); }
+.rules p { margin: 0 0 var(--sp-2); font-size: var(--t-s); }
+.rules__verdict b { font-weight: 600; }
+.rules__basis { color: var(--ink-2); }
+.rules__must { margin: 0 0 var(--sp-3); padding-left: var(--sp-5); font-size: var(--t-s); color: var(--ink-2); }
+.rules__must li { margin-bottom: var(--sp-1); }
+.rules__source { font-size: var(--t-xs); color: var(--ink-3); }
+.rules__source a { color: var(--ink-2); }
 
 /* ------------------------------------------------------------ small -------- */
 @media (max-width: 960px) {

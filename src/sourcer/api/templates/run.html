@@ -3,16 +3,18 @@
 
 {% block rail %}
   <div class="subject">{{ run.trade | replace("-", " ") | title }}
-    <span>{{ run.city }}, {{ run.state }} · run {{ run.id }}</span></div>
+    <span>{{ run.city }}, {{ run.state }} · {{ country_label }} · run {{ run.id }}</span></div>
+  <p class="run-mode"><span class="tag mode-{{ mode }}">{{ "Web" if mode == "web" else "Tech" }}</span>
+    {{ mode_label }}</p>
 
   <h3>This run</h3>
   <div class="fx">Found <b class="num">{{ run.discovered_count }}</b></div>
   <div class="fx">Sites read <b class="num">{{ run.enriched_count }}</b></div>
   <div class="fx">Shown <b class="num">{{ businesses | length }}</b></div>
   {% for name, outcome in (run.source_outcomes or {}).items() %}
-  <div class="fx {{ outcome.status }}">
+  <div class="fx {{ outcome.status }}" {% if outcome.reason %}title="{{ outcome.reason }}"{% endif %}>
     <span>{{ source_labels.get(name, name) }}
-      {% if outcome.status != "ok" %}<span class="why">{{ outcome.status }}</span>{% endif %}</span>
+      {% if outcome.status != "ok" %}<span class="why">{{ outcome.status | replace("_", " ") }}</span>{% endif %}</span>
     <b class="num">{{ outcome.found }}</b>
   </div>
   {% endfor %}
