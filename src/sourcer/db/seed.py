@@ -111,6 +111,23 @@ def _capture(connection, run):
     }
 
 
+def capture_all():
+    """Every finished run in the working database, ready to export.
+
+    For shipping what is already there, rather than build-seed's fresh searches.
+    Runs still in progress are left out, so the dataset never ships half a run.
+    """
+    connection = connect()
+    try:
+        return [
+            _capture(connection, run)
+            for run in reversed(store.list_runs(connection, limit=10_000))
+            if run["run_status"] == "done"
+        ]
+    finally:
+        connection.close()
+
+
 def export_seed(runs):
     directory = seed_dir()
     directory.mkdir(parents=True, exist_ok=True)

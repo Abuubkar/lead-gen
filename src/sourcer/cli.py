@@ -3,7 +3,7 @@
 import argparse
 
 from sourcer.db.database import describe
-from sourcer.db.seed import export_seed, load_seed, seed_runs
+from sourcer.db.seed import capture_all, export_seed, load_seed, seed_runs
 
 
 def cmd_init_db(_args):
@@ -31,6 +31,14 @@ def cmd_build_seed(args):
     runs = seed_runs(args.markets, args.trades, pages=args.pages)
     path = export_seed(runs)
     print(f"wrote {path}")
+    return 0
+
+
+def cmd_export_seed(_args):
+    """Write the working database's finished runs out as the shipped dataset."""
+    runs = capture_all()
+    path = export_seed(runs)
+    print(f"wrote {len(runs)} runs to {path}")
     return 0
 
 
@@ -77,6 +85,11 @@ def main():
     build.add_argument("--trades", nargs="+", default=["solicitors", "restaurants", "software"])
     build.add_argument("--pages", type=int, default=2)
     build.set_defaults(handler=cmd_build_seed)
+
+    out = subcommands.add_parser(
+        "export-seed", help="Write the database's finished runs as the shipped dataset."
+    )
+    out.set_defaults(handler=cmd_export_seed)
 
     again = subcommands.add_parser(
         "rescore", help="Score finished runs again under the current rubric."
