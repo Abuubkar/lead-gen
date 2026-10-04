@@ -140,9 +140,14 @@ def rescore(run_id, refetch=True):
 
 
 def _discover_all(connection, run_id, trade, market, source_names, page_limit):
-    # Only the Sources that cover the market's country; YellowPages has nothing
-    # to say about Lahore and the Food Standards Agency nothing about Phoenix.
-    chosen = sources.selected(source_names, market["country"])
+    # Only the Sources that can search this trade in this market, the same ones
+    # the search page listed. One that cannot would report "0 found", which
+    # reads as an empty market rather than a Source with nothing to say.
+    chosen = [
+        source
+        for source in sources.selected(source_names, market["country"])
+        if sources.skip_reason(source, trade, market) is None
+    ]
     with Fetcher(delay_seconds=DISCOVERY_DELAY_SECONDS) as fetcher:
         for source in chosen:
             if is_cancelled(run_id):

@@ -37,8 +37,8 @@ LABEL = "Companies House"
 ENABLED_BY_DEFAULT = True
 TIER = "http"
 COUNTRIES = ("GB",)
-# Where it searches, and for what, as the search page shows it.
-COVERAGE = "UK"
+# What it adds to a Business, as the search page shows it.
+GIVES = "company type, SIC code, age"
 
 ENDPOINT = "https://api.company-information.service.gov.uk/advanced-search/companies"
 PAGE_SIZE = 100
@@ -89,6 +89,14 @@ def _record(item, market):
         "founded_year": int(str(created)[:4]) if created else None,
         "years_in_business": _years_since(created),
     }
+
+
+def skip_reason(trade_key, market):
+    if not companies_house_key():
+        return "needs an API key"
+    if not source_key(trade_key, NAME):
+        return "not set up for this trade"
+    return None
 
 
 def discover(fetcher, trade_key, market, page_limit=1):

@@ -32,8 +32,8 @@ LABEL = "Care Quality Commission"
 ENABLED_BY_DEFAULT = True
 TIER = "http"
 COUNTRIES = ("GB",)
-# Where it searches, and for what, as the search page shows it.
-COVERAGE = "England · dentists and GPs"
+# What it adds to a Business, as the search page shows it.
+GIVES = "phone, website for about half"
 
 DATA_PAGE = "https://www.cqc.org.uk/about-us/transparency/using-cqc-data"
 DIRECTORY_LINK = re.compile(
@@ -103,6 +103,14 @@ def _record(row, market):
         "website_url": (row.get(WEBSITE_COLUMN) or "").strip() or None,
         "categories": [t.strip() for t in (row.get("Service types") or "").split("|") if t.strip()],
     }
+
+
+def skip_reason(trade_key, market):
+    if market["region"] != "England":
+        return "England only"
+    if not source_key(trade_key, NAME):
+        return "dentists and GPs only"
+    return None
 
 
 def discover(fetcher, trade_key, market, page_limit=1):

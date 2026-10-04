@@ -37,8 +37,8 @@ LABEL = "City & state registers"
 ENABLED_BY_DEFAULT = True
 TIER = "http"
 COUNTRIES = ("US",)
-# Where it searches, and for what, as the search page shows it.
-COVERAGE = "Seattle, Texas, New Orleans"
+# What it adds to a Business, as the search page shows it.
+GIVES = "licence date, usually a phone"
 
 HEADERS = {"Accept": "application/json"}
 PAGE_SIZE = 100
@@ -143,6 +143,15 @@ REGISTERS = (
 
 def registers_for(market):
     return [register for register in REGISTERS if register["covers"](market)]
+
+
+def skip_reason(trade_key, market):
+    registers = registers_for(market)
+    if not registers:
+        return "Seattle, Texas and New Orleans only"
+    if not any(source_key(trade_key, register["term"]) for register in registers):
+        return "not set up for this trade"
+    return None
 
 
 def discover(fetcher, trade_key, market, page_limit=1):

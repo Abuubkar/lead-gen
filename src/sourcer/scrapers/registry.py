@@ -19,6 +19,7 @@ from sourcer.scrapers import (
     yellowpages,
     yellowpagespk,
 )
+from sourcer.scrapers.catalog import source_key
 
 # BBB is not registered because it does not work. Every request from both the
 # development network and the Render host was refused at Cloudflare's edge, so
@@ -53,8 +54,36 @@ ALL_NAMES = tuple(source.NAME for source in REGISTRY)
 DEFAULT_NAMES = tuple(source.NAME for source in REGISTRY if source.ENABLED_BY_DEFAULT)
 
 
+COUNTRY_NAMES = {"GB": "UK", "PK": "Pakistan", "US": "US"}
+
+
 def covers(source, country):
     return country in getattr(source, "COUNTRIES", ())
+
+
+def skip_reason(source, trade, market):
+    """Why a Source will not search this trade in this market, or None if it will.
+
+    The market is the one place a rep chooses where to search; a Source only
+    narrows it. Three things can rule a Source out: the market's country, a
+    narrower limit of its own (a register for one city, a key it needs), and a
+    trade it has no term for. A Source with its own check answers the last two
+    itself.
+    """
+    if not covers(source, market["country"]):
+        countries = [COUNTRY_NAMES.get(code, code) for code in source.COUNTRIES]
+        return f"{' and '.join(countries)} only"
+    own = getattr(source, "skip_reason", None)
+    if own is not None:
+        return own(trade, market)
+    if not source_key(trade, source.NAME):
+        return "not set up for this trade"
+    return None
+
+
+def planned(trade, market):
+    """Every Source, each with why it will not run here, or None if it will."""
+    return [(source, skip_reason(source, trade, market)) for source in REGISTRY]
 
 
 def for_country(country):

@@ -35,17 +35,17 @@
 
   <form class="search" method="post" action="/runs">
     <label class="field"><span>Trade</span>
-      <select name="trade">
+      <select name="trade" hx-get="/sources" hx-include="[name=market]" hx-target="#sources">
         {% for m in modes %}
         <optgroup label="{{ m.label }}">
           {% for key, label in m.trades %}
-          <option value="{{ key }}" {% if key == "solicitors" %}selected{% endif %}>{{ label }}</option>
+          <option value="{{ key }}" {% if key == default_trade %}selected{% endif %}>{{ label }}</option>
           {% endfor %}
         </optgroup>
         {% endfor %}
       </select></label>
     <label class="field"><span>Market</span>
-      <select name="market">
+      <select name="market" hx-get="/sources" hx-include="[name=trade]" hx-target="#sources">
         {% for code, country, markets in markets_by_country %}
         <optgroup label="{{ country }}">
           {% for m in markets %}
@@ -56,17 +56,8 @@
       </select></label>
     <label class="field"><span>Pages</span>
       <input name="pages" type="number" value="2" min="1" max="5"></label>
-    <fieldset class="sources">
-      <legend>Sources <span class="hint">each runs only where it covers the market</span></legend>
-      {% for source in sources %}
-      <label class="check">
-        <input type="checkbox" name="sources" value="{{ source.NAME }}"
-               {% if source.NAME in default_sources %}checked{% endif %}>
-        <span class="src-name">{{ source.LABEL }}</span>
-        <span class="src-where">{{ source.COVERAGE }}</span>
-        {% if source_notes.get(source.NAME) %}<span class="note">{{ source_notes[source.NAME] }}</span>{% endif %}
-      </label>
-      {% endfor %}
+    <fieldset class="sources" id="sources">
+      {% include "_sources.html" %}
     </fieldset>
     <button class="go" type="submit">Find prospects</button>
   </form>

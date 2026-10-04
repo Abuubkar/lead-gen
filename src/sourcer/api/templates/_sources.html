@@ -1,0 +1,20 @@
+<legend>Sources <span class="hint">for {{ trade_label | lower }} in {{ market_label }}</span></legend>
+{% for source in running %}
+<label class="check">
+  <input type="checkbox" name="sources" value="{{ source.NAME }}" checked>
+  <span class="src-name">{{ source.LABEL }}</span>
+  <span class="src-gives">{{ source.GIVES }}</span>
+</label>
+{% else %}
+<p class="src-none">No source covers this trade in this market.</p>
+{% endfor %}
+{% if skipped %}
+<details class="src-skipped">
+  <summary>{{ skipped | length }} not used here</summary>
+  <ul>
+    {% for source, reason in skipped %}
+    <li><span class="src-name">{{ source.LABEL }}</span> <span class="src-why">{{ reason }}</span></li>
+    {% endfor %}
+  </ul>
+</details>
+{% endif %}

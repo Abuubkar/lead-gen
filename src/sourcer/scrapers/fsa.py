@@ -33,8 +33,8 @@ LABEL = "Food Standards Agency"
 ENABLED_BY_DEFAULT = True
 TIER = "http"
 COUNTRIES = ("GB",)
-# Where it searches, and for what, as the search page shows it.
-COVERAGE = "UK · food businesses"
+# What it adds to a Business, as the search page shows it.
+GIVES = "name and address only"
 
 ENDPOINT = "https://api.ratings.food.gov.uk/Establishments"
 HEADERS = {"x-api-version": "2", "Accept": "application/json"}
@@ -71,6 +71,10 @@ def _record(establishment, market):
         if establishment.get("BusinessType")
         else [],
     }
+
+
+def skip_reason(trade_key, market):
+    return None if source_key(trade_key, NAME) else "food businesses only"
 
 
 def discover(fetcher, trade_key, market, page_limit=1):

@@ -406,7 +406,13 @@ body:has(.drawer:not(:empty)) .drawer { transform: none; }
                           text-transform: uppercase; color: var(--ink-3); }
 .search .sources legend .hint { text-transform: none; letter-spacing: 0; font-weight: 400;
                                 color: var(--ink-4); margin-left: var(--sp-1); }
-.search .sources .src-where { font-size: var(--t-2xs); color: var(--ink-4); }
+.search .sources .src-gives { font-size: var(--t-2xs); color: var(--ink-4); }
+.search .sources .src-none { flex-basis: 100%; margin: 0; font-size: var(--t-xs); color: var(--ink-3); }
+.search .src-skipped { flex-basis: 100%; margin-top: calc(-1 * var(--sp-2)); font-size: var(--t-2xs); color: var(--ink-4); }
+.search .src-skipped summary { cursor: pointer; color: var(--ink-3); }
+.search .src-skipped ul { list-style: none; margin: var(--sp-1) 0 0; padding: 0; }
+.search .src-skipped li { display: flex; gap: var(--sp-2); padding: 2px 0; }
+.search .src-skipped .src-name { color: var(--ink-3); min-width: 12em; }
 
 .run-title { display: flex; align-items: baseline; gap: var(--sp-2); min-width: 0; flex-wrap: wrap; }
 .tag { font: 600 var(--t-3xs)/1 var(--text); letter-spacing: 0.08em; text-transform: uppercase;

@@ -28,8 +28,8 @@ LABEL = "NPI Registry"
 ENABLED_BY_DEFAULT = True
 TIER = "http"
 COUNTRIES = ("US",)
-# Where it searches, and for what, as the search page shows it.
-COVERAGE = "US · dentists and clinics"
+# What it adds to a Business, as the search page shows it.
+GIVES = "phone, the owner or practice official"
 
 ENDPOINT = "https://npiregistry.cms.hhs.gov/api/"
 HEADERS = {"Accept": "application/json"}
@@ -90,6 +90,10 @@ def _record(result, market):
         "owner_name": _official(basic),
         "categories": [t.get("desc") for t in result.get("taxonomies") or [] if t.get("desc")],
     }
+
+
+def skip_reason(trade_key, market):
+    return None if source_key(trade_key, NAME) else "dentists and clinics only"
 
 
 def discover(fetcher, trade_key, market, page_limit=1):

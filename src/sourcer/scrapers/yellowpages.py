@@ -26,8 +26,8 @@ TIER = "http"
 # yellowpages.com is the American directory. Its paths are built from a US
 # state code, so it has nothing to say about Britain or Pakistan.
 COUNTRIES = ("US",)
-# Where it searches, and for what, as the search page shows it.
-COVERAGE = "US"
+# What it adds to a Business, as the search page shows it.
+GIVES = "phone, website, years trading, reviews"
 
 BASE = "https://www.yellowpages.com"
 

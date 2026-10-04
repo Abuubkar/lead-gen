@@ -26,7 +26,6 @@ from sourcer.api.filters import (
     band_of,
     shown_score,
 )
-from sourcer.config import companies_house_key
 from sourcer.db import repository as store
 from sourcer.db.database import connect
 from sourcer.pipelines import compliance, scoring
@@ -82,6 +81,10 @@ def _run_context(connection, run_id, params):
 # --------------------------------------------------------------------------- #
 
 
+DEFAULT_TRADE = "solicitors"
+DEFAULT_MARKET = "Norwich|England|GB"
+
+
 async def home(request):
     connection = connect()
     try:
@@ -104,18 +107,34 @@ async def home(request):
                 for mode, label in scoring.mode_choices()
             ],
             "markets_by_country": trades.markets_by_country(),
-            # A Source a rep can tick but that will not run, said before the
-            # search rather than discovered after it.
-            "source_notes": {
-                "companies_house": None if companies_house_key() else "needs an API key",
-            },
-            "default_market": "Norwich|England|GB",
+            "default_trade": DEFAULT_TRADE,
+            "default_market": DEFAULT_MARKET,
+            # Which Sources will run, said before the search rather than
+            # discovered after it, and redrawn whenever the trade or market changes.
+            **_sources_context(DEFAULT_TRADE, trades.find_market(DEFAULT_MARKET)),
             "recent": recent,
-            "sources": sources.REGISTRY,
-            "default_sources": sources.DEFAULT_NAMES,
             "country_labels": trades.COUNTRY_LABELS,
         },
     )
+
+
+def _sources_context(trade, market):
+    """The Sources for a search, split into those that will run and those that will not."""
+    planned = sources.planned(trade, market)
+    return {
+        "trade_label": trades.TRADES[trade]["label"],
+        "market_label": market["label"],
+        "running": [source for source, reason in planned if reason is None],
+        "skipped": [(source, reason) for source, reason in planned if reason is not None],
+    }
+
+
+async def source_list(request):
+    trade = (request.query_params.get("trade") or "").strip()
+    market = trades.find_market((request.query_params.get("market") or "").strip())
+    if not trades.is_trade(trade) or market is None:
+        return HTMLResponse("", status_code=400)
+    return templates.TemplateResponse(request, "_sources.html", _sources_context(trade, market))
 
 
 async def start_run(request):
@@ -324,6 +343,7 @@ async def healthz(request):
 routes = [
     Route("/", home),
     Route("/runs", start_run, methods=["POST"]),
+    Route("/sources", source_list),
     Route("/runs/{run_id:int}", view_run),
     Route("/runs/{run_id:int}/rows", run_rows),
     Route("/runs/{run_id:int}/cancel", cancel_run, methods=["POST"]),

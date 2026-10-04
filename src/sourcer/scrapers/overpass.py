@@ -25,8 +25,8 @@ LABEL = "OpenStreetMap"
 ENABLED_BY_DEFAULT = True
 TIER = "http"
 COUNTRIES = ("GB", "PK", "US")
-# Where it searches, and for what, as the search page shows it.
-COVERAGE = "UK · Pakistan · US"
+# What it adds to a Business, as the search page shows it.
+GIVES = "website and phone where mapped"
 
 # One request per Search Run, with a generous server-side timeout, rather than
 # several narrower queries against a shared volunteer service. The client waits

@@ -31,8 +31,8 @@ LABEL = "Yellow Pages Pakistan"
 ENABLED_BY_DEFAULT = True
 TIER = "http"
 COUNTRIES = ("PK",)
-# Where it searches, and for what, as the search page shows it.
-COVERAGE = "Pakistan"
+# What it adds to a Business, as the search page shows it.
+GIVES = "phone or website when the listing gives one"
 
 API = "https://yellowpagespk.com/wp-json/wp/v2"
 HEADERS = {"Accept": "application/json"}

@@ -33,8 +33,8 @@ LABEL = "PSEB Tech Hub"
 ENABLED_BY_DEFAULT = True
 TIER = "http"
 COUNTRIES = ("PK",)
-# Where it searches, and for what, as the search page shows it.
-COVERAGE = "Pakistan · IT companies"
+# What it adds to a Business, as the search page shows it.
+GIVES = "website, staff, years trading"
 
 ENDPOINT = "https://techdestination.com/wp-admin/admin-ajax.php"
 REFERER = "https://techdestination.com/tech-hub-portal/"
@@ -111,6 +111,10 @@ def _record(card, market):
         "founded_year": CURRENT_YEAR - years if years else None,
         "categories": ["pseb:it", *[item for item in expertise if item]],
     }
+
+
+def skip_reason(trade_key, market):
+    return None if source_key(trade_key, NAME) else "IT companies only"
 
 
 def discover(fetcher, trade_key, market, page_limit=1):
