@@ -127,6 +127,10 @@ RUN_COLUMNS = (
     "trade",
     "city",
     "state",
+    # Without these a loaded run defaults to a US web run, which scores a Lahore
+    # software search by the wrong rubric under the wrong country's rules.
+    "country",
+    "mode",
     "run_status",
     "progress_note",
     "started_at",
@@ -177,8 +181,11 @@ def _insert_run(connection, captured):
 
     for entry in captured["businesses"]:
         business = dict(entry["business"])
-        for column in ("categories", "sources"):
-            business[column] = json.dumps(business.get(column) or [])
+        # Every JSON column, from the one list the repository decodes by, so a
+        # new one such as tech_stack cannot be missed here as it once was.
+        for column in store.JSON_COLUMNS:
+            if column in business:
+                business[column] = json.dumps(business[column] or [])
         business["run_id"] = run_id
         columns = list(business)
         business_id = connection.execute(
