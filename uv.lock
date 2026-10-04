@@ -561,6 +561,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "anthropic" },
+    { name = "certifi" },
     { name = "fastapi" },
     { name = "jinja2" },
     { name = "python-multipart" },
@@ -576,6 +577,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "anthropic", specifier = ">=1.6.0" },
+    { name = "certifi", specifier = ">=2026.7.22" },
     { name = "fastapi", specifier = ">=0.141.1" },
     { name = "jinja2", specifier = ">=3.1.6" },
     { name = "python-multipart", specifier = ">=0.0.32" },

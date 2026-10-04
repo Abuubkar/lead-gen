@@ -8,7 +8,17 @@ Each declares whether it is enabled by default and which countries it covers,
 as ISO 3166-1 codes. A Search Run only asks the Sources that cover its country.
 """
 
-from sourcer.scrapers import companies_house, fsa, overpass, yellowpages
+from sourcer.scrapers import (
+    companies_house,
+    cqc,
+    fsa,
+    npi,
+    overpass,
+    techhub,
+    us_registers,
+    yellowpages,
+    yellowpagespk,
+)
 
 # BBB is not registered because it does not work. Every request from both the
 # development network and the Render host was refused at Cloudflare's edge, so
@@ -24,7 +34,20 @@ from sourcer.scrapers import companies_house, fsa, overpass, yellowpages
 # often an accountant's, so leading with it would give a rep the accountant's
 # address instead of the shop's. Last, it only fills what the others never carry:
 # company number, company type, SIC codes and the date of incorporation.
-REGISTRY = (yellowpages, fsa, overpass, companies_house)
+#
+# Within that, Sources that carry a phone or a website lead, so their contact
+# details win over a register that has none.
+REGISTRY = (
+    yellowpages,
+    npi,
+    us_registers,
+    cqc,
+    fsa,
+    techhub,
+    yellowpagespk,
+    overpass,
+    companies_house,
+)
 
 ALL_NAMES = tuple(source.NAME for source in REGISTRY)
 DEFAULT_NAMES = tuple(source.NAME for source in REGISTRY if source.ENABLED_BY_DEFAULT)

@@ -65,7 +65,14 @@ Each source declares the countries it covers and only runs there.
 | Source | Countries | Licence | Gives | Does not give |
 |---|---|---|---|---|
 | [Companies House](https://developer.company-information.service.gov.uk/) | UK | Open Government Licence v3.0 | SIC codes, company type, incorporation date, registered office | Phone, website, email |
+| [Care Quality Commission](https://www.cqc.org.uk/about-us/transparency/using-cqc-data) care directory | England | Open Government Licence v3.0 | Every dentist and GP practice: name, address, phone, and the website where the practice gave one | Company type, age, email |
 | [Food Standards Agency](https://api.ratings.food.gov.uk/help) | UK | Open Government Licence v3.0 | Every inspected food business: name, type, address, postcode | Phone, website, email |
+| [NPI Registry](https://npiregistry.cms.hhs.gov/api-page) | US | Federal data disclosable under FOIA; no stated conditions | Every dental practice and clinic billing a health plan: name, practice address, phone, the official who acts for it | Website, age |
+| [Seattle business licences](https://cos-data.seattle.gov/d/wnbq-64tb) | Seattle | Public Domain | Licensed businesses by NAICS code: name, address, phone, licence start date | Website |
+| [Texas sales tax permits](https://data.texas.gov/d/jrea-zgmq) | Six Texas markets | Public Domain | Outlets that collect sales tax, by NAICS code: name, address, date of first sale | Phone, website; trades that do not collect sales tax |
+| [New Orleans occupational licences](https://data.nola.gov/d/iqay-p646) | New Orleans | CC0 | Licensed businesses by type: name, address, phone, owner, start date | Website |
+| [PSEB Tech Hub](https://techdestination.com/tech-hub-portal/) | Pakistan | No terms published; robots.txt disallows nothing | IT companies registered with PSEB: name, town, staff, years trading, areas of work, website | Phone, email |
+| [Yellow Pages Pakistan](https://yellowpagespk.com/) | Pakistan | robots.txt disallows only admin pages; the disclaimer sets no conditions | About 2,200 self-written listings by category and city, with a phone or website where the text gives one | Age; quality varies |
 | [OpenStreetMap](https://www.openstreetmap.org/copyright) (Overpass) | UK, PK, US | Open Database Licence | Name, address, often a website and phone | Company type, age, reviews |
 | YellowPages | US | Robots permits the paths used | Name, phone, address, website, reviews | — |
 
@@ -81,8 +88,23 @@ Some facts behind those columns, measured while building this:
   the name of an administrative boundary. Pakistani boundaries are named in
   Urdu, so a name search for Lahore returned nothing; by distance it returns
   businesses with English names where they are tagged.
-- Pakistan has OpenStreetMap only. Its company registry, run by SECP, can look
-  up a company you already know but cannot list companies by trade or place.
+- Pakistan's company registry, run by SECP, can look up a company you already
+  know but cannot list companies by trade or place, so Pakistan relies on PSEB,
+  one small directory and OpenStreetMap.
+- PSEB's Tech Hub returns only the first page of results for a place, about
+  twenty companies; its "load more" call drops the place filter. So a city is
+  searched by name and by each of its administrative towns, as Wikipedia lists
+  them. A town name used in more than one city, such as Iqbal Town, is skipped.
+- The CQC directory is about 18 MB and renamed each week. It is downloaded at
+  most once a week and kept in the data directory. The CQC API now needs a
+  subscription key; the file does not.
+- The US registers record when a licence or permit started, which is the latest
+  a business can have begun trading. It is used as the founding year, so it can
+  make a business look younger than it is, never older.
+- NAICS codes come in two editions here: Seattle files under 2022 and Texas
+  under 2017, which renumbered clothing stores and software publishers. Each
+  trade lists its code from both, checked against Seattle's own descriptions and
+  the Census Bureau's 2017 code file.
 
 ### Sources left out
 
@@ -91,6 +113,11 @@ Some facts behind those columns, measured while building this:
 | Yell | Its terms forbid using the site to build "customer lists or mailing lists", and Cloudflare blocks automated access, including to its robots.txt. |
 | FreeIndex | Its [terms](https://www.freeindex.co.uk/terms.htm) state that using its data "as a source or target for direct marketing ... is strictly prohibited". |
 | Thomson Local | Blocks automated access before robots.txt can be read. |
+| Solicitors Regulation Authority API | Free and rich (phone, email, website for every firm), but its [terms](https://www.sra.org.uk/sra/how-we-work/privacy-data-information/data-sharing/terms-conditions/) forbid using the data "to transmit, or procure the sending of, any unsolicited or unauthorised advertising or promotional material". |
+| FindPK | Its terms say "You may not scrape, copy or republish the directories in bulk". |
+| BusinessList.pk | Its terms forbid access "through any automated means (including, without limitation, through the use of scripts or webcrawlers)". |
+| "Yellow Pages of Pakistan" on opendata.com.pk | Labelled public domain, but it is a 2020 copy of FindPK made by an individual, who could not relicense FindPK's data. |
+| TDLR licence list (Texas) | Lists electricians and air-conditioning contractors with phones, but the dataset states no licence. |
 | Better Business Bureau | Never returned a business: every request was refused at Cloudflare's edge, from a development network and from Render. Its terms also limit use to personal, non-commercial purposes. The adapter is kept in `bbb.py` and is not registered. See [ADR 0001](docs/adr/0001-robots-constrained-bbb-access.md). |
 
 ## How the score works
@@ -228,8 +255,11 @@ several.
 - **A UK business's email rule depends on a Companies House match.** Without a
   key, or for a business registered under a different name or address, UK
   businesses fall back to "consent first".
-- **Pakistan relies on OpenStreetMap alone**, so it returns fewer businesses
-  than the UK.
+- **Pakistan is thin outside tech.** PSEB covers IT companies well; for local
+  trades there is only OpenStreetMap and a small self-listed directory.
+- **The US registers cover four of fifty-six US markets**: Seattle, New Orleans
+  and, for trades that collect sales tax, the six Texas cities. Elsewhere in the
+  US the sources are YellowPages, the NPI Registry and OpenStreetMap.
 - **Public Overpass servers are slow and sometimes unreachable.** A query has
   taken over three minutes.
 - **The careers check is approximate.** A link to an industry job board can
@@ -252,7 +282,7 @@ several.
 | `scrapers/client.py` | Every outbound request: robots, rate limiting, both tiers |
 | `scrapers/registry.py` | Which sources exist, which countries each covers |
 | `scrapers/catalog.py` | Trades by mode, markets by country, per-source keys |
-| `scrapers/companies_house.py`, `fsa.py`, `overpass.py`, `yellowpages.py` | One module per source |
+| `scrapers/companies_house.py`, `cqc.py`, `fsa.py`, `npi.py`, `overpass.py`, `techhub.py`, `us_registers.py`, `yellowpages.py`, `yellowpagespk.py` | One module per source |
 | `extractors/website.py` | Reading a business's own site by rule |
 | `pipelines/dedup.py` | Normalisation and identity resolution |
 | `pipelines/merge.py` | What changes when a second source reports the same business |
@@ -278,7 +308,10 @@ GET /healthz
 Map data © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright),
 available under the Open Database Licence. Contains public sector information
 licensed under the
-[Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/).
+[Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/),
+including Care Quality Commission information. The Seattle and Texas registers
+are in the public domain and the New Orleans register is under CC0; they are
+credited here as a courtesy.
 
 ## Conventions
 

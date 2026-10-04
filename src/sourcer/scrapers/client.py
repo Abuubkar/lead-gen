@@ -15,6 +15,7 @@ import threading
 import time
 from urllib.parse import urlsplit, urlunsplit
 
+import certifi
 from protego import Protego
 from scrapling.engines.toolbelt.proxy_rotation import ProxyRotator
 from scrapling.fetchers import FetcherSession, StealthySession
@@ -40,6 +41,12 @@ def selector_config():
 # refusing after roughly ten requests in a few minutes from one address, so this
 # is deliberately slower than it needs to be for a single page.
 DEFAULT_DELAY_SECONDS = 12.0
+
+# Which certificate authorities to trust. The HTTP client ships its own list,
+# which lacks GlobalSign's Root R46: data.texas.gov is signed under it and was
+# refused as an unknown issuer, though browsers and Python both accept it.
+# certifi is Mozilla's list, the one browsers use.
+CA_BUNDLE = certifi.where()
 
 # Status codes that mean "stop asking", not "try again".
 BLOCKED_STATUSES = (401, 403, 407, 429, 444, 451, 503)
@@ -216,7 +223,9 @@ class Fetcher:
             if tier == "browser" and self.allow_browser:
                 response = self._browser_session().fetch(robots_url, google_search=False)
             else:
-                response = self._http_session().get(robots_url, stealthy_headers=True, timeout=15)
+                response = self._http_session().get(
+                    robots_url, stealthy_headers=True, timeout=15, verify=CA_BUNDLE
+                )
             if response.status == 200:
                 body = response.body
                 policy = Protego.parse(
@@ -295,9 +304,36 @@ class Fetcher:
             raise Unreachable(url, reason=last or "no answer")
         raise Blocked(url, reason=last or "no tier succeeded")
 
+    def post(self, url, data, headers=None, timeout=None, obey_robots=True):
+        """Send a form, or raise Disallowed, Blocked or Unreachable.
+
+        For the one Source whose listings only arrive through a site's own
+        search form. HTTP tier only: a form post needs no rendering, and the
+        same robots check, delay and block detection apply as to a page.
+        """
+        if obey_robots and not self.allowed(url):
+            raise Disallowed(url)
+
+        self._wait_turn(url)
+        extra = {"timeout": timeout} if timeout else {}
+        try:
+            response = self._http_session().post(
+                url,
+                data=data,
+                headers=dict(headers or {}),
+                stealthy_headers=not headers,
+                verify=CA_BUNDLE,
+                **extra,
+            )
+        except Exception as error:  # a transport failure is not a refusal
+            raise Unreachable(url, reason=f"{type(error).__name__}: {error}") from error
+        if looks_blocked(response):
+            raise Blocked(url, reason=_title_of(response) or f"status {response.status}")
+        return response
+
     def _http_get(self, url, referer, headers=None, timeout=None):
         session = self._http_session()
-        extra = {"timeout": timeout} if timeout else {}
+        extra = {"verify": CA_BUNDLE, **({"timeout": timeout} if timeout else {})}
         if headers or referer:
             sent = dict(headers or {})
             if referer:

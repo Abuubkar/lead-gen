@@ -37,6 +37,8 @@ LABEL = "Companies House"
 ENABLED_BY_DEFAULT = True
 TIER = "http"
 COUNTRIES = ("GB",)
+# Where it searches, and for what, as the search page shows it.
+COVERAGE = "UK"
 
 ENDPOINT = "https://api.company-information.service.gov.uk/advanced-search/companies"
 PAGE_SIZE = 100

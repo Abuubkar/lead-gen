@@ -87,9 +87,19 @@ concurrency this workload does not have.
 Each Source declares the countries it covers as ISO 3166-1 codes, and a Search
 Run asks only the Sources that cover its Market's country. The registry runs
 them in a fixed order, and because merging fills blanks and never overwrites,
-the first Source to report a field owns it. Companies House runs last: its
-address is the registered office, often an accountant's, so leading with it
-would hand a Rep the wrong address.
+the first Source to report a field owns it. Sources that carry a phone or a
+website run before registers that carry neither, so their contact details win.
+Companies House runs last: its address is the registered office, often an
+accountant's, so leading with it would hand a Rep the wrong address.
+
+Most Sources are government registers read through an API: Companies House, the
+CQC care directory and the Food Standards Agency in the UK; the NPI Registry and
+the Seattle, Texas and New Orleans licence registers in the US; PSEB's list of
+IT companies in Pakistan. A register's term for a trade (a SIC or NAICS code, a
+taxonomy, a service type) lives in the catalogue beside the trade, so adding a
+register is a module, a line in the registry, and a column in the catalogue.
+One register can cover several Markets: the US registers module holds three
+Socrata datasets and picks the one, if any, that covers the Market.
 
 A Market carries coordinates, taken once from OpenStreetMap's Nominatim geocoder
 during development and kept in the catalogue, so the application never calls

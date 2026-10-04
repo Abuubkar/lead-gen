@@ -33,6 +33,8 @@ LABEL = "Food Standards Agency"
 ENABLED_BY_DEFAULT = True
 TIER = "http"
 COUNTRIES = ("GB",)
+# Where it searches, and for what, as the search page shows it.
+COVERAGE = "UK · food businesses"
 
 ENDPOINT = "https://api.ratings.food.gov.uk/Establishments"
 HEADERS = {"x-api-version": "2", "Accept": "application/json"}

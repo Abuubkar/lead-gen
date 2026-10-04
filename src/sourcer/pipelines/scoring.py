@@ -72,6 +72,20 @@ SOURCES_REPORTING_PHONE = ("yellowpages",)
 SOFTWARE_SIC_CODES = ("62011", "62012", "62020", "62030", "62090", "63110", "63120")
 # The OpenStreetMap office tag for IT businesses.
 SOFTWARE_OSM_TAGS = ("it",)
+# US NAICS codes for the same work, in both editions the US registers use: 2022
+# (Seattle) and 2017 (Texas). Titles checked against Seattle's own descriptions
+# and the Census Bureau's 2017 code file.
+SOFTWARE_NAICS_CODES = ("541511", "541512", "541519", "513210", "511210", "518210")
+# New Orleans files businesses under a type in words rather than a code.
+SOFTWARE_REGISTER_TYPES = (
+    "Custom Computer Programming Services",
+    "Computer Systems Design Services",
+    "Computer Facilities Management Services",
+    "Data Processing Services",
+)
+# Every company on PSEB's Tech Hub is an IT or IT-enabled services company;
+# the Source marks them so.
+SOFTWARE_REGISTER_MARKS = ("pseb:it",)
 
 # BritNova's stack as its own site lists it, plus the frameworks its case
 # studies name. Overlap with what a prospect runs is the strongest single sign
@@ -252,6 +266,13 @@ def _is_software_company(context):
         return 1.0, "software or IT by SIC code"
     if any(tag in categories for tag in SOFTWARE_OSM_TAGS):
         return 1.0, "IT office"
+    naics_codes = [entry[6:] for entry in categories if str(entry).startswith("naics:")]
+    if any(code in SOFTWARE_NAICS_CODES for code in naics_codes):
+        return 1.0, "software or IT by NAICS code"
+    if any(entry in SOFTWARE_REGISTER_TYPES for entry in categories):
+        return 1.0, "licensed as software or IT"
+    if any(entry in SOFTWARE_REGISTER_MARKS for entry in categories):
+        return 1.0, "registered with PSEB as an IT company"
     if sic_codes or categories:
         return 0.0, "not classed as software or IT"
     return None, None

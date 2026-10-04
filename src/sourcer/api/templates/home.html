@@ -63,7 +63,7 @@
         <input type="checkbox" name="sources" value="{{ source.NAME }}"
                {% if source.NAME in default_sources %}checked{% endif %}>
         <span class="src-name">{{ source.LABEL }}</span>
-        <span class="src-where">{{ source.COUNTRIES | map("replace", "GB", "UK") | join(" · ") }}</span>
+        <span class="src-where">{{ source.COVERAGE }}</span>
         {% if source_notes.get(source.NAME) %}<span class="note">{{ source_notes[source.NAME] }}</span>{% endif %}
       </label>
       {% endfor %}

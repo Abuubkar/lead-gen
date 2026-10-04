@@ -17,6 +17,20 @@ each Source uses for it:
                    (SIC07_CH_condensed_list_en.csv on GOV.UK).
   fsa              Food Standards Agency business type IDs, read from the live
                    BusinessTypes endpoint.
+  naics            US NAICS codes, for the Seattle and Texas registers. Seattle
+                   files under the 2022 edition and Texas under the 2017 one,
+                   which renumbered clothing stores, software publishers and
+                   web portals, so a trade lists its code from each. 2022
+                   titles were read from Seattle's own naics_description
+                   column; 2017 titles from the Census Bureau's code file
+                   (2-6 digit_2017_Codes.xlsx).
+  nola             New Orleans business types, exactly as its register spells
+                   them, read from the live dataset.
+  npi              NPI Registry taxonomy descriptions, checked live.
+  cqc              CQC service types, from the care directory's own column.
+  yellowpagespk    yellowpagespk.com listing-category slugs, from its API.
+  techhub          True where PSEB's Tech Hub lists the trade. It has one list
+                   of IT companies, so all three tech trades get the same one.
 
 A Source with no term for a trade is simply skipped for it.
 """
@@ -32,6 +46,9 @@ TRADES = {
         "label": "Solicitors & law firms",
         "overpass": (("office", "lawyer"),),
         "companies_house": ("69102",),
+        "naics": ("541110",),
+        "nola": ("Offices of Lawyers",),
+        "yellowpagespk": ("law-firms", "legal-service", "legal-advisor"),
     },
     "accounting": {
         "mode": "web",
@@ -39,23 +56,34 @@ TRADES = {
         "yellowpages": "accountants-certified-public",
         "overpass": (("office", "accountant"),),
         "companies_house": ("69201", "69202", "69203"),
+        "naics": ("541211", "541219"),
+        "nola": ("Offices of Certified Public Accountants", "Accounting Services, Other"),
+        "yellowpagespk": ("account-tax-consultant",),
     },
     "estate-agents": {
         "mode": "web",
         "label": "Estate agents",
         "overpass": (("office", "estate_agent"),),
         "companies_house": ("68310",),
+        "naics": ("531210",),
+        "nola": ("Real Estate Agents and Brokers",),
+        "yellowpagespk": ("property-real-estate-agent", "real-estate"),
     },
     "architects": {
         "mode": "web",
         "label": "Architects",
         "overpass": (("office", "architect"),),
         "companies_house": ("71111",),
+        "naics": ("541310",),
+        "nola": ("Architectural Services",),
     },
     "insurance": {
         "mode": "web",
         "label": "Insurance brokers",
         "overpass": (("office", "insurance"),),
+        "naics": ("524210",),
+        "nola": ("Insurance Agencies & Brokerages",),
+        "yellowpagespk": ("insurance",),
     },
     "dental": {
         "mode": "web",
@@ -63,12 +91,21 @@ TRADES = {
         "yellowpages": "dentists",
         "overpass": (("amenity", "dentist"),),
         "companies_house": ("86230",),
+        "naics": ("621210",),
+        "nola": ("Offices of Dentists",),
+        "npi": ("Dentist",),
+        "cqc": ("Dentist",),
     },
     "medical": {
         "mode": "web",
         "label": "GP & specialist clinics",
         "overpass": (("amenity", "doctors"),),
         "companies_house": ("86210", "86220"),
+        "naics": ("621111",),
+        "nola": ("Offices of Physicians(except Mental Health Specialists)",),
+        "npi": ("Family Medicine", "Internal Medicine"),
+        "cqc": ("Doctors/GPs",),
+        "yellowpagespk": ("health-medical", "specialist-medical-doctors"),
     },
     "veterinary": {
         "mode": "web",
@@ -76,6 +113,8 @@ TRADES = {
         "yellowpages": "veterinarians",
         "overpass": (("amenity", "veterinary"),),
         "companies_house": ("75000",),
+        "naics": ("541940",),
+        "nola": ("Veterinary Services",),
     },
     "restaurants": {
         "mode": "web",
@@ -83,6 +122,12 @@ TRADES = {
         "overpass": (("amenity", "restaurant"), ("amenity", "cafe")),
         "companies_house": ("56101", "56102"),
         "fsa": (1,),
+        "naics": ("722511", "722515"),
+        "nola": (
+            "Full Service Restaurants(table service available)",
+            "Snack & Nonalcoholic Beverage Bars",
+        ),
+        "yellowpagespk": ("restaurant",),
     },
     "takeaways": {
         "mode": "web",
@@ -90,12 +135,16 @@ TRADES = {
         "overpass": (("amenity", "fast_food"),),
         "companies_house": ("56103",),
         "fsa": (7844,),
+        "naics": ("722513",),
+        "nola": ("Limited Service Restaurants(no table service available)",),
     },
     "pubs": {
         "mode": "web",
         "label": "Pubs & bars",
         "overpass": (("amenity", "pub"),),
         "fsa": (7843,),
+        "naics": ("722410",),
+        "nola": ("Drinking Places(Alcoholic Beverages)",),
     },
     "hotels": {
         "mode": "web",
@@ -103,24 +152,42 @@ TRADES = {
         "overpass": (("tourism", "hotel"),),
         "companies_house": ("55100",),
         "fsa": (7842,),
+        "naics": ("721110", "721191"),
+        "nola": ("Hotels(except Casino Hotels) & Motels", "Bed & Breakfast Inns"),
+        "yellowpagespk": ("hotels",),
     },
     "hair-beauty": {
         "mode": "web",
         "label": "Hair & beauty salons",
         "overpass": (("shop", "hairdresser"), ("shop", "beauty")),
         "companies_house": ("96020",),
+        "naics": ("812112", "812111"),
+        "nola": ("Beauty Salons", "Barber Shops", "Nail Salons"),
+        "yellowpagespk": ("beauty-salon", "beauty-spa"),
     },
     "fitness": {
         "mode": "web",
         "label": "Gyms & fitness studios",
         "overpass": (("leisure", "fitness_centre"),),
         "companies_house": ("93130",),
+        "naics": ("713940",),
+        "nola": ("Fitness & Recreational Sports Centers",),
     },
     "clothing": {
         "mode": "web",
         "label": "Clothing retailers",
         "overpass": (("shop", "clothes"),),
         "companies_house": ("47710",),
+        "naics": ("458110", "448110", "448120", "448140", "448150", "448190"),
+        "nola": (
+            "Clothing Stores, Other",
+            "Women's Clothing Stores",
+            "Family Clothing Stores",
+            "Men's Clothing Stores",
+            "Children's & Infants' Clothing Stores",
+            "Clothing Accessories Stores",
+        ),
+        "yellowpagespk": ("fashion-styles",),
     },
     "plumbing": {
         "mode": "web",
@@ -128,6 +195,8 @@ TRADES = {
         "yellowpages": "plumbers",
         "overpass": (("craft", "plumber"), ("shop", "plumber")),
         "companies_house": ("43220",),
+        "naics": ("238220",),
+        "nola": ("Plumbing, Heating and Air-Conditioning Contractors",),
     },
     "hvac": {
         "mode": "web",
@@ -136,6 +205,8 @@ TRADES = {
         "overpass": (("craft", "hvac"), ("shop", "hvac")),
         # SIC files plumbing and air conditioning under one code.
         "companies_house": ("43220",),
+        "naics": ("238220",),
+        "nola": ("Plumbing, Heating and Air-Conditioning Contractors",),
     },
     "electrical": {
         "mode": "web",
@@ -143,6 +214,8 @@ TRADES = {
         "yellowpages": "electricians",
         "overpass": (("craft", "electrician"),),
         "companies_house": ("43210",),
+        "naics": ("238210",),
+        "nola": ("Electrical Contractors",),
     },
     "roofing": {
         "mode": "web",
@@ -150,30 +223,45 @@ TRADES = {
         "yellowpages": "roofing-contractors",
         "overpass": (("craft", "roofer"),),
         "companies_house": ("43910",),
+        "naics": ("238160",),
+        "nola": ("Roofing, Siding and Sheet Metal Contractors",),
     },
     "landscaping": {
         "mode": "web",
         "label": "Landscaping",
         "yellowpages": "landscaping-lawn-services",
         "overpass": (("craft", "gardener"), ("shop", "garden_centre")),
+        "naics": ("561730",),
+        "nola": ("Landscaping Services",),
     },
     "auto-repair": {
         "mode": "web",
         "label": "Auto repair",
         "yellowpages": "auto-repair-service",
         "overpass": (("shop", "car_repair"),),
+        "naics": ("811111", "811198"),
+        "nola": (
+            "General Automotive Repair",
+            "Automotive Repair & Maintenance, All Other",
+            "Automotive Mechanical & Electrical Repair & Maintenance, Other",
+        ),
+        "yellowpagespk": ("automotive",),
     },
     "pest-control": {
         "mode": "web",
         "label": "Pest control",
         "yellowpages": "pest-control-services",
         "overpass": (("craft", "pest_control"),),
+        "naics": ("561710",),
+        "nola": ("Exterminating & Pest Control Services",),
     },
     "commercial-cleaning": {
         "mode": "web",
         "label": "Commercial cleaning",
         "yellowpages": "janitorial-service",
         "overpass": (("shop", "laundry"), ("craft", "cleaning")),
+        "naics": ("561720",),
+        "nola": ("Janitorial Services",),
     },
     # --------------------------------------------------------------- tech --
     # OpenStreetMap has one tag for all of these, office=it, so outside the UK
@@ -183,18 +271,29 @@ TRADES = {
         "label": "Software companies",
         "overpass": (("office", "it"),),
         "companies_house": ("62011", "62012"),
+        "naics": ("541511", "513210", "511210"),
+        "nola": ("Custom Computer Programming Services",),
+        "yellowpagespk": ("software-houses",),
+        "techhub": True,
     },
     "it-services": {
         "mode": "tech",
         "label": "IT consultancies & services",
         "overpass": (("office", "it"),),
         "companies_house": ("62020", "62030", "62090"),
+        "naics": ("541512", "541519"),
+        "nola": ("Computer Systems Design Services", "Computer Facilities Management Services"),
+        "yellowpagespk": ("software-houses", "web-development"),
+        "techhub": True,
     },
     "data-hosting": {
         "mode": "tech",
         "label": "Data, hosting & web platforms",
         "overpass": (("office", "it"),),
         "companies_house": ("63110", "63120"),
+        "naics": ("518210", "519290", "519130"),
+        "nola": ("Data Processing Services",),
+        "techhub": True,
     },
 }
 
