@@ -89,6 +89,9 @@ def _work(run_id, trade, market, mode, source_names, page_limit):
         if not is_cancelled(run_id):
             _score_all(connection, run_id, mode)
 
+        # The live counts move as the run works; settle them on what the
+        # businesses actually are once it stops.
+        store.recount(connection, run_id)
         if is_cancelled(run_id):
             store.set_progress_note(connection, run_id, "cancelled")
             store.set_run_status(connection, run_id, "cancelled")
@@ -128,6 +131,7 @@ def rescore(run_id, refetch=True):
         if refetch:
             _enrich_all(connection, run_id, mode)
         _score_all(connection, run_id, mode)
+        store.recount(connection, run_id)
         store.set_progress_note(connection, run_id, "rescored")
         return run_id
     finally:
@@ -315,7 +319,11 @@ def _enrich_all(connection, run_id, mode):
                 _remember(run_id, business["id"], found)
 
             store.set_enrichment_status(connection, business["id"], outcome)
-            store.bump_run_counts(connection, run_id, enriched=1)
+            # "Sites read" means sites read. A business with no website passes
+            # through here too and is skipped; counting it reported 200 sites
+            # read on a run where not one had a website to read.
+            if outcome == "ok":
+                store.bump_run_counts(connection, run_id, enriched=1)
             # Scored here rather than in a later pass. The table streams while
             # the run works, and a row with no Score yet reads as a Business
             # worth nothing rather than one not yet judged.
@@ -377,7 +385,11 @@ def _score_one(connection, run_id, business, mode):
     signals, computed_score, confidence = scoring.assess(context, mode)
     store.replace_signals(connection, business["id"], signals)
     store.set_business_score(connection, business["id"], computed_score, confidence)
-    store.bump_run_counts(connection, run_id, scored=1)
+    # Counted only when a Score came out. A business with no evidence in its
+    # core group is assessed but left unscored, and counting it claimed scores
+    # for businesses that have none.
+    if computed_score is not None:
+        store.bump_run_counts(connection, run_id, scored=1)
 
 
 def _score_all(connection, run_id, mode):

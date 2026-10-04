@@ -18,6 +18,7 @@ from urllib.parse import urlencode
 
 from sourcer.config import overpass_url
 from sourcer.scrapers.catalog import source_key
+from sourcer.scrapers.client import Unreachable
 
 NAME = "overpass"
 LABEL = "OpenStreetMap"
@@ -103,7 +104,15 @@ def discover(fetcher, trade_key, market, page_limit=1):
         if isinstance(response.body, bytes)
         else str(response.body)
     )
-    for element in json.loads(body).get("elements", []):
+    try:
+        elements = json.loads(body).get("elements", [])
+    except json.JSONDecodeError:
+        # An overloaded or timed-out Overpass server answers with an error page
+        # rather than JSON. That is a server with nothing to give, not a refusal,
+        # and a raw decoding error told a rep nothing. Say what it sent.
+        sent = " ".join(body.split())[:120] or "an empty response"
+        raise Unreachable(overpass_url(), reason=f"Overpass returned no data: {sent}") from None
+    for element in elements:
         record = _record(element, market)
         if record:
             yield record

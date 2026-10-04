@@ -252,6 +252,25 @@ def list_businesses_to_enrich(connection, run_id):
     )
 
 
+def recount(connection, run_id):
+    """Set a run's counts from what its businesses actually are.
+
+    The counts are kept incrementally while a run works, so any path that
+    miscounts leaves them wrong for good. Read off the businesses instead:
+    sites read is those whose site was read, scored is those with a Score.
+    """
+    connection.execute(
+        "UPDATE search_run SET"
+        " discovered_count = (SELECT count(*) FROM business WHERE run_id = :run),"
+        " enriched_count = (SELECT count(*) FROM business"
+        "   WHERE run_id = :run AND enrichment_status = 'ok'),"
+        " scored_count = (SELECT count(*) FROM business"
+        "   WHERE run_id = :run AND score IS NOT NULL)"
+        " WHERE id = :run",
+        {"run": run_id},
+    )
+
+
 def reset_for_rescore(connection, run_id, refetch):
     """Ready a finished run to be scored again from scratch.
 
