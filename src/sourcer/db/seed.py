@@ -16,6 +16,7 @@ import time
 from sourcer.config import seed_dir
 from sourcer.db import repository as store
 from sourcer.db.database import connect, init_db, transaction
+from sourcer.scrapers import catalog
 from sourcer.workers import runner
 
 SEED_FILE = "dataset.json"
@@ -31,14 +32,21 @@ def seed_path():
 # --------------------------------------------------------------------------- #
 
 
-def seed_runs(markets, trade_keys, pages=2):
-    """Run live searches across markets and trades, and collect the results."""
+def seed_runs(market_keys, trade_keys, pages=2):
+    """Run live searches across markets and trades, and collect the results.
+
+    Markets are catalogue keys, "City|Region|Country". An unknown one is
+    reported and skipped rather than searched as a guess.
+    """
     captured = []
-    for market in markets:
-        city, _, state = market.partition(",")
+    for key in market_keys:
+        market = catalog.find_market(key)
+        if market is None:
+            print(f"  skipping {key}: not a market in the catalogue")
+            continue
         for trade_key in trade_keys:
-            run_id = runner.start(trade_key, city.strip(), state.strip(), page_limit=pages)
-            print(f"  running {trade_key} in {city.strip()}, {state.strip()} (run {run_id})")
+            run_id = runner.start(trade_key, market, page_limit=pages)
+            print(f"  running {trade_key} in {market['label']} (run {run_id})")
             captured.append(_wait_for(run_id))
     return [run for run in captured if run]
 

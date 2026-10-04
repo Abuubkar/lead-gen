@@ -198,6 +198,70 @@ BUILDERS = {
     "wordpress": re.compile(r"wp-content|wordpress", re.I),
 }
 
+# Frameworks recognisable in served HTML. Each pattern was checked against real
+# sites built on that framework, and the ones that looked plausible but failed
+# were left out:
+#   next.js  /_next/static/ on both nextjs.org (app router) and react.dev
+#   angular  ng-version= and _ngcontent- on angular.dev
+#   vue      a data-v-<hash> attribute on vuejs.org
+#   django   csrfmiddlewaretoken on djangoproject.com's login form. It is absent
+#            from pages without a form, so a Django site is often missed.
+#   shopify  cdn.shopify.com on a live Shopify store
+# React on its own is not detectable from served HTML: data-reactroot and the
+# root-container markers are runtime properties and matched nothing, even on
+# react.dev. It is inferred from Next.js, or from react-dom when a page names it.
+# The word "django" is not a marker; it only matched a site that is about Django.
+STACK_IN_HTML = {
+    "next.js": re.compile(r"/_next/static/"),
+    "react": re.compile(r"react-dom"),
+    "angular": re.compile(r"ng-version=|_ngcontent-"),
+    "vue": re.compile(r"data-v-[0-9a-f]{8}"),
+    "django": re.compile(r"csrfmiddlewaretoken"),
+    "shopify": re.compile(r"cdn\.shopify\.com|Shopify\.theme"),
+}
+
+# Hosting recognisable from response headers, each seen on a real site:
+# vercel on nextjs.org and react.dev, netlify on vuejs.org and britnova.net,
+# cloudflare on cloudflare.com, aws through CloudFront on aws.amazon.com.
+STACK_IN_HEADERS = {
+    "vercel": (("server", "vercel"), ("x-vercel-id", "")),
+    "netlify": (("server", "netlify"),),
+    "cloudflare": (("server", "cloudflare"), ("cf-ray", "")),
+    "aws": (("via", "cloudfront.net"), ("x-amz-cf-pop", "")),
+}
+
+# Specific phrases rather than a bare "AI", which matches any company or product
+# abbreviated that way. Tested on real pages: it found britnova.net's "Machine
+# Learning" and left a shoe retailer's store and the Django site alone.
+AI_PHRASES = re.compile(
+    r"\b(artificial intelligence|machine learning|deep learning|large language models?"
+    r"|LLMs?|generative AI|computer vision|NLP"
+    r"|AI[- ](powered|driven|agents?|solutions?|platform|models?))\b",
+    re.I,
+)
+
+# A link to a careers or jobs page. Approximate, and the drawer shows the
+# evidence so a rep can check it: the link is not required to stay on the same
+# site, because a real careers page often lives elsewhere (aws.amazon.com links
+# to amazon.jobs), so an industry job board linked from a site can also match.
+CAREERS = re.compile(
+    r'href="[^"]*/(careers?|jobs|vacancies|join-us|work-with-us)(/|"|\?|#)'
+    r"|>\s*(careers?|jobs|we'?re hiring|join (our|the) team|vacancies|open (roles|positions))\s*<",
+    re.I,
+)
+
+
+def _stack_of(html, headers):
+    """Frameworks and hosting recognised in a site's pages and headers."""
+    found = [name for name, pattern in STACK_IN_HTML.items() if pattern.search(html)]
+    if "next.js" in found and "react" not in found:
+        found.append("react")  # Next.js is React.
+    lowered = {str(key).lower(): str(value).lower() for key, value in (headers or {}).items()}
+    for name, rules in STACK_IN_HEADERS.items():
+        if any(key in lowered and needle in lowered[key] for key, needle in rules):
+            found.append(name)
+    return sorted(set(found))
+
 
 def _year_or_none(value):
     year = int(value)
@@ -324,7 +388,7 @@ def _read_owner(text):
     return None, None
 
 
-def extract(text, html, url):
+def extract(text, html, url, headers=None):
     """Every Signal-bearing fact the rules can find in one site's pages."""
     found = {"evidence_url": url}
 
@@ -367,6 +431,12 @@ def extract(text, html, url):
         (label for label, pattern in BUILDERS.items() if pattern.search(html)), None
     )
     found["https"] = url.startswith("https://")
+
+    # The tech rubric's facts. Read on every site, since a run does not know its
+    # mode here, and cheap to compute.
+    found["tech_stack"] = _stack_of(html, headers)
+    found["mentions_ai"] = bool(AI_PHRASES.search(text))
+    found["has_careers"] = bool(CAREERS.search(html))
     return found
 
 
@@ -390,10 +460,18 @@ def enrich(fetcher, website_url):
     except Exception:
         return {}, "failed"
 
-    pages = _pages_to_read(fetcher, home_url, response)
+    # Judge the site a visitor actually reaches, not the address a directory
+    # listed. Directories often list http:// for a site that redirects to
+    # https://; reading the listed scheme marked about three in four of the 55
+    # "no HTTPS" sites in the shipped dataset as insecure when they were not.
+    # A redirect to another domain also means that domain is the business's
+    # site, which is the one its own emails and pages belong to.
+    site_url = str(getattr(response, "url", None) or home_url)
+
+    pages = _pages_to_read(fetcher, site_url, response)
     text = " ".join(_text_of(page_response) for _, page_response in pages)
     html = " ".join(_html_of(page_response) for _, page_response in pages)
-    found = extract(text, html, home_url)
+    found = extract(text, html, site_url, getattr(response, "headers", None))
     found["pages_read"] = len(pages)
     # Handed on for the optional model step, which would otherwise refetch.
     # Never stored: it has no column, and the Signals are what persist.

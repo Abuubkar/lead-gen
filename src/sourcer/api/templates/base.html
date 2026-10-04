@@ -11,8 +11,17 @@
 </head>
 <body>
   <aside class="rail">
-    <a class="brand" href="/"><em></em> sourcer</a>
+    <a class="brand" href="/"><em></em> sourcer <span class="brand-for">for BritNova</span></a>
     {% block rail %}{% endblock %}
+    {# Both licences require this. OpenStreetMap's ODbL asks for credit to its
+       contributors and a link to its copyright page; the Open Government Licence
+       asks for this exact statement and a link to the licence. #}
+    <p class="credits">
+      Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>,
+      under the ODbL.
+      Contains public sector information licensed under the
+      <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0</a>.
+    </p>
   </aside>
   <main id="main">{% block main %}{% endblock %}</main>
   {% block after %}{% endblock %}

@@ -89,3 +89,27 @@ def proxies():
     """A rotation list from the environment, empty when none is configured."""
     raw = os.environ.get("SOURCER_PROXIES", "")
     return [entry.strip() for entry in raw.split(",") if entry.strip()]
+
+
+# The public Overpass instance at overpass-api.de asks commercial users to use a
+# self-hosted or paid server instead, calls itself overloaded, and did not
+# answer at all while this was built. Private.coffee runs a free one whose
+# general terms do not forbid commercial use, and it is the default so the tool
+# works out of the box. A sales team running this every day should point this
+# at a paid instance; the OpenStreetMap wiki lists several.
+DEFAULT_OVERPASS_URL = "https://overpass.private.coffee/api/interpreter"
+
+
+def overpass_url():
+    """Which Overpass instance to query."""
+    return os.environ.get("SOURCER_OVERPASS_URL", "").strip() or DEFAULT_OVERPASS_URL
+
+
+def companies_house_key():
+    """The Companies House API key, or None.
+
+    Free, but it needs an account on the Companies House developer hub, which a
+    person has to create. Without one the Source reports itself as not
+    configured rather than failing a Search Run.
+    """
+    return os.environ.get("COMPANIES_HOUSE_API_KEY", "").strip() or None

@@ -19,8 +19,9 @@ from sourcer.db import repository as store
 from sourcer.db.database import connect, init_db
 from sourcer.extractors.website import enrich
 from sourcer.pipelines import scoring
+from sourcer.scrapers import catalog
 from sourcer.scrapers import registry as sources
-from sourcer.scrapers.client import Blocked, Disallowed, Fetcher
+from sourcer.scrapers.client import Blocked, Disallowed, Fetcher, NotConfigured, Unreachable
 from sourcer.services import llm
 
 # Per-host politeness during one run. Slower than strictly necessary for a
@@ -47,23 +48,29 @@ def _clear_cancel(run_id):
         _cancelled.discard(run_id)
 
 
-def start(trade, city, state, source_names=None, page_limit=3):
+def start(trade, market, source_names=None, page_limit=3):
     """Record the request, then work it in the background. Returns the run id.
+
+    market is a catalogue market: city, region, country and coordinates. The
+    mode follows from the trade, since every trade belongs to exactly one.
 
     Applies the schema first. Starting a run is an entry point into the
     database, reachable from the command line as well as the web app, and
     application is idempotent, so doing it here removes a class of "forgot to
     initialise" rather than relying on some earlier caller.
     """
+    mode = catalog.trade_mode(trade) or scoring.DEFAULT_MODE
     connection = init_db()
     try:
-        run_id = store.create_run(connection, trade, city, state)
+        run_id = store.create_run(
+            connection, trade, market["city"], market["region"], market["country"], mode
+        )
     finally:
         connection.close()
 
     thread = threading.Thread(
         target=_work,
-        args=(run_id, trade, city, state, source_names, page_limit),
+        args=(run_id, trade, market, mode, source_names, page_limit),
         name=f"search-run-{run_id}",
         daemon=True,
     )
@@ -71,16 +78,16 @@ def start(trade, city, state, source_names=None, page_limit=3):
     return run_id
 
 
-def _work(run_id, trade, city, state, source_names, page_limit):
+def _work(run_id, trade, market, mode, source_names, page_limit):
     """The whole run. Never raises: a failure is recorded, not thrown away."""
     connection = connect()
     try:
         store.set_run_status(connection, run_id, "running")
-        _discover_all(connection, run_id, trade, city, state, source_names, page_limit)
+        _discover_all(connection, run_id, trade, market, source_names, page_limit)
         if not is_cancelled(run_id):
-            _enrich_all(connection, run_id)
+            _enrich_all(connection, run_id, mode)
         if not is_cancelled(run_id):
-            _score_all(connection, run_id)
+            _score_all(connection, run_id, mode)
 
         if is_cancelled(run_id):
             store.set_progress_note(connection, run_id, "cancelled")
@@ -98,29 +105,51 @@ def _work(run_id, trade, city, state, source_names, page_limit):
         connection.close()
 
 
-def _discover_all(connection, run_id, trade, city, state, source_names, page_limit):
-    chosen = sources.selected(source_names)
+def _discover_all(connection, run_id, trade, market, source_names, page_limit):
+    # Only the Sources that cover the market's country; YellowPages has nothing
+    # to say about Lahore and the Food Standards Agency nothing about Phoenix.
+    chosen = sources.selected(source_names, market["country"])
     with Fetcher(delay_seconds=DISCOVERY_DELAY_SECONDS) as fetcher:
         for source in chosen:
             if is_cancelled(run_id):
                 return
-            _discover_one(connection, run_id, fetcher, source, trade, city, state, page_limit)
+            _discover_one(connection, run_id, fetcher, source, trade, market, page_limit)
 
 
-def _discover_one(connection, run_id, fetcher, source, trade, city, state, page_limit):
+def _discover_one(connection, run_id, fetcher, source, trade, market, page_limit):
     """One Source. A refusal is recorded against the run, never retried."""
     store.set_progress_note(connection, run_id, f"searching {source.LABEL}")
     found = 0
     try:
-        for record in source.discover(fetcher, trade, city, state, page_limit=page_limit):
+        for record in source.discover(fetcher, trade, market, page_limit=page_limit):
             if is_cancelled(run_id):
                 break
             store.upsert_business(connection, run_id, record, source.NAME)
             found += 1
             store.bump_run_counts(connection, run_id, discovered=1)
             store.set_progress_note(connection, run_id, f"searching {source.LABEL}, {found} found")
+    except NotConfigured as error:
+        # Zero results from a Source that was never set up says nothing about
+        # the market, so it must not read as an empty one.
+        store.record_source_outcome(
+            connection,
+            run_id,
+            source.NAME,
+            {"status": "not_configured", "found": found, "reason": error.needs},
+        )
+        return
+    except Unreachable as error:
+        # Caught before Blocked, which it subclasses: a server that did not
+        # answer is not refusing us, and saying so sends a rep the wrong way.
+        store.record_source_outcome(
+            connection,
+            run_id,
+            source.NAME,
+            {"status": "unreachable", "found": found, "reason": error.reason},
+        )
+        return
     except Blocked as error:
-        # The distinction matters to a Searcher: an empty column here means the
+        # The distinction matters to a rep: an empty column here means the
         # site refused us, not that the market is empty.
         store.record_source_outcome(
             connection,
@@ -162,6 +191,8 @@ UNSTORED_FIELDS = (
     "site_builder",
     "https",
     "copyright_year",
+    "mentions_ai",
+    "has_careers",
     "pages_read",
     "evidence_url",
     "site_text",
@@ -205,7 +236,7 @@ def _record_contacts(connection, business_id, found, evidence_url):
         )
 
 
-def _enrich_all(connection, run_id):
+def _enrich_all(connection, run_id, mode):
     pending = store.list_businesses_to_enrich(connection, run_id)
     total = len(pending)
     with Fetcher(delay_seconds=ENRICHMENT_DELAY_SECONDS) as fetcher:
@@ -258,7 +289,8 @@ def _enrich_all(connection, run_id):
             # Scored here rather than in a later pass. The table streams while
             # the run works, and a row with no Score yet reads as a Business
             # worth nothing rather than one not yet judged.
-            _score_one(connection, run_id, store.get_business_fields(connection, business["id"]))
+            business_now = store.get_business_fields(connection, business["id"])
+            _score_one(connection, run_id, business_now, mode)
 
 
 # Facts a website gave us that the schema has no column for, such as the
@@ -294,7 +326,7 @@ def _forget_run(run_id):
         _scored.pop(run_id, None)
 
 
-def _score_one(connection, run_id, business):
+def _score_one(connection, run_id, business, mode):
     """Signals and Score for one Business. Skips a Business already scored.
 
     Enrichment scores each Business it reads, and the pass that follows catches
@@ -312,13 +344,13 @@ def _score_one(connection, run_id, business):
         **business,
         **_recall(run_id, business["id"]),
     }
-    signals, computed_score, confidence = scoring.assess(context)
+    signals, computed_score, confidence = scoring.assess(context, mode)
     store.replace_signals(connection, business["id"], signals)
     store.set_business_score(connection, business["id"], computed_score, confidence)
     store.bump_run_counts(connection, run_id, scored=1)
 
 
-def _score_all(connection, run_id):
+def _score_all(connection, run_id, mode):
     """Everything Enrichment did not already score: the Businesses with no site."""
     businesses = store.list_businesses(connection, run_id)
     total = len(businesses)
@@ -326,4 +358,4 @@ def _score_all(connection, run_id):
         if is_cancelled(run_id):
             return
         store.set_progress_note(connection, run_id, f"scoring {index}/{total}")
-        _score_one(connection, run_id, business)
+        _score_one(connection, run_id, business, mode)

@@ -23,6 +23,9 @@ NAME = "yellowpages"
 LABEL = "YellowPages"
 ENABLED_BY_DEFAULT = True
 TIER = "http"
+# yellowpages.com is the American directory. Its paths are built from a US
+# state code, so it has nothing to say about Britain or Pakistan.
+COUNTRIES = ("US",)
 
 BASE = "https://www.yellowpages.com"
 
@@ -125,6 +128,7 @@ def _record(card, city, state):
         "street": address,
         "city": _text(card, ".locality") or city,
         "state": state,
+        "country": "US",
         "categories": [text.strip() for text in card.css(".categories a::text").getall()],
         "years_in_business": _years_of(card),
         "public_rating": _rating_of(card),
@@ -132,13 +136,14 @@ def _record(card, city, state):
     }
 
 
-def discover(fetcher, trade_key, city, state, page_limit=3):
+def discover(fetcher, trade_key, market, page_limit=3):
     """Organic listings across the first few category pages.
 
     The referer chains from the previous page, because a real visitor reaches
     page two from page one and the default Google referer on every request is a
     known tell.
     """
+    city, state = market["city"], market["region"]
     previous_url = None
     for page in range(1, page_limit + 1):
         url = category_url(trade_key, city, state, page)

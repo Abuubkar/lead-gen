@@ -26,6 +26,7 @@ from sourcer.api.filters import (
     band_of,
     shown_score,
 )
+from sourcer.config import companies_house_key
 from sourcer.db import repository as store
 from sourcer.db.database import connect
 from sourcer.pipelines import scoring
@@ -45,21 +46,24 @@ def _run_context(connection, run_id, params):
     run = store.get_run(connection, run_id)
     if run is None:
         return None
+    mode = run.get("mode") or scoring.DEFAULT_MODE
     everything = store.list_businesses(connection, run_id)
     businesses, active = apply_filters(everything, params or {})
     return {
         "run": run,
+        "mode": mode,
+        "mode_label": scoring.rubric(mode)["label"],
         "businesses": businesses,
         "breakdown": store.group_breakdown(connection, run_id),
-        "groups": list(scoring.GROUP_LABELS),
+        "groups": list(scoring.group_labels(mode)),
         "total_count": len(everything),
         "hidden_count": len(everything) - len(businesses),
         "provisional_below": PROVISIONAL_BELOW,
         "active_filters": active,
         "filters": FILTERS,
         "review_states": REVIEW_STATES,
-        "group_labels": scoring.GROUP_LABELS,
-        "group_totals": scoring.group_totals(),
+        "group_labels": scoring.group_labels(mode),
+        "group_totals": scoring.group_totals(mode),
         "default_min_confidence": DEFAULT_MIN_CONFIDENCE,
         "source_labels": {source.NAME: source.LABEL for source in sources.REGISTRY},
     }
@@ -81,13 +85,27 @@ async def home(request):
         request,
         "home.html",
         {
-            "trades": trades.choices(),
-            "markets": trades.markets(),
+            "modes": [
+                {
+                    "key": mode,
+                    "label": label,
+                    "trades": trades.choices(mode),
+                    "group_labels": scoring.group_labels(mode),
+                    "group_totals": scoring.group_totals(mode),
+                }
+                for mode, label in scoring.mode_choices()
+            ],
+            "markets_by_country": trades.markets_by_country(),
+            # A Source a rep can tick but that will not run, said before the
+            # search rather than discovered after it.
+            "source_notes": {
+                "companies_house": None if companies_house_key() else "needs an API key",
+            },
+            "default_market": "Norwich|England|GB",
             "recent": recent,
             "sources": sources.REGISTRY,
             "default_sources": sources.DEFAULT_NAMES,
-            "group_totals": scoring.group_totals(),
-            "group_labels": scoring.GROUP_LABELS,
+            "country_labels": trades.COUNTRY_LABELS,
         },
     )
 
@@ -95,25 +113,19 @@ async def home(request):
 async def start_run(request):
     form = await request.form()
     trade = (form.get("trade") or "").strip()
-    # One field, because a city and a state are only meaningful together: the
-    # pair is what a Source turns into a path. Older callers may still send the
-    # two separately.
-    market = (form.get("market") or "").strip()
-    if market:
-        city, _, state = market.partition(",")
-    else:
-        city, state = form.get("city") or "", form.get("state") or ""
-    city, state = city.strip(), state.strip().upper()
+    # A market is one key carrying city, region and country together, because
+    # they only mean something as a set: the country decides which Sources run.
+    market = trades.find_market((form.get("market") or "").strip())
     # These used to fall back to a default in silence, which searched something
-    # the Searcher did not ask for and returned nothing much.
+    # the rep did not ask for and returned nothing much.
     if not trades.is_trade(trade):
         return HTMLResponse("<h1>Not a trade we have a mapping for</h1>", status_code=400)
-    if not trades.is_market(city, state):
+    if market is None:
         return HTMLResponse("<h1>Not a market we cover</h1>", status_code=400)
     chosen = form.getlist("sources") or list(sources.DEFAULT_NAMES)
     pages = int(form.get("pages") or 2)
 
-    run_id = runner.start(trade, city, state, source_names=chosen, page_limit=pages)
+    run_id = runner.start(trade, market, source_names=chosen, page_limit=pages)
     return RedirectResponse(url=f"/runs/{run_id}", status_code=303)
 
 
@@ -144,27 +156,32 @@ async def run_rows(request):
     return templates.TemplateResponse(request, "_rows.html", context)
 
 
+def _detail_context(connection, business):
+    """What the evidence drawer needs, scored by the rubric of the business's run."""
+    run = store.get_run(connection, business["run_id"]) if business else None
+    mode = (run or {}).get("mode") or scoring.DEFAULT_MODE
+    return {
+        "business": business,
+        "mode": mode,
+        "group_labels": scoring.group_labels(mode),
+        "group_totals": scoring.group_totals(mode),
+        "review_states": REVIEW_STATES,
+        "provisional_below": PROVISIONAL_BELOW,
+    }
+
+
 async def view_business(request):
     business_id = int(request.path_params["business_id"])
     connection = connect()
     try:
         business = store.get_business_detail(connection, business_id)
+        if business is None:
+            return HTMLResponse("", status_code=404)
+        context = _detail_context(connection, business)
     finally:
         connection.close()
 
-    if business is None:
-        return HTMLResponse("", status_code=404)
-    return templates.TemplateResponse(
-        request,
-        "_detail.html",
-        {
-            "business": business,
-            "group_labels": scoring.GROUP_LABELS,
-            "group_totals": scoring.group_totals(),
-            "review_states": REVIEW_STATES,
-            "provisional_below": PROVISIONAL_BELOW,
-        },
-    )
+    return templates.TemplateResponse(request, "_detail.html", context)
 
 
 async def set_review(request):
@@ -182,20 +199,11 @@ async def set_review(request):
             notes=(form.get("notes") or None),
         )
         business = store.get_business_detail(connection, business_id)
+        context = _detail_context(connection, business)
     finally:
         connection.close()
 
-    return templates.TemplateResponse(
-        request,
-        "_detail.html",
-        {
-            "business": business,
-            "group_labels": scoring.GROUP_LABELS,
-            "group_totals": scoring.group_totals(),
-            "review_states": REVIEW_STATES,
-            "provisional_below": PROVISIONAL_BELOW,
-        },
-    )
+    return templates.TemplateResponse(request, "_detail.html", context)
 
 
 async def cancel_run(request):
@@ -269,23 +277,32 @@ async def api_business(request):
 
 
 async def api_rubric(request):
-    """The rubric itself, so a reader can check the weights without the code."""
+    """Both rubrics, so a reader can check the weights without the code."""
     return JSONResponse(
         {
-            "total_points": scoring.TOTAL_POINTS,
-            "groups": [
-                {"name": name, "label": scoring.GROUP_LABELS[name], "points": points}
-                for name, points in scoring.group_totals().items()
-            ],
-            "signals": [
-                {
-                    "name": name,
-                    "group": group,
-                    "max_points": max_points,
-                    "reads": list(reads),
-                }
-                for name, group, max_points, _, reads in scoring.SIGNALS
-            ],
+            mode: {
+                "label": scoring.rubric(mode)["label"],
+                "total_points": scoring.total_points(mode),
+                "core_group": scoring.core_group(mode),
+                "groups": [
+                    {
+                        "name": name,
+                        "label": scoring.group_labels(mode)[name],
+                        "points": points,
+                    }
+                    for name, points in scoring.group_totals(mode).items()
+                ],
+                "signals": [
+                    {
+                        "name": name,
+                        "group": group,
+                        "max_points": max_points,
+                        "reads": list(reads),
+                    }
+                    for name, group, max_points, _, reads in scoring.rubric(mode)["signals"]
+                ],
+            }
+            for mode in scoring.MODES
         }
     )
 

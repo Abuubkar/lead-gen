@@ -14,6 +14,23 @@ from sourcer.config import db_path
 
 SCHEMA_FILE = Path(__file__).with_name("schema.sql")
 
+# Columns added after a database may already exist. CREATE TABLE IF NOT EXISTS
+# leaves an existing table alone, so a column added to schema.sql alone would
+# never reach a database created before it. Each is added on open if missing,
+# which keeps the promise above: nothing to run by hand, and a database holding
+# Search Runs worth keeping is upgraded rather than rebuilt.
+#
+# Every entry must also appear in schema.sql, so a fresh database and an
+# upgraded one end up identical.
+ADDED_COLUMNS = (
+    ("search_run", "country", "TEXT NOT NULL DEFAULT 'US'"),
+    ("search_run", "mode", "TEXT NOT NULL DEFAULT 'web'"),
+    ("business", "country", "TEXT"),
+    ("business", "company_number", "TEXT"),
+    ("business", "company_type", "TEXT"),
+    ("business", "tech_stack", "TEXT NOT NULL DEFAULT '[]'"),
+)
+
 
 def now():
     """Timestamps are ISO-8601 UTC text. SQLite has no date type, and text sorts."""
@@ -48,7 +65,16 @@ def init_db(path=None):
     """
     connection = connect(path)
     connection.executescript(SCHEMA_FILE.read_text())
+    _add_missing_columns(connection)
     return connection
+
+
+def _add_missing_columns(connection):
+    """Bring an older database up to the current schema without losing rows."""
+    for table, column, definition in ADDED_COLUMNS:
+        present = {row["name"] for row in connection.execute(f"PRAGMA table_info({table})")}
+        if column not in present:
+            connection.execute(f"ALTER TABLE {table} ADD COLUMN {column} {definition}")
 
 
 @contextmanager

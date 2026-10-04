@@ -1,64 +1,91 @@
 {% extends "base.html" %}
+{% block title %}Find prospects · sourcer{% endblock %}
+
 {% block rail %}
   <h3>How the score works</h3>
-  <p>A hundred points, and every point names the fact behind it.</p>
-  <ul class="rubric">
-    {% for name, points in group_totals.items() %}
-    <li><span>{{ group_labels[name] }}</span><b class="num">{{ points | int }}</b>
-      <i><s style="width: {{ points | int }}%"></s></i></li>
-    {% endfor %}
-  </ul>
-  <p style="margin-top: 16px">A business we could not read keeps its score and loses
-    <strong>confidence</strong> instead, so the least visible targets are never buried.</p>
+  <p>Two rubrics, a hundred points each. The trade you pick decides which one
+    scores the results, and every point names the fact behind it.</p>
+  {% for m in modes %}
+  <div class="rubric-block">
+    <div class="rubric-head">{{ m.label }}</div>
+    <ul class="rubric">
+      {% for name, points in m.group_totals.items() %}
+      <li><span>{{ m.group_labels[name] }}</span><b class="num">{{ points | int }}</b>
+        <i><s style="width: {{ points | int }}%"></s></i></li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endfor %}
+  <p class="rail-note">A business we could not read loses <strong>confidence</strong>,
+    not points. With no evidence it needs what BritNova sells, it is left unscored
+    rather than guessed at.</p>
   <div class="foot">
-    <a class="link quiet" href="/api/rubric">Rubric as JSON →</a>
+    <a class="link quiet" href="/api/rubric">Both rubrics as JSON →</a>
   </div>
 {% endblock %}
 
 {% block main %}
 <div class="home">
-  <h1>Find acquisition targets</h1>
-  <p class="lede">Pick a trade and a market. We search public directories, read each
-     business's own website, and rank them on how likely the owner is to sell.</p>
+  <p class="eyebrow">BritNova business development</p>
+  <h1>Find prospects</h1>
+  <p class="lede">Pick a trade and a market. We search public registers and
+    directories, read each business's own website, and rank them on how well they
+    fit what BritNova builds: websites and shops for local businesses, or AI, cloud
+    and software engineering for tech companies.</p>
 
   <form class="search" method="post" action="/runs">
     <label class="field"><span>Trade</span>
       <select name="trade">
-        {% for key, label in trades %}<option value="{{ key }}">{{ label }}</option>{% endfor %}
+        {% for m in modes %}
+        <optgroup label="{{ m.label }}">
+          {% for key, label in m.trades %}
+          <option value="{{ key }}" {% if key == "solicitors" %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </optgroup>
+        {% endfor %}
       </select></label>
     <label class="field"><span>Market</span>
       <select name="market">
-        {% for city, state in markets %}
-        <option value="{{ city }},{{ state }}"
-                {% if city == "Austin" %}selected{% endif %}>{{ city }}, {{ state }}</option>
+        {% for code, country, markets in markets_by_country %}
+        <optgroup label="{{ country }}">
+          {% for m in markets %}
+          <option value="{{ m.key }}" {% if m.key == default_market %}selected{% endif %}>{{ m.label }}</option>
+          {% endfor %}
+        </optgroup>
         {% endfor %}
       </select></label>
     <label class="field"><span>Pages</span>
       <input name="pages" type="number" value="2" min="1" max="5"></label>
-    <div class="sources">
+    <fieldset class="sources">
+      <legend>Sources <span class="hint">each runs only where it covers the market</span></legend>
       {% for source in sources %}
       <label class="check">
         <input type="checkbox" name="sources" value="{{ source.NAME }}"
                {% if source.NAME in default_sources %}checked{% endif %}>
-        {{ source.LABEL }}
-        {% if not source.ENABLED_BY_DEFAULT %}<span class="note">terms restrict use</span>{% endif %}
+        <span class="src-name">{{ source.LABEL }}</span>
+        <span class="src-where">{{ source.COUNTRIES | map("replace", "GB", "UK") | join(" · ") }}</span>
+        {% if source_notes.get(source.NAME) %}<span class="note">{{ source_notes[source.NAME] }}</span>{% endif %}
       </label>
       {% endfor %}
-    </div>
-    <button class="go" type="submit">Search</button>
+    </fieldset>
+    <button class="go" type="submit">Find prospects</button>
   </form>
 
   {% if recent %}
   <section class="runs">
     <div class="head">
-      <span class="label">Recent searches</span><span class="label hide">State</span>
+      <span class="label">Recent searches</span><span class="label hide">Status</span>
       <span class="label hide">Found</span><span class="label hide">Scored</span>
       <span class="label hide">When</span>
     </div>
     {% for run in recent %}
     <a href="/runs/{{ run.id }}">
-      <b>{{ run.trade | replace("-", " ") | title }} in {{ run.city }}, {{ run.state }}</b>
-      <span class="pill {{ run.run_status }}">{{ run.run_status }}</span>
+      <span class="run-title">
+        <b>{{ run.trade | replace("-", " ") | title }}</b>
+        <span class="tag mode-{{ run.mode }}">{{ "Web" if run.mode == "web" else "Tech" }}</span>
+        <span class="hush">{{ run.city }}, {{ run.state }} · {{ country_labels.get(run.country, run.country) }}</span>
+      </span>
+      <span class="pill {{ run.run_status }} hide">{{ run.run_status }}</span>
       <span class="hush num hide">{{ run.discovered_count }}</span>
       <span class="hush num hide">{{ run.scored_count }}</span>
       <span class="hush hide">{{ run.created_at[:16] | replace("T", " ") }}</span>

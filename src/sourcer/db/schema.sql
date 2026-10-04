@@ -14,6 +14,12 @@ CREATE TABLE IF NOT EXISTS search_run (
     trade             TEXT    NOT NULL,
     city              TEXT    NOT NULL,
     state             TEXT    NOT NULL,
+    -- ISO 3166-1 alpha-2: GB, PK or US. Decides which Sources can run, and
+    -- which country's marketing rules apply to what the run finds.
+    country           TEXT    NOT NULL DEFAULT 'US',
+    -- web: local businesses that need a website. tech: companies that need
+    -- engineers. Decides the trades offered and the rubric that scores them.
+    mode              TEXT    NOT NULL DEFAULT 'web',
     -- Run Status: pending | running | done | failed | cancelled
     run_status        TEXT    NOT NULL DEFAULT 'pending',
     -- Progress Note: the line shown while the Search Run is live,
@@ -70,6 +76,14 @@ CREATE TABLE IF NOT EXISTS business (
     public_review_count INTEGER,
     location_count     INTEGER,
     is_franchise       INTEGER,
+
+    country            TEXT,
+    -- From Companies House, for UK businesses it can match. company_type is
+    -- what decides whether UK law lets a sales team email them unprompted.
+    company_number     TEXT,
+    company_type       TEXT,
+    -- JSON list of frameworks and platforms recognised on the business's site.
+    tech_stack         TEXT    NOT NULL DEFAULT '[]',
 
     -- JSON array of Source names that contributed to this row.
     sources            TEXT    NOT NULL DEFAULT '[]',

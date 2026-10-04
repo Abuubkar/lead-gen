@@ -16,7 +16,7 @@ from sourcer.pipelines.dedup import DEDUP_RULES, dedup_keys, key_rule_of, resolv
 from sourcer.pipelines.merge import plan_merge
 
 # Columns holding a JSON document as text.
-JSON_COLUMNS = ("categories", "sources", "source_outcomes")
+JSON_COLUMNS = ("categories", "sources", "source_outcomes", "tech_stack")
 
 # Everything a Source or Enrichment may supply about a Business. The dedup key
 # columns are derived, never passed in, so they are absent here.
@@ -38,6 +38,10 @@ BUSINESS_FIELDS = (
     "location_count",
     "is_franchise",
     "outreach_angle",
+    "country",
+    "company_number",
+    "company_type",
+    "tech_stack",
 )
 
 TERMINAL_RUN_STATUSES = ("done", "failed", "cancelled")
@@ -67,12 +71,12 @@ def _rows(rows):
 # --------------------------------------------------------------------------- #
 
 
-def create_run(connection, trade, city, state):
-    """Record a Searcher's request. Starts pending; nothing has run yet."""
+def create_run(connection, trade, city, state, country="US", mode="web"):
+    """Record a rep's request. Starts pending; nothing has run yet."""
     cursor = connection.execute(
-        "INSERT INTO search_run (trade, city, state, run_status, created_at)"
-        " VALUES (?, ?, ?, 'pending', ?)",
-        (trade, city, state, now()),
+        "INSERT INTO search_run (trade, city, state, country, mode, run_status, created_at)"
+        " VALUES (?, ?, ?, ?, ?, 'pending', ?)",
+        (trade, city, state, country, mode, now()),
     )
     return cursor.lastrowid
 

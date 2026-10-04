@@ -67,12 +67,35 @@ class Blocked(Exception):
         super().__init__(f"blocked by {urlsplit(url).netloc}: {self.reason}")
 
 
+class Unreachable(Blocked):
+    """No tier got any answer at all: a timeout or a refused connection.
+
+    A server that is down or overloaded is not refusing us, and reporting it as
+    blocked would send a rep looking for a policy problem that does not exist.
+    A subclass, so code that only cares that the Source failed still catches it.
+    """
+
+
 class Disallowed(Exception):
     """The site's robots policy forbids this path. Not an error, a boundary."""
 
     def __init__(self, url):
         self.url = url
         super().__init__(f"robots policy disallows {url}")
+
+
+class NotConfigured(Exception):
+    """A Source that needs setup it has not been given, such as an API key.
+
+    Distinct from Blocked so a Search Run reports "not set up" rather than an
+    empty market: zero results from an unconfigured Source says nothing about
+    how many businesses exist.
+    """
+
+    def __init__(self, source, needs):
+        self.source = source
+        self.needs = needs
+        super().__init__(f"{source} is not configured: {needs}")
 
 
 def _title_of(response):
@@ -234,38 +257,56 @@ class Fetcher:
             order = [tier for tier in order if tier != "browser"]
         return order or ["http"]
 
-    def get(self, url, referer=None, tier="http", obey_robots=True):
+    def get(self, url, referer=None, tier="http", obey_robots=True, headers=None, timeout=None):
         """Fetch a page, or raise Disallowed or Blocked.
 
         The referer chains from the previous page when given. Without it the
         HTTP client attaches a Google referer to every request, which is
         incoherent on page three of a paginated crawl and is a known tell.
+
+        headers is for API Sources that require their own, such as a version or
+        an authorisation header. A request that carries them is sent as itself
+        rather than disguised as a browser: a government API should see who is
+        calling it.
+
+        timeout overrides the session's thirty seconds for one request. Overpass
+        can take well over a minute to answer; raising the default for every
+        site instead would let one dead website stall a whole Search Run.
         """
         if obey_robots and not self.allowed(url, tier=tier):
             raise Disallowed(url)
 
         last = None
+        answered = False
         for attempt in self._tier_order(tier):
             self._wait_turn(url)
             fetch_at_tier = self._http_get if attempt == "http" else self._browser_get
             try:
-                response = fetch_at_tier(url, referer)
+                response = fetch_at_tier(url, referer, headers, timeout)
             except Exception as error:  # a transport failure is not a refusal
                 last = f"{type(error).__name__}: {error}"
                 continue
+            answered = True
             if not looks_blocked(response):
                 return response
             last = _title_of(response) or f"status {getattr(response, 'status', '?')}"
 
+        if not answered:
+            raise Unreachable(url, reason=last or "no answer")
         raise Blocked(url, reason=last or "no tier succeeded")
 
-    def _http_get(self, url, referer):
+    def _http_get(self, url, referer, headers=None, timeout=None):
         session = self._http_session()
-        if referer:
-            return session.get(url, headers={"referer": referer}, stealthy_headers=False)
-        return session.get(url, stealthy_headers=True)
+        extra = {"timeout": timeout} if timeout else {}
+        if headers or referer:
+            sent = dict(headers or {})
+            if referer:
+                sent["referer"] = referer
+            return session.get(url, headers=sent, stealthy_headers=False, **extra)
+        return session.get(url, stealthy_headers=True, **extra)
 
-    def _browser_get(self, url, referer):
+    def _browser_get(self, url, referer, headers=None, timeout=None):
+        # API headers belong to the HTTP tier; a browser fetch renders a page.
         session = self._browser_session()
         if referer:
             return session.fetch(url, google_search=False, extra_headers={"referer": referer})

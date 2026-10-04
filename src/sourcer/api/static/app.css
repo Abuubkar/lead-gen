@@ -379,6 +379,35 @@ body:has(.drawer:not(:empty)) .drawer { transform: none; }
 .pill.done { color: #3f6212; } .pill.running, .pill.pending { color: var(--ink-2); }
 .pill.failed, .pill.cancelled { color: var(--signal); }
 
+/* --------------------------------------------------------- britnova ------- */
+.brand-for { font: 500 var(--t-3xs)/1 var(--text); letter-spacing: 0.1em; text-transform: uppercase;
+             color: var(--rail-faint); margin-left: var(--sp-1); }
+.credits { margin: var(--sp-4) 0 0; font-size: var(--t-3xs); line-height: 1.5; color: var(--rail-faint); }
+.credits a { color: var(--rail-dim); }
+.rubric-block { margin-bottom: var(--sp-5); }
+.rubric-head { font-size: var(--t-xs); font-weight: 500; color: var(--rail-ink);
+               margin-bottom: var(--sp-2); }
+.rail-note { font-size: var(--t-xs); }
+
+.home .eyebrow { font: 600 var(--t-3xs)/1 var(--text); letter-spacing: 0.12em; text-transform: uppercase;
+                 color: var(--ink-3); margin: 0 0 var(--sp-2); }
+.search fieldset.sources { border: 0; border-top: 1px solid var(--rule); margin: 0; min-width: 0;
+                           padding: var(--sp-3) 0 0; }
+/* A legend sits in the fieldset border unless floated; floated, it wraps like
+   any other block and the checks flow beneath it. */
+.search .sources legend { float: left; width: 100%; padding: 0; margin-bottom: var(--sp-2);
+                          font: 600 var(--t-3xs)/1 var(--text); letter-spacing: 0.1em;
+                          text-transform: uppercase; color: var(--ink-3); }
+.search .sources legend .hint { text-transform: none; letter-spacing: 0; font-weight: 400;
+                                color: var(--ink-4); margin-left: var(--sp-1); }
+.search .sources .src-where { font-size: var(--t-2xs); color: var(--ink-4); }
+
+.run-title { display: flex; align-items: baseline; gap: var(--sp-2); min-width: 0; flex-wrap: wrap; }
+.tag { font: 600 var(--t-3xs)/1 var(--text); letter-spacing: 0.08em; text-transform: uppercase;
+       padding: 3px 5px; border: 1px solid currentColor; }
+.tag.mode-web { color: var(--ink-2); }
+.tag.mode-tech { color: var(--ink); background: var(--lime); border-color: var(--lime); }
+
 /* ------------------------------------------------------------ small -------- */
 @media (max-width: 960px) {
   body { grid-template-columns: 1fr; }

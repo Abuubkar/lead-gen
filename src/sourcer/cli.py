@@ -48,8 +48,13 @@ def main():
     build = subcommands.add_parser(
         "build-seed", help="Run live searches and write the shipped dataset."
     )
-    build.add_argument("--markets", nargs="+", default=["Austin,TX", "Phoenix,AZ", "Columbus,OH"])
-    build.add_argument("--trades", nargs="+", default=["plumbing", "hvac", "dental"])
+    build.add_argument(
+        "--markets",
+        nargs="+",
+        default=["Norwich|England|GB", "Lahore|Punjab|PK", "Austin|TX|US"],
+        help='Catalogue market keys, "City|Region|Country".',
+    )
+    build.add_argument("--trades", nargs="+", default=["solicitors", "restaurants", "software"])
     build.add_argument("--pages", type=int, default=2)
     build.set_defaults(handler=cmd_build_seed)
 
