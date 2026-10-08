@@ -29,6 +29,10 @@ each Source uses for it:
   npi              NPI Registry taxonomy descriptions, checked live.
   cqc              CQC service types, from the care directory's own column.
   yellowpagespk    yellowpagespk.com listing-category slugs, from its API.
+  overture         Overture Maps place categories, matched anywhere in a place's
+                   category tree, so "restaurant" takes in every cuisine. Read
+                   from the September 2026 release's taxonomy for Norwich,
+                   Phoenix and Lahore.
   techhub          True where PSEB's Tech Hub lists the trade. It has one list
                    of IT companies, so all three tech trades get the same one.
 
@@ -49,6 +53,7 @@ TRADES = {
         "naics": ("541110",),
         "nola": ("Offices of Lawyers",),
         "yellowpagespk": ("law-firms", "legal-service", "legal-advisor"),
+        "overture": ("attorney_or_law_firm", "legal_service"),
     },
     "accounting": {
         "mode": "web",
@@ -59,6 +64,7 @@ TRADES = {
         "naics": ("541211", "541219"),
         "nola": ("Offices of Certified Public Accountants", "Accounting Services, Other"),
         "yellowpagespk": ("account-tax-consultant",),
+        "overture": ("accountant", "tax_service"),
     },
     "estate-agents": {
         "mode": "web",
@@ -68,6 +74,7 @@ TRADES = {
         "naics": ("531210",),
         "nola": ("Real Estate Agents and Brokers",),
         "yellowpagespk": ("property-real-estate-agent", "real-estate"),
+        "overture": ("real_estate_agent",),
     },
     "architects": {
         "mode": "web",
@@ -76,6 +83,7 @@ TRADES = {
         "companies_house": ("71111",),
         "naics": ("541310",),
         "nola": ("Architectural Services",),
+        "overture": ("architect", "architectural_designer"),
     },
     "insurance": {
         "mode": "web",
@@ -84,6 +92,7 @@ TRADES = {
         "naics": ("524210",),
         "nola": ("Insurance Agencies & Brokerages",),
         "yellowpagespk": ("insurance",),
+        "overture": ("insurance_agency",),
     },
     "dental": {
         "mode": "web",
@@ -95,6 +104,7 @@ TRADES = {
         "nola": ("Offices of Dentists",),
         "npi": ("Dentist",),
         "cqc": ("Dentist",),
+        "overture": ("dental_clinic",),
     },
     "medical": {
         "mode": "web",
@@ -106,6 +116,7 @@ TRADES = {
         "npi": ("Family Medicine", "Internal Medicine"),
         "cqc": ("Doctors/GPs",),
         "yellowpagespk": ("health-medical", "specialist-medical-doctors"),
+        "overture": ("doctors_office", "primary_care_or_general_clinic", "walk_in_clinic"),
     },
     "veterinary": {
         "mode": "web",
@@ -115,6 +126,7 @@ TRADES = {
         "companies_house": ("75000",),
         "naics": ("541940",),
         "nola": ("Veterinary Services",),
+        "overture": ("veterinarian",),
     },
     "restaurants": {
         "mode": "web",
@@ -128,6 +140,7 @@ TRADES = {
             "Snack & Nonalcoholic Beverage Bars",
         ),
         "yellowpagespk": ("restaurant",),
+        "overture": ("restaurant", "cafe", "coffee_shop"),
     },
     "takeaways": {
         "mode": "web",
@@ -137,6 +150,7 @@ TRADES = {
         "fsa": (7844,),
         "naics": ("722513",),
         "nola": ("Limited Service Restaurants(no table service available)",),
+        "overture": ("fast_food_restaurant",),
     },
     "pubs": {
         "mode": "web",
@@ -145,6 +159,7 @@ TRADES = {
         "fsa": (7843,),
         "naics": ("722410",),
         "nola": ("Drinking Places(Alcoholic Beverages)",),
+        "overture": ("bar", "pub"),
     },
     "hotels": {
         "mode": "web",
@@ -155,6 +170,7 @@ TRADES = {
         "naics": ("721110", "721191"),
         "nola": ("Hotels(except Casino Hotels) & Motels", "Bed & Breakfast Inns"),
         "yellowpagespk": ("hotels",),
+        "overture": ("hotel", "bed_and_breakfast"),
     },
     "hair-beauty": {
         "mode": "web",
@@ -164,6 +180,7 @@ TRADES = {
         "naics": ("812112", "812111"),
         "nola": ("Beauty Salons", "Barber Shops", "Nail Salons"),
         "yellowpagespk": ("beauty-salon", "beauty-spa"),
+        "overture": ("beauty_salon", "hair_salon", "barber", "nail_salon"),
     },
     "fitness": {
         "mode": "web",
@@ -172,6 +189,7 @@ TRADES = {
         "companies_house": ("93130",),
         "naics": ("713940",),
         "nola": ("Fitness & Recreational Sports Centers",),
+        "overture": ("gym", "fitness_studio", "fitness_trainer"),
     },
     "clothing": {
         "mode": "web",
@@ -188,6 +206,7 @@ TRADES = {
             "Clothing Accessories Stores",
         ),
         "yellowpagespk": ("fashion-styles",),
+        "overture": ("fashion_and_apparel_store",),
     },
     "plumbing": {
         "mode": "web",
@@ -197,6 +216,7 @@ TRADES = {
         "companies_house": ("43220",),
         "naics": ("238220",),
         "nola": ("Plumbing, Heating and Air-Conditioning Contractors",),
+        "overture": ("plumbing",),
     },
     "hvac": {
         "mode": "web",
@@ -207,6 +227,7 @@ TRADES = {
         "companies_house": ("43220",),
         "naics": ("238220",),
         "nola": ("Plumbing, Heating and Air-Conditioning Contractors",),
+        "overture": ("hvac_service",),
     },
     "electrical": {
         "mode": "web",
@@ -216,6 +237,7 @@ TRADES = {
         "companies_house": ("43210",),
         "naics": ("238210",),
         "nola": ("Electrical Contractors",),
+        "overture": ("electrician",),
     },
     "roofing": {
         "mode": "web",
@@ -225,6 +247,7 @@ TRADES = {
         "companies_house": ("43910",),
         "naics": ("238160",),
         "nola": ("Roofing, Siding and Sheet Metal Contractors",),
+        "overture": ("roofing",),
     },
     "landscaping": {
         "mode": "web",
@@ -233,6 +256,7 @@ TRADES = {
         "overpass": (("craft", "gardener"), ("shop", "garden_centre")),
         "naics": ("561730",),
         "nola": ("Landscaping Services",),
+        "overture": ("landscaping", "gardener", "lawn_service"),
     },
     "auto-repair": {
         "mode": "web",
@@ -246,6 +270,7 @@ TRADES = {
             "Automotive Mechanical & Electrical Repair & Maintenance, Other",
         ),
         "yellowpagespk": ("automotive",),
+        "overture": ("automotive_repair", "auto_body_shop", "auto_electrical_repair"),
     },
     "pest-control": {
         "mode": "web",
@@ -254,6 +279,7 @@ TRADES = {
         "overpass": (("craft", "pest_control"),),
         "naics": ("561710",),
         "nola": ("Exterminating & Pest Control Services",),
+        "overture": ("pest_control_service",),
     },
     "commercial-cleaning": {
         "mode": "web",
@@ -262,6 +288,7 @@ TRADES = {
         "overpass": (("shop", "laundry"), ("craft", "cleaning")),
         "naics": ("561720",),
         "nola": ("Janitorial Services",),
+        "overture": ("janitorial_service", "office_cleaning", "cleaning_service"),
     },
     # --------------------------------------------------------------- tech --
     # OpenStreetMap has one tag for all of these, office=it, so outside the UK
@@ -275,6 +302,7 @@ TRADES = {
         "nola": ("Custom Computer Programming Services",),
         "yellowpagespk": ("software-houses",),
         "techhub": True,
+        "overture": ("software_development", "information_technology_company"),
     },
     "it-services": {
         "mode": "tech",
@@ -285,6 +313,11 @@ TRADES = {
         "nola": ("Computer Systems Design Services", "Computer Facilities Management Services"),
         "yellowpagespk": ("software-houses", "web-development"),
         "techhub": True,
+        "overture": (
+            "it_service_and_computer_repair",
+            "it_consultant",
+            "information_technology_company",
+        ),
     },
     "data-hosting": {
         "mode": "tech",
@@ -294,6 +327,7 @@ TRADES = {
         "naics": ("518210", "519290", "519130"),
         "nola": ("Data Processing Services",),
         "techhub": True,
+        "overture": ("web_hosting_service", "data_center"),
     },
 }
 

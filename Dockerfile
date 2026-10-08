@@ -26,6 +26,10 @@ COPY src ./src
 COPY seed ./seed
 RUN uv sync --no-dev
 
+# DuckDB fetches its S3 reader on first use. Fetched at build time instead, so
+# the first Overture search does not wait on it or fail if it cannot be reached.
+RUN uv run --no-dev python -c "import duckdb; duckdb.connect().execute('INSTALL httpfs')"
+
 # The working database lives on its own volume. Without one, a redeploy
 # reseeds from the committed dataset, which is a fine default for a demo.
 RUN mkdir -p /data

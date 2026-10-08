@@ -12,6 +12,7 @@ import logging
 from starlette.applications import Starlette
 
 from sourcer.api.routes import routes
+from sourcer.db import repository as store
 from sourcer.db.database import init_db
 from sourcer.db.seed import load_seed
 
@@ -19,7 +20,11 @@ log = logging.getLogger("sourcer")
 
 
 def build():
-    init_db().close()
+    connection = init_db()
+    try:
+        store.purge_empty_runs(connection)
+    finally:
+        connection.close()
     try:
         load_seed()
     except Exception:

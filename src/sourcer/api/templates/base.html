@@ -6,7 +6,7 @@
   <title>{% block title %}sourcer{% endblock %}</title>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/app.css">
+  <link rel="stylesheet" href="/static/app.css?v={{ css_version }}">
   <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.4/dist/htmx.min.js"></script>
 </head>
 <body>
@@ -22,6 +22,9 @@
       Contains public sector information licensed under the
       <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0</a>,
       including Care Quality Commission information.
+      Places from the <a href="https://overturemaps.org">Overture Maps Foundation</a>,
+      under CDLA Permissive 2.0, Apache 2.0 and CC0; Foursquare data copyright 2024
+      Foursquare Labs, Inc., under Apache 2.0.
     </p>
   </aside>
   <main id="main">{% block main %}{% endblock %}</main>

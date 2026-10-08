@@ -1,5 +1,39 @@
 {% if run.run_status in ("pending", "running") %}
-<p class="working"><i></i>{{ run.progress_note or "starting" }}</p>
+{% set order = ["find", "read", "score"] %}
+<div class="working">
+  <i></i>
+  <div>
+    <ol class="steps">
+      {% for key, label in [("find", "Find businesses"), ("read", "Read their websites"), ("score", "Score them")] %}
+      <li class="{% if key == stage %}now{% elif order.index(key) < order.index(stage) %}done{% endif %}">{{ label }}</li>
+      {% endfor %}
+    </ol>
+    <p class="note">{{ run.progress_note or "Starting the search" }}</p>
+    {% if run.discovered_count %}<p class="tally">{{ run.discovered_count }} found so far
+      {%- if run.enriched_count %} · {{ run.enriched_count }} websites read{% endif %}
+      {%- if run.scored_count %} · {{ run.scored_count }} scored{% endif %}.
+      Results appear below as they come in.</p>{% endif %}
+  </div>
+</div>
+{% elif run.run_status == "done" and outcome.found %}
+<div class="outcome">
+  <p class="outcome-head"><b>{{ outcome.found }}</b> found · <b>{{ outcome.scored }}</b> scored
+    {%- if outcome.unscored %} · <b>{{ outcome.unscored }}</b> not scored{% endif %}</p>
+  {% if outcome.unscored or hidden_count or outcome.failed %}
+  <ul>
+    {% if outcome.no_website %}<li>{{ outcome.no_website }} have no website on record, so there is
+      nothing yet to judge {{ "whether they need one" if mode == "web" else "what they build" }} on.
+      Their names and phone numbers are still here to call.</li>{% endif %}
+    {% if outcome.unreadable %}<li>{{ outcome.unreadable }} have a website we could not read
+      well enough to judge.</li>{% endif %}
+    {% if hidden_count %}<li>{{ hidden_count }} are hidden by the filters.
+      <a href="/runs/{{ run.id }}?min_confidence=0">Show all {{ total_count }}</a>.</li>{% endif %}
+    {% if outcome.failed %}<li>{{ outcome.failed | join(" and ") }} did not answer, so
+      {{ "its" if outcome.failed | length == 1 else "their" }} businesses are missing.
+      <a href="/">Run the search again</a> in a few minutes to add them.</li>{% endif %}
+  </ul>
+  {% endif %}
+</div>
 {% endif %}
 
 {% for b in businesses %}
@@ -43,7 +77,7 @@
 
 {% if businesses %}
 <p class="foot-note">{{ businesses | length }} shown.
-  {% if hidden_count %}{{ hidden_count }} thinly-evidenced hidden ·
+  {% if hidden_count %}{{ hidden_count }} hidden by the filters ·
     <a href="/runs/{{ run.id }}?min_confidence=0">show everything</a>{% endif %}</p>
 {% elif run.run_status == "done" %}
 {% set failed = [] %}
@@ -52,7 +86,9 @@
 {% endfor %}
 <div class="empty">
   {% if active_filters and total_count %}
-  <h2>Nothing matched.</h2><p>Try clearing the filters.</p>
+  <h2>{{ total_count }} found, but none pass the filters.</h2>
+  <p>Most are not scored yet, usually because no website is on record for them.
+    <a href="/runs/{{ run.id }}?min_confidence=0">Show all {{ total_count }}</a>.</p>
   {% elif failed %}
   <h2>Nothing found, because {{ failed | join(" and ") }} did not answer.</h2>
   <p>Its servers were busy or down when this search ran. This usually passes:

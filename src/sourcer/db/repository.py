@@ -10,6 +10,7 @@ Signals behind it but never computes or adjusts either. See ADR 0002.
 """
 
 import json
+from datetime import UTC, datetime, timedelta
 
 from sourcer.db.database import now
 from sourcer.pipelines.dedup import DEDUP_RULES, dedup_keys, key_rule_of, resolve_dedup_key
@@ -144,12 +145,39 @@ def get_run(connection, run_id):
     return _row(connection.execute("SELECT * FROM search_run WHERE id = ?", (run_id,)).fetchone())
 
 
+# An ended Search Run with no Businesses: nothing to come back to.
+_EMPTY_ENDED_RUN = f"""
+    run_status IN ({", ".join("?" for _ in TERMINAL_RUN_STATUSES)})
+    AND NOT EXISTS (SELECT 1 FROM business WHERE business.run_id = search_run.id)
+"""
+
+# How long an empty Search Run is kept after it ends: long enough for the
+# person who started it to read why it found nothing, then it is removed.
+EMPTY_RUN_GRACE_MINUTES = 10
+
+
 def list_runs(connection, limit=20):
+    """Recent Search Runs, leaving out any that ended with nothing found."""
     return _rows(
         connection.execute(
-            "SELECT * FROM search_run ORDER BY created_at DESC, id DESC LIMIT ?", (limit,)
+            f"SELECT * FROM search_run WHERE NOT ({_EMPTY_ENDED_RUN}) "
+            "ORDER BY created_at DESC, id DESC LIMIT ?",
+            (*TERMINAL_RUN_STATUSES, limit),
         ).fetchall()
     )
+
+
+def purge_empty_runs(connection, grace_minutes=EMPTY_RUN_GRACE_MINUTES):
+    """Delete Search Runs that ended with nothing found, once their grace is over.
+
+    A run that found even one Business is kept. Returns how many were removed.
+    """
+    cutoff = (datetime.now(UTC) - timedelta(minutes=grace_minutes)).isoformat(timespec="seconds")
+    removed = connection.execute(
+        f"DELETE FROM search_run WHERE {_EMPTY_ENDED_RUN} AND finished_at < ?",
+        (*TERMINAL_RUN_STATUSES, cutoff),
+    )
+    return removed.rowcount
 
 
 # --------------------------------------------------------------------------- #

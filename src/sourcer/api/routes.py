@@ -9,6 +9,7 @@ rather script against it than click. Filtering lives in filters.py and CSV in
 export.py, so all three surfaces agree by construction.
 """
 
+import hashlib
 from pathlib import Path
 
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, StreamingResponse
@@ -37,8 +38,50 @@ HERE = Path(__file__).parent
 templates = Jinja2Templates(directory=str(HERE / "templates"))
 
 
+# The stylesheet's address changes with its contents, so a browser holding the
+# old one fetches the new one after a deploy instead of showing new pages unstyled.
+templates.env.globals["css_version"] = hashlib.sha1(
+    (HERE / "static" / "app.css").read_bytes()
+).hexdigest()[:10]
+
 templates.env.filters["band"] = band_of
 templates.env.filters["shown_score"] = shown_score
+
+
+# Which step a live Search Run is on, read from its Progress Note.
+STAGES = (("Reading websites", "read"), ("Scoring", "score"))
+FAILED_OUTCOMES = ("unreachable", "blocked", "error")
+
+
+def _stage(note):
+    for prefix, stage in STAGES:
+        if (note or "").startswith(prefix):
+            return stage
+    return "find"
+
+
+def _outcome(run, everything):
+    """What a finished Search Run found, and why some of it has no Score.
+
+    A Business without a Score is not a failure: no Source said whether it has
+    a website, or its site could not be read, so there is nothing yet to judge
+    it on. Saying which, with numbers, stops a rep reading an unscored list as
+    a broken search.
+    """
+    unscored = [b for b in everything if b.get("score") is None]
+    labels = {source.NAME: source.LABEL for source in sources.REGISTRY}
+    return {
+        "found": len(everything),
+        "scored": len(everything) - len(unscored),
+        "unscored": len(unscored),
+        "no_website": sum(1 for b in unscored if not b.get("website_url")),
+        "unreadable": sum(1 for b in unscored if b.get("website_url")),
+        "failed": [
+            labels.get(name, name)
+            for name, outcome in (run.get("source_outcomes") or {}).items()
+            if outcome.get("status") in FAILED_OUTCOMES
+        ],
+    }
 
 
 def _run_context(connection, run_id, params):
@@ -64,6 +107,8 @@ def _run_context(connection, run_id, params):
         "breakdown": store.group_breakdown(connection, run_id),
         "groups": list(scoring.group_labels(mode)),
         "total_count": len(everything),
+        "stage": _stage(run.get("progress_note")),
+        "outcome": _outcome(run, everything),
         "hidden_count": len(everything) - len(businesses),
         "provisional_below": PROVISIONAL_BELOW,
         "active_filters": active,
@@ -88,6 +133,9 @@ DEFAULT_MARKET = "Norwich|England|GB"
 async def home(request):
     connection = connect()
     try:
+        # Searches that found nothing are dropped once their grace is over, so
+        # the list only ever holds searches worth going back to.
+        store.purge_empty_runs(connection)
         recent = store.list_runs(connection, limit=10)
     finally:
         connection.close()

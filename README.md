@@ -73,6 +73,7 @@ Each source declares the countries it covers and only runs there.
 | [New Orleans occupational licences](https://data.nola.gov/d/iqay-p646) | New Orleans | CC0 | Licensed businesses by type: name, address, phone, owner, start date | Website |
 | [PSEB Tech Hub](https://techdestination.com/tech-hub-portal/) | Pakistan | No terms published; robots.txt disallows nothing | IT companies registered with PSEB: name, town, staff, years trading, areas of work, website | Phone, email |
 | [Yellow Pages Pakistan](https://yellowpagespk.com/) | Pakistan | robots.txt disallows only admin pages; the disclaimer sets no conditions | About 2,200 self-written listings by category and city, with a phone or website where the text gives one | Age; quality varies |
+| [Overture Maps](https://docs.overturemaps.org/guides/places/) places | UK, PK, US | CDLA Permissive 2.0, Apache 2.0 (Foursquare) or CC0, per record | About 72 million places merged from Meta, Microsoft, Foursquare and others: name, address, category, and a website and phone for most | Company type, age |
 | [OpenStreetMap](https://www.openstreetmap.org/copyright) (Overpass) | UK, PK, US | Open Database Licence | Name, address, often a website and phone | Company type, age, reviews |
 | YellowPages | US | Robots permits the paths used | Name, phone, address, website, reviews | — |
 
@@ -88,6 +89,14 @@ Some facts behind those columns, measured while building this:
   the name of an administrative boundary. Pakistani boundaries are named in
   Urdu, so a name search for Lahore returned nothing; by distance it returns
   businesses with English names where they are tagged.
+- Overture Maps is the Source that reliably returns businesses. In Norwich it
+  lists 54 solicitors (51 with a website) where OpenStreetMap lists 16, and 182
+  software companies in Lahore. It is published as files on Amazon S3 rather
+  than behind a server, so it does not go down the way public Overpass servers
+  do. The first search in a market downloads every place around it, which took
+  between 11 seconds and two minutes in testing and about 300 MB of memory; the
+  places are kept on disk, so later searches there read from it. Places Overture
+  rates below 0.5 for still existing are left out.
 - Pakistan's company registry, run by SECP, can look up a company you already
   know but cannot list companies by trade or place, so Pakistan relies on PSEB,
   one small directory and OpenStreetMap.
@@ -118,6 +127,10 @@ Some facts behind those columns, measured while building this:
 | BusinessList.pk | Its terms forbid access "through any automated means (including, without limitation, through the use of scripts or webcrawlers)". |
 | "Yellow Pages of Pakistan" on opendata.com.pk | Labelled public domain, but it is a 2020 copy of FindPK made by an individual, who could not relicense FindPK's data. |
 | TDLR licence list (Texas) | Lists electricians and air-conditioning contractors with phones, but the dataset states no licence. |
+| Google Places API | Its terms allow caching only latitude and longitude, for 30 days, and its shared terms forbid "caching and exporting Google Maps Content and creating content from Google Maps Content". This tool stores every business and exports CSV. |
+| HERE Geocoding and Search | HERE's own guidance caps storing results at 30 days without a paid add-on. |
+| Geoapify Places | Its terms allow its free plan in production only "with some limitations", and its places are OpenStreetMap's, which the tool already reads. |
+| Foursquare Open Source Places | Already inside Overture Maps, which merges it with other providers. |
 | Better Business Bureau | Never returned a business: every request was refused at Cloudflare's edge, from a development network and from Render. Its terms also limit use to personal, non-commercial purposes. The adapter is kept in `bbb.py` and is not registered. See [ADR 0001](docs/adr/0001-robots-constrained-bbb-access.md). |
 
 ## How the score works
@@ -283,7 +296,7 @@ instance; the wiki lists several.
 | `scrapers/client.py` | Every outbound request: robots, rate limiting, both tiers |
 | `scrapers/registry.py` | Which sources exist, which countries each covers |
 | `scrapers/catalog.py` | Trades by mode, markets by country, per-source keys |
-| `scrapers/companies_house.py`, `cqc.py`, `fsa.py`, `npi.py`, `overpass.py`, `techhub.py`, `us_registers.py`, `yellowpages.py`, `yellowpagespk.py` | One module per source |
+| `scrapers/companies_house.py`, `cqc.py`, `fsa.py`, `npi.py`, `overpass.py`, `overture.py`, `techhub.py`, `us_registers.py`, `yellowpages.py`, `yellowpagespk.py` | One module per source |
 | `extractors/website.py` | Reading a business's own site by rule |
 | `pipelines/dedup.py` | Normalisation and identity resolution |
 | `pipelines/merge.py` | What changes when a second source reports the same business |
@@ -310,7 +323,10 @@ Map data © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright
 available under the Open Database Licence. Contains public sector information
 licensed under the
 [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/),
-including Care Quality Commission information. The Seattle and Texas registers
+including Care Quality Commission information. Places from the
+[Overture Maps Foundation](https://overturemaps.org), under CDLA Permissive 2.0,
+Apache 2.0 and CC0; Foursquare data copyright 2024 Foursquare Labs, Inc., under
+Apache 2.0. The Seattle and Texas registers
 are in the public domain and the New Orleans register is under CC0; they are
 credited here as a courtesy.
 

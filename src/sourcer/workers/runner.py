@@ -157,7 +157,11 @@ def _discover_all(connection, run_id, trade, market, source_names, page_limit):
 
 def _discover_one(connection, run_id, fetcher, source, trade, market, page_limit):
     """One Source. A refusal is recorded against the run, never retried."""
-    store.set_progress_note(connection, run_id, f"searching {source.LABEL}")
+    # A Source that is slow on first use says so, so a long wait is not
+    # mistaken for a hung search.
+    wait = getattr(source, "WAIT_NOTE", "")
+    looking = f"Looking for businesses in {source.LABEL}"
+    store.set_progress_note(connection, run_id, f"{looking}. {wait}".strip())
     found = 0
     try:
         for record in source.discover(fetcher, trade, market, page_limit=page_limit):
@@ -166,7 +170,7 @@ def _discover_one(connection, run_id, fetcher, source, trade, market, page_limit
             store.upsert_business(connection, run_id, record, source.NAME)
             found += 1
             store.bump_run_counts(connection, run_id, discovered=1)
-            store.set_progress_note(connection, run_id, f"searching {source.LABEL}, {found} found")
+            store.set_progress_note(connection, run_id, f"{looking}: {found} so far")
     except NotConfigured as error:
         # Zero results from a Source that was never set up says nothing about
         # the market, so it must not read as an empty one.
@@ -282,7 +286,7 @@ def _enrich_all(connection, run_id, mode):
         for index, business in enumerate(pending, start=1):
             if is_cancelled(run_id):
                 return
-            store.set_progress_note(connection, run_id, f"reading websites {index}/{total}")
+            store.set_progress_note(connection, run_id, f"Reading websites: {index} of {total}")
 
             found, outcome = enrich(fetcher, business.get("website_url"))
 
@@ -290,7 +294,8 @@ def _enrich_all(connection, run_id, mode):
             # Absent a key it does nothing at all.
             model_keys = []
             if found.get("site_text") and llm.available():
-                store.set_progress_note(connection, run_id, f"reading websites {index}/{total}, AI")
+                note = f"Reading websites: {index} of {total}, with the model"
+                store.set_progress_note(connection, run_id, note)
                 inferred = llm.read_site(business["name"], found.pop("site_text"))
                 for key, value in inferred.items():
                     if key not in found:
@@ -404,5 +409,5 @@ def _score_all(connection, run_id, mode):
     for index, business in enumerate(businesses, start=1):
         if is_cancelled(run_id):
             return
-        store.set_progress_note(connection, run_id, f"scoring {index}/{total}")
+        store.set_progress_note(connection, run_id, f"Scoring: {index} of {total}")
         _score_one(connection, run_id, business, mode)

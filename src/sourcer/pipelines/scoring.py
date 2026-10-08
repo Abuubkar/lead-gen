@@ -83,6 +83,15 @@ SOFTWARE_REGISTER_TYPES = (
     "Computer Facilities Management Services",
     "Data Processing Services",
 )
+# Overture Maps categories for the same work.
+SOFTWARE_OVERTURE_CATEGORIES = (
+    "overture:software_development",
+    "overture:information_technology_company",
+    "overture:it_consultant",
+    "overture:it_service_and_computer_repair",
+    "overture:web_hosting_service",
+    "overture:data_center",
+)
 # Every company on PSEB's Tech Hub is an IT or IT-enabled services company;
 # the Source marks them so.
 SOFTWARE_REGISTER_MARKS = ("pseb:it",)
@@ -271,6 +280,8 @@ def _is_software_company(context):
         return 1.0, "software or IT by NAICS code"
     if any(entry in SOFTWARE_REGISTER_TYPES for entry in categories):
         return 1.0, "licensed as software or IT"
+    if any(entry in SOFTWARE_OVERTURE_CATEGORIES for entry in categories):
+        return 1.0, "software or IT by its map category"
     if any(entry in SOFTWARE_REGISTER_MARKS for entry in categories):
         return 1.0, "registered with PSEB as an IT company"
     if sic_codes or categories:
