@@ -262,6 +262,10 @@ instance; the wiki lists several.
 
 ## Known limits
 
+- **At most three searches run at once.** Others wait their turn, first come
+  first served, and the page shows how many are ahead. Each search holds
+  connections and pages in memory, and a free instance that runs out of its
+  512 MB restarts, losing every search in progress.
 - **Companies House needs a key a person registers for.** Its requests were
   checked against the live API with a deliberately invalid key, which it
   rejected as unauthorised, so the request is well formed; parsing of real

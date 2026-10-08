@@ -5,8 +5,10 @@ and rows appear in the table as they land. That streaming is the best moment in
 the tool: a Searcher watches the shortlist assemble instead of staring at a
 spinner for four minutes.
 
-No queue and no worker process. One container, one Searcher, minute-long jobs.
-A broker would add an operational dependency that buys nothing at this scale.
+No broker and no worker process: one container, minute-long jobs. But at most
+MAX_RUNNING Search Runs work at once, and the rest wait their turn in order.
+Each one holds connections and pages in memory, and a small instance that runs
+out restarts, losing every run in progress.
 
 Source precedence needs no code of its own. Sources run in registry order,
 richest first, and merging only ever fills blanks, so the best available answer
@@ -31,6 +33,60 @@ ENRICHMENT_DELAY_SECONDS = 1.5
 
 _cancelled = set()
 _cancel_lock = threading.Lock()
+
+# How many Search Runs may work at once. A run is mostly waiting on the network,
+# so more would not finish sooner; they would only share the same small machine.
+MAX_RUNNING = 3
+# How often a waiting run looks again, and refreshes its place in the queue.
+WAIT_CHECK_SECONDS = 3.0
+
+_turns = threading.Condition()
+_waiting = []  # run ids, oldest first
+_running = set()
+
+
+def _queue_note(place):
+    note = f"Waiting to start: {MAX_RUNNING} searches are already running."
+    if place == 1:
+        return f"{note} 1 search is ahead of yours."
+    if place > 1:
+        return f"{note} {place} searches are ahead of yours."
+    return note
+
+
+def _take_turn(connection, run_id):
+    """Wait until fewer than MAX_RUNNING runs are working and this one is next.
+
+    First come, first served. Returns False if the run was cancelled while it
+    waited.
+    """
+    with _turns:
+        _waiting.append(run_id)
+    try:
+        last_note = None
+        while True:
+            with _turns:
+                if is_cancelled(run_id):
+                    return False
+                if len(_running) < MAX_RUNNING and _waiting[0] == run_id:
+                    _running.add(run_id)
+                    return True
+                note = _queue_note(_waiting.index(run_id))
+            if note != last_note:
+                store.set_progress_note(connection, run_id, note)
+                last_note = note
+            with _turns:
+                _turns.wait(timeout=WAIT_CHECK_SECONDS)
+    finally:
+        with _turns:
+            _waiting.remove(run_id)
+            _turns.notify_all()
+
+
+def _end_turn(run_id):
+    with _turns:
+        _running.discard(run_id)
+        _turns.notify_all()
 
 
 def cancel(run_id):
@@ -82,6 +138,10 @@ def _work(run_id, trade, market, mode, source_names, page_limit):
     """The whole run. Never raises: a failure is recorded, not thrown away."""
     connection = connect()
     try:
+        if not _take_turn(connection, run_id):
+            store.set_progress_note(connection, run_id, "cancelled")
+            store.set_run_status(connection, run_id, "cancelled")
+            return
         store.set_run_status(connection, run_id, "running")
         _discover_all(connection, run_id, trade, market, source_names, page_limit)
         if not is_cancelled(run_id):
@@ -102,7 +162,8 @@ def _work(run_id, trade, market, mode, source_names, page_limit):
         store.set_run_status(connection, run_id, "failed", error=f"{type(error).__name__}: {error}")
     finally:
         # Whatever happened, including cancellation or an exception, this run's
-        # bookkeeping goes with it.
+        # bookkeeping goes with it, and its turn passes to the next in line.
+        _end_turn(run_id)
         _clear_cancel(run_id)
         _forget_run(run_id)
         connection.close()

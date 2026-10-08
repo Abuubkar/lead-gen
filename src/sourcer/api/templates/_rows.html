@@ -1,4 +1,12 @@
-{% if run.run_status in ("pending", "running") %}
+{% if run.run_status == "pending" %}
+<div class="working">
+  <i></i>
+  <div>
+    <p class="note">{{ run.progress_note or "Starting the search" }}</p>
+    <p class="tally">It starts on its own when one finishes. You can leave this page open.</p>
+  </div>
+</div>
+{% elif run.run_status == "running" %}
 {% set order = ["find", "read", "score"] %}
 <div class="working">
   <i></i>
