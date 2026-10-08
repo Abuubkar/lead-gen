@@ -126,7 +126,13 @@ business has a phone, at different weights.
   merge through SQLite's own JSON functions.
 - **Indexes** on the run, the three dedup keys, and run with score descending,
   which is the ordering the results table actually uses.
-- **Enrichment is capped** at three pages per business and rate limited per host.
+- **Enrichment is capped** at three pages per business and rate limited per
+  website. Five sites are read at once: each business is its own site, so the
+  per-site pause, held in one place for the whole process, is unchanged while
+  one slow site no longer holds up the rest. A site gets ten seconds and one
+  retry, and one whose robots.txt times out is given up on rather than asked
+  for every page. Measured on the same 46 Norwich dental sites, reading took
+  85 seconds against 386 before.
 - **Adaptive selectors.** The YellowPages listing selector is saved on every
   successful parse and relocated by structure and text when the selector stops
   matching. Measured against a real page with the listing class renamed, the

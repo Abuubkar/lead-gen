@@ -16,6 +16,7 @@ for a field is the one that survives.
 """
 
 import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from sourcer.db import repository as store
 from sourcer.db.database import connect, init_db
@@ -30,6 +31,17 @@ from sourcer.services import llm
 # single page, because the alternative is being refused for the whole run.
 DISCOVERY_DELAY_SECONDS = 10.0
 ENRICHMENT_DELAY_SECONDS = 1.5
+
+# Websites read at once within one search. Each Business is its own site, and
+# the per-site pause lives in the shared HostGate, so reading in parallel never
+# brings two requests to one site closer than ENRICHMENT_DELAY_SECONDS. What it
+# stops is one slow site holding up the rest.
+READERS = 5
+# How long a business's own site gets. One that has not answered in ten seconds
+# is asked once more, then given up on, instead of the thirty seconds and second
+# retry the Sources get.
+SITE_TIMEOUT_SECONDS = 10
+SITE_ATTEMPTS = 2
 
 _cancelled = set()
 _cancel_lock = threading.Lock()
@@ -341,65 +353,103 @@ def _record_contacts(connection, business_id, found, evidence_url):
 
 
 def _enrich_all(connection, run_id, mode):
+    """Read every site, READERS at a time, and record each as it finishes.
+
+    The reading runs on worker threads, each with its own Fetcher, because an
+    HTTP session is not shared across threads. Everything that touches the
+    database stays on this thread, in the order the reads finish.
+    """
     pending = store.list_businesses_to_enrich(connection, run_id)
     total = len(pending)
-    with Fetcher(delay_seconds=ENRICHMENT_DELAY_SECONDS) as fetcher:
-        for index, business in enumerate(pending, start=1):
+    local = threading.local()
+    fetchers = []
+    fetchers_lock = threading.Lock()
+
+    def read(business):
+        fetcher = getattr(local, "fetcher", None)
+        if fetcher is None:
+            fetcher = Fetcher(
+                delay_seconds=ENRICHMENT_DELAY_SECONDS,
+                timeout_seconds=SITE_TIMEOUT_SECONDS,
+                attempts=SITE_ATTEMPTS,
+                give_up_when_silent=True,
+            )
+            local.fetcher = fetcher
+            with fetchers_lock:
+                fetchers.append(fetcher)
+        if is_cancelled(run_id):
+            return business, ({}, "skipped")
+        return business, enrich(fetcher, business.get("website_url"))
+
+    store.set_progress_note(connection, run_id, f"Reading websites: 0 of {total}")
+    pool = ThreadPoolExecutor(max_workers=READERS, thread_name_prefix=f"run-{run_id}-read")
+    try:
+        futures = [pool.submit(read, business) for business in pending]
+        for done, future in enumerate(as_completed(futures), start=1):
             if is_cancelled(run_id):
                 return
-            store.set_progress_note(connection, run_id, f"Reading websites: {index} of {total}")
+            business, (found, outcome) = future.result()
+            store.set_progress_note(connection, run_id, f"Reading websites: {done} of {total}")
+            _record_reading(connection, run_id, mode, business, found, outcome, done, total)
+    finally:
+        # Cancelled reads that have not started are dropped; ones in flight
+        # finish, which a ten-second timeout keeps short.
+        pool.shutdown(wait=True, cancel_futures=True)
+        for fetcher in fetchers:
+            fetcher.close()
 
-            found, outcome = enrich(fetcher, business.get("website_url"))
 
-            # The model fills gaps the rules left, and never overrides them.
-            # Absent a key it does nothing at all.
-            model_keys = []
-            if found.get("site_text") and llm.available():
-                note = f"Reading websites: {index} of {total}, with the model"
-                store.set_progress_note(connection, run_id, note)
-                inferred = llm.read_site(business["name"], found.pop("site_text"))
-                for key, value in inferred.items():
-                    if key not in found:
-                        found[key] = value
-                        model_keys.append(key)
-            found.pop("site_text", None)
+def _record_reading(connection, run_id, mode, business, found, outcome, done, total):
+    """Store what one site said, and score its Business straight away."""
+    # The model fills gaps the rules left, and never overrides them.
+    # Absent a key it does nothing at all.
+    model_keys = []
+    if found.get("site_text") and llm.available():
+        note = f"Reading websites: {done} of {total}, with the model"
+        store.set_progress_note(connection, run_id, note)
+        inferred = llm.read_site(business["name"], found.pop("site_text"))
+        for key, value in inferred.items():
+            if key not in found:
+                found[key] = value
+                model_keys.append(key)
+    found.pop("site_text", None)
 
-            # Which facts came from where. A Signal built on a model's guess
-            # must say so, because a guess is weaker evidence than a page we
-            # read, and the Score is meant to be auditable.
-            if found:
-                found["_model_keys"] = tuple(model_keys)
-                found["_website_keys"] = tuple(
-                    key for key in found if not key.startswith("_") and key not in model_keys
-                )
+    # Which facts came from where. A Signal built on a model's guess
+    # must say so, because a guess is weaker evidence than a page we
+    # read, and the Score is meant to be auditable.
+    if found:
+        found["_model_keys"] = tuple(model_keys)
+        found["_website_keys"] = tuple(
+            key for key in found if not key.startswith("_") and key not in model_keys
+        )
 
-            if found:
-                store.fill_business(
-                    connection,
-                    business["id"],
-                    {
-                        key: value
-                        for key, value in found.items()
-                        if key not in CONTACT_FIELDS and key not in UNSTORED_FIELDS
-                    },
-                    "website",
-                )
-                _record_contacts(connection, business["id"], found, found.get("evidence_url"))
-                # Held for scoring, which needs the site-derived facts that have
-                # no column of their own.
-                _remember(run_id, business["id"], found)
+    if found:
+        store.fill_business(
+            connection,
+            business["id"],
+            {
+                key: value
+                for key, value in found.items()
+                if key not in CONTACT_FIELDS and key not in UNSTORED_FIELDS
+            },
+            "website",
+        )
+        _record_contacts(connection, business["id"], found, found.get("evidence_url"))
+        # Held for scoring, which needs the site-derived facts that have
+        # no column of their own.
+        _remember(run_id, business["id"], found)
 
-            store.set_enrichment_status(connection, business["id"], outcome)
-            # "Sites read" means sites read. A business with no website passes
-            # through here too and is skipped; counting it reported 200 sites
-            # read on a run where not one had a website to read.
-            if outcome == "ok":
-                store.bump_run_counts(connection, run_id, enriched=1)
-            # Scored here rather than in a later pass. The table streams while
-            # the run works, and a row with no Score yet reads as a Business
-            # worth nothing rather than one not yet judged.
-            business_now = store.get_business_fields(connection, business["id"])
-            _score_one(connection, run_id, business_now, mode)
+    store.set_enrichment_status(connection, business["id"], outcome)
+    # "Sites read" means sites read. A business with no website passes
+    # through here too and is skipped; counting it reported 200 sites
+    # read on a run where not one had a website to read.
+    if outcome == "ok":
+        store.bump_run_counts(connection, run_id, enriched=1)
+    # Scored here rather than in a later pass. The table streams while
+    # the run works, and a row with no Score yet reads as a Business
+    # worth nothing rather than one not yet judged.
+    business_now = store.get_business_fields(connection, business["id"])
+    _score_one(connection, run_id, business_now, mode)
 
 
 # Facts a website gave us that the schema has no column for, such as the

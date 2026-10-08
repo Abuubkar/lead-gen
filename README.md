@@ -249,7 +249,10 @@ instance; the wiki lists several.
   raises rather than proceeding. The APIs used (Companies House, the Food
   Standards Agency and Overpass) are public endpoints rather than crawlable
   sites; each exemption is named in the code where it is taken.
-- **One request at a time per host**, with a delay between.
+- **One request at a time per website**, with a pause after each before the
+  next to the same site. The rule is shared by every search and every worker in
+  the process, so reading five sites at once, or running three searches, never
+  brings two requests to one site closer together.
 - **Terms are read, not just robots.txt.** Robots.txt allows FreeIndex's
   listing pages; its terms forbid this use, so it is not a source.
 - **No login-walled source.** No LinkedIn, Apollo or Crunchbase.

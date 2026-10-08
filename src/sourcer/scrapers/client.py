@@ -13,6 +13,7 @@ needs memory the free deployment tier does not have.
 
 import threading
 import time
+from contextlib import contextmanager
 from urllib.parse import urlsplit, urlunsplit
 
 import certifi
@@ -112,6 +113,15 @@ def _title_of(response):
         return ""
 
 
+def _timed_out(error):
+    """Whether a request failed for want of an answer, not for a bad one.
+
+    The HTTP client reports curl's error code in its message; 28 is a timeout.
+    """
+    message = str(error)
+    return "curl: (28)" in message or "timed out" in message.lower()
+
+
 def looks_blocked(response):
     """Whether a response is a refusal rather than content."""
     if response is None:
@@ -122,6 +132,45 @@ def looks_blocked(response):
     return any(marker in title for marker in BLOCK_TITLE_MARKERS)
 
 
+class HostGate:
+    """Politeness per website, shared by every Fetcher in the process.
+
+    One request at a time to any one host, and a pause after each before the
+    next one to that host may start. The pause is measured from the end of a
+    request, not its start, so a slow site is never asked again sooner because
+    it was slow.
+
+    Shared, not per Fetcher, because websites are now read in parallel and up
+    to three searches run at once: each with its own record, two workers or two
+    searches could reach the same site back to back. Each host has its own
+    lock, so waiting on one site never holds up a request to another.
+    """
+
+    def __init__(self):
+        self._guard = threading.Lock()
+        self._locks = {}
+        self._last_finished = {}
+
+    @contextmanager
+    def turn(self, url, delay_seconds):
+        host = urlsplit(url).netloc.lower()
+        with self._guard:
+            lock = self._locks.setdefault(host, threading.Lock())
+        with lock:
+            previous = self._last_finished.get(host)
+            if previous is not None:
+                remaining = delay_seconds - (time.monotonic() - previous)
+                if remaining > 0:
+                    time.sleep(remaining)
+            try:
+                yield
+            finally:
+                self._last_finished[host] = time.monotonic()
+
+
+HOSTS = HostGate()
+
+
 class Fetcher:
     """A polite fetcher for the life of one Search Run.
 
@@ -130,16 +179,37 @@ class Fetcher:
     browser session only if something actually needs one.
     """
 
-    def __init__(self, delay_seconds=DEFAULT_DELAY_SECONDS, allow_browser=None):
+    def __init__(
+        self,
+        delay_seconds=DEFAULT_DELAY_SECONDS,
+        allow_browser=None,
+        timeout_seconds=30,
+        attempts=2,
+        give_up_when_silent=False,
+    ):
+        """delay_seconds is the pause per website between requests.
+
+        timeout_seconds and attempts bound how long one request can take: each
+        attempt waits up to timeout_seconds, and attempts counts the first try.
+
+        give_up_when_silent stops asking a host whose robots.txt timed out: its
+        pages would only time out in turn. For reading business websites, where
+        one dead site cost 48 seconds of timeouts. Only a timeout counts. Other
+        failures are quick, and some come from sites that work: two Norwich
+        dentists redirect robots.txt to a broken address yet serve their pages.
+        Not for Sources, whose robots.txt may be what is blocked.
+        """
         self.delay_seconds = delay_seconds
+        self.timeout_seconds = timeout_seconds
+        self.attempts = attempts
+        self.give_up_when_silent = give_up_when_silent
+        self._silent = set()
         self.allow_browser = browser_enabled() if allow_browser is None else allow_browser
         self._http = None
         self._http_owner = None
         self._browser = None
         self._browser_owner = None
         self._robots = {}
-        self._last_request_at = {}
-        self._lock = threading.Lock()
         self._proxies = proxies()
         # One proxy is just a proxy; several rotate. Without this the list was
         # accepted and only its first entry ever used.
@@ -168,8 +238,8 @@ class Fetcher:
         if self._http is None:
             session = FetcherSession(
                 impersonate="chrome",
-                timeout=30,
-                retries=2,
+                timeout=self.timeout_seconds,
+                retries=self.attempts,
                 retry_delay=3,
                 selector_config=selector_config(),
                 proxy_rotator=self._rotator,
@@ -197,16 +267,9 @@ class Fetcher:
 
     # -- politeness ------------------------------------------------------ #
 
-    def _wait_turn(self, url):
-        """One request at a time per host, never faster than the delay."""
-        host = urlsplit(url).netloc
-        with self._lock:
-            previous = self._last_request_at.get(host)
-            if previous is not None:
-                remaining = self.delay_seconds - (time.monotonic() - previous)
-                if remaining > 0:
-                    time.sleep(remaining)
-            self._last_request_at[host] = time.monotonic()
+    def _turn(self, url):
+        """This Fetcher's turn at a host, through the shared HostGate."""
+        return HOSTS.turn(url, self.delay_seconds)
 
     def _robots_for(self, url, tier="http"):
         parts = urlsplit(url)
@@ -218,21 +281,26 @@ class Fetcher:
         policy = None
         # Reading the policy is a request to the same host, so it waits its turn
         # like any other.
-        self._wait_turn(robots_url)
         try:
-            if tier == "browser" and self.allow_browser:
-                response = self._browser_session().fetch(robots_url, google_search=False)
-            else:
-                response = self._http_session().get(
-                    robots_url, stealthy_headers=True, timeout=15, verify=CA_BUNDLE
-                )
+            with self._turn(robots_url):
+                if tier == "browser" and self.allow_browser:
+                    response = self._browser_session().fetch(robots_url, google_search=False)
+                else:
+                    response = self._http_session().get(
+                        robots_url,
+                        stealthy_headers=True,
+                        timeout=min(15, self.timeout_seconds),
+                        verify=CA_BUNDLE,
+                    )
             if response.status == 200:
                 body = response.body
                 policy = Protego.parse(
                     body.decode("utf-8", "ignore") if isinstance(body, bytes) else str(body)
                 )
-        except Exception:
+        except Exception as error:
             policy = None
+            if self.give_up_when_silent and _timed_out(error):
+                self._silent.add(origin[1])
 
         # A robots file we cannot read is not permission. It is also not a
         # refusal: a site that blocks robots.txt has told us nothing, so we
@@ -284,17 +352,19 @@ class Fetcher:
         """
         if obey_robots and not self.allowed(url, tier=tier):
             raise Disallowed(url)
+        if urlsplit(url).netloc in self._silent:
+            raise Unreachable(url, reason="its robots.txt timed out")
 
         last = None
         answered = False
         for attempt in self._tier_order(tier):
-            self._wait_turn(url)
             fetch_at_tier = self._http_get if attempt == "http" else self._browser_get
-            try:
-                response = fetch_at_tier(url, referer, headers, timeout)
-            except Exception as error:  # a transport failure is not a refusal
-                last = f"{type(error).__name__}: {error}"
-                continue
+            with self._turn(url):
+                try:
+                    response = fetch_at_tier(url, referer, headers, timeout)
+                except Exception as error:  # a transport failure is not a refusal
+                    last = f"{type(error).__name__}: {error}"
+                    continue
             answered = True
             if not looks_blocked(response):
                 return response
@@ -314,17 +384,17 @@ class Fetcher:
         if obey_robots and not self.allowed(url):
             raise Disallowed(url)
 
-        self._wait_turn(url)
         extra = {"timeout": timeout} if timeout else {}
         try:
-            response = self._http_session().post(
-                url,
-                data=data,
-                headers=dict(headers or {}),
-                stealthy_headers=not headers,
-                verify=CA_BUNDLE,
-                **extra,
-            )
+            with self._turn(url):
+                response = self._http_session().post(
+                    url,
+                    data=data,
+                    headers=dict(headers or {}),
+                    stealthy_headers=not headers,
+                    verify=CA_BUNDLE,
+                    **extra,
+                )
         except Exception as error:  # a transport failure is not a refusal
             raise Unreachable(url, reason=f"{type(error).__name__}: {error}") from error
         if looks_blocked(response):
