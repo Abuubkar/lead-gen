@@ -217,17 +217,18 @@ instruction to treat it as an individual.
 | Variable | Default | Purpose |
 |---|---|---|
 | `COMPANIES_HOUSE_API_KEY` | unset | Enables Companies House. Without it the source reports "not configured". |
-| `SOURCER_OVERPASS_URL` | Private.coffee's Overpass | Which Overpass server to query. |
+| `SOURCER_OVERPASS_URL` | Private.coffee, then VK Maps | Overpass servers to try in order, comma-separated. |
 | `SOURCER_PROXIES` | unset | Comma-separated proxies, rotated when there is more than one. |
 | `SOURCER_BROWSER` | off | Allows the headless-browser tier. Needs around a gigabyte of memory. |
 
-The public Overpass server at overpass-api.de asks commercial users to use a
-self-hosted or paid server, describes itself as overloaded, and did not answer
-while this was built. Private.coffee runs a free one whose general terms do not
-forbid commercial use, so it is the default. A team running searches every day
-should point `SOURCER_OVERPASS_URL` at a paid instance; the
-[OpenStreetMap wiki](https://wiki.openstreetmap.org/wiki/Overpass_API) lists
-several.
+The [OpenStreetMap wiki](https://wiki.openstreetmap.org/wiki/Overpass_API)
+lists two public Overpass servers that any project may use, Private.coffee and
+VK Maps, and the tool tries them in that order, asking each twice. Both fail at
+times: Private.coffee answered most searches with a 500 error on the day the
+tool was first opened to the team. The main server at overpass-api.de is left
+out, because it asks commercial users to use a self-hosted or paid server. A
+team running searches every day should point `SOURCER_OVERPASS_URL` at a paid
+instance; the wiki lists several.
 
 ## Collection ethics
 

@@ -9,16 +9,18 @@ only here carries little: OpenStreetMap recorded a website for one in fifty-seve
 of the businesses it alone found in a real run, so its silence on a website is
 not taken as evidence of none (see scoring.SOURCES_REPORTING_WEBSITE).
 
-Which server answers is configuration, not code; see config.overpass_url. The
-public instance asks commercial users to use a paid or self-hosted one.
+Which servers answer is configuration, not code; see config.overpass_urls.
+Public servers fail often, so each is asked twice before moving to the next,
+and the Source only reports itself unreachable when none answered.
 """
 
 import json
-from urllib.parse import urlencode
+import re
+from urllib.parse import urlencode, urlsplit
 
-from sourcer.config import overpass_url
+from sourcer.config import overpass_urls
 from sourcer.scrapers.catalog import source_key
-from sourcer.scrapers.client import Unreachable
+from sourcer.scrapers.client import Blocked, Unreachable
 
 NAME = "overpass"
 LABEL = "OpenStreetMap"
@@ -34,6 +36,16 @@ GIVES = "website and phone where mapped"
 # cut off just before it arrives.
 QUERY_TIMEOUT_SECONDS = 90
 CLIENT_TIMEOUT_SECONDS = QUERY_TIMEOUT_SECONDS + 30
+
+# Rounds through the server list. Failures pass: the same query that got a 500
+# or an error page was answered seconds later. Going round the list rather than
+# asking one server twice in a row gives each a little longer to recover.
+ROUNDS = 2
+
+TITLE = re.compile(r"<title>\s*([^<]+?)\s*</title>", re.I)
+# Overpass's own error page has a generic title and says what went wrong in a
+# line that starts "Error:".
+OVERPASS_ERROR = re.compile(r"Error</strong>:\s*([^<]+)", re.I)
 
 
 def _query(tags, market):
@@ -89,32 +101,56 @@ def _record(element, market):
     }
 
 
+def _what_it_sent(body):
+    """A short account of a non-JSON answer: an error page's title, or its start."""
+    error = OVERPASS_ERROR.search(body)
+    if error:
+        return " ".join(error.group(1).split())[:120]
+    title = TITLE.search(body)
+    if title:
+        return title.group(1)
+    return " ".join(body.split())[:80] or "an empty response"
+
+
+def _elements(fetcher, query):
+    """The query's results from the first server that answers with data.
+
+    An overloaded or timed-out server answers with an error page rather than
+    JSON. That is a server with nothing to give, not a refusal, so the next ask
+    goes to the next server, and round the list again.
+    """
+    urls = overpass_urls()
+    failures = []
+    for _ in range(ROUNDS):
+        for url in urls:
+            host = urlsplit(url).netloc
+            try:
+                response = fetcher.get(
+                    f"{url}?{urlencode({'data': query})}",
+                    obey_robots=False,  # A public API endpoint, not a crawlable site.
+                    tier=TIER,
+                    timeout=CLIENT_TIMEOUT_SECONDS,
+                )
+            except Blocked as error:  # Unreachable included
+                failures.append(f"{host}: {error.reason}")
+                continue
+            body = response.body
+            text = body.decode("utf-8", "ignore") if isinstance(body, bytes) else str(body)
+            try:
+                return json.loads(text).get("elements", [])
+            except json.JSONDecodeError:
+                failures.append(f"{host}: {_what_it_sent(text)}")
+    tried = "; ".join(failures)
+    raise Unreachable(urls[0], reason=f"no OpenStreetMap server answered ({tried})")
+
+
 def discover(fetcher, trade_key, market, page_limit=1):
     """Businesses of a trade near a market. One request, so page_limit is unused."""
     tags = source_key(trade_key, NAME)
     if not tags:
         return
 
-    response = fetcher.get(
-        f"{overpass_url()}?{urlencode({'data': _query(tags, market)})}",
-        obey_robots=False,  # A public API endpoint, not a crawlable site.
-        tier=TIER,
-        timeout=CLIENT_TIMEOUT_SECONDS,
-    )
-    body = (
-        response.body.decode("utf-8", "ignore")
-        if isinstance(response.body, bytes)
-        else str(response.body)
-    )
-    try:
-        elements = json.loads(body).get("elements", [])
-    except json.JSONDecodeError:
-        # An overloaded or timed-out Overpass server answers with an error page
-        # rather than JSON. That is a server with nothing to give, not a refusal,
-        # and a raw decoding error told a rep nothing. Say what it sent.
-        sent = " ".join(body.split())[:120] or "an empty response"
-        raise Unreachable(overpass_url(), reason=f"Overpass returned no data: {sent}") from None
-    for element in elements:
+    for element in _elements(fetcher, _query(tags, market)):
         record = _record(element, market)
         if record:
             yield record

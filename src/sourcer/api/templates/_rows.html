@@ -46,6 +46,19 @@
   {% if hidden_count %}{{ hidden_count }} thinly-evidenced hidden ·
     <a href="/runs/{{ run.id }}?min_confidence=0">show everything</a>{% endif %}</p>
 {% elif run.run_status == "done" %}
-<div class="empty"><h2>Nothing matched.</h2>
-  {% if active_filters %}<p>Try clearing the filters.</p>{% endif %}</div>
+{% set failed = [] %}
+{% for name, outcome in (run.source_outcomes or {}).items() %}
+  {% if outcome.status in ("unreachable", "blocked", "error") %}{% set _ = failed.append(source_labels.get(name, name)) %}{% endif %}
+{% endfor %}
+<div class="empty">
+  {% if active_filters and total_count %}
+  <h2>Nothing matched.</h2><p>Try clearing the filters.</p>
+  {% elif failed %}
+  <h2>Nothing found, because {{ failed | join(" and ") }} did not answer.</h2>
+  <p>Its servers were busy or down when this search ran. This usually passes:
+    <a href="/">run the search again</a> in a few minutes.</p>
+  {% else %}
+  <h2>Nothing found.</h2><p>None of the sources lists a business of this trade here.</p>
+  {% endif %}
+</div>
 {% endif %}
